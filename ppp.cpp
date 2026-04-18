@@ -2,14 +2,14 @@
 // that does to find the keyword(i.e if,for,while) or a function to do it to the
 // C-like form. it needed for simplify the other pipeline especially the parser.
 // for determinig the keywords uses tabs for body selecting it uses the 5-tuple
-// DFA-keyword (Q,Σ,δ,q0,F) consisting of
+// // DFA-keyword (Q,Σ,δ,q0,F) consisting of
 //- a set of states Q
 //{S_START,S_I,S_IF,S_F,S_FO,S_FOR,S_W,S_WH,S_WHI,S_WHIL,S_WHILE,S_END_IF,S_END_FOR,S_END_WHILE}
 //- a finite set of input symbols Σ {i,f,w,h,i,l,e,o,r}
-//- a transition function δ {dfa_keyw_trn_table}
-//- a start state q0 ∈ Q {S_START}
-//- a finite set of accept states F{S_END_IF,S_END_FOR,S_END_WHILE,S_ARROW_END}
-// at the same time, for determining the function body it uses the  5-tuple
+//- a transition function δ {dfa_keyw_trn_table} //- a start state q0 ∈ Q
+//{S_START} //- a finite set of accept states
+// F{S_END_IF,S_END_FOR,S_END_WHILE,S_ARROW_END} // at the same time, for
+// determining the function body it uses the  5-tuple
 // DFA-arrow (Q,Σ,δ,q0,F) consisting of
 //- a set of states Q {S_START,S_EQ,S_GT,S_ARROW_END}
 //- a finite set of input symbols Σ  {=,>}
@@ -289,6 +289,7 @@ int countIndent(std::string& s) {
 //  if,for,while declarations. it also significant for the bison parser
 void process_stack(std::stringstream& ss) {
   std::stack<int> st;
+  bool prevOpened;
   st.push(0);
 
   auto trimRight = [](const std::string& s) {
@@ -303,20 +304,40 @@ void process_stack(std::stringstream& ss) {
     if (res_clear.ends_with("=>")) {
       res_clear.erase(res_clear.size() - 2);
     }
+
     if (ss.eof()) break;
+    if (res_clear.empty()) {
+      out_ss << '\n';
+      continue;
+    }
+
     int indent_count = countIndent(line);
+
     if (indent_count > st.top()) {
-      out_ss << "{\n";
-      out_ss << res_clear + '\n';
+      //      out_ss << res_clear;
+      out_ss << "{";
+      out_ss << res_clear;
+      out_ss << '\n';
+      prevOpened = true;
+      continue;
 
       st.push(indent_count);
     } else if (indent_count == st.top()) {
-      out_ss << res_clear + '\n';
-
+      if (!prevOpened) {
+        out_ss << res_clear + '\n';
+        prevOpened = false;
+        continue;
+      } else {
+        out_ss << res_clear;
+        prevOpened = false;
+        continue;
+      }
     } else {
       st.pop();
       out_ss << "}\n";
+      prevOpened = false;
     }
+    out_ss << res_clear + '\n';
   }
 
   while (st.size() > 1) {
@@ -327,19 +348,29 @@ void process_stack(std::stringstream& ss) {
 
 void preprocess(std::stringstream& ss) {
   std::string res;
-  res = dfa_is_needed_keyw(ss).value_or("");
-  if (res != "") {
-    out_ss << res + " ";
-    process_stack(ss);
-  } else if (dfa_is_arrow(ss)) {
-    process_stack(ss);
-  } else {
-    //    buf_write(in_file, buf_read_ch(curr_file));
+
+  while (true) {
+    res = dfa_is_needed_keyw(ss).value_or("");
+    if (res != "") {
+      out_ss << res << " ";
+      process_stack(ss);
+      continue;
+    }
+
+    if (dfa_is_arrow(ss)) {
+      process_stack(ss);
+      continue;
+    }
+
     std::string line;
-    std::getline(in_ss, line);
-    ss << line;
+    if (std::getline(in_ss, line)) {
+      ss << line << "\n";
+    } else {
+      break;
+    }
   }
 }
+
 
 int main(int argc, char* argv[]) {
   if (argc < 2) {
