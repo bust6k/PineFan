@@ -1,0 +1,15 @@
+strategy("My Strategy")
+if (close > close[1])  
+    strategy.entry("Long", strategy.long)  
+
+
+if (close < close[1])  
+    strategy.entry("Short", strategy.short)  
+
+
+strategy("MA Cross")
+fastMA = ta.sma(close, 9)
+slowMA = ta.sma(close, 21)
+
+if (ta.crossover(fastMA, slowMA))
+    strategy.entry("Long", strategy.long)

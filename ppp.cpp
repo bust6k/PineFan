@@ -1,0 +1,377 @@
+// ppp(pinescript preprocessor) - is a preprocessor for the PineScript language.
+// that does to find the keyword(i.e if,for,while) or a function to do it to the
+// C-like form. it needed for simplify the other pipeline especially the parser.
+// for determinig the keywords uses tabs for body selecting it uses the 5-tuple
+// DFA-keyword (Q,Σ,δ,q0,F) consisting of
+//- a set of states Q
+//{S_START,S_I,S_IF,S_F,S_FO,S_FOR,S_W,S_WH,S_WHI,S_WHIL,S_WHILE,S_END_IF,S_END_FOR,S_END_WHILE}
+//- a finite set of input symbols Σ {i,f,w,h,i,l,e,o,r}
+//- a transition function δ {dfa_keyw_trn_table}
+//- a start state q0 ∈ Q {S_START}
+//- a finite set of accept states F{S_END_IF,S_END_FOR,S_END_WHILE,S_ARROW_END}
+// at the same time, for determining the function body it uses the  5-tuple
+// DFA-arrow (Q,Σ,δ,q0,F) consisting of
+//- a set of states Q {S_START,S_EQ,S_GT,S_ARROW_END}
+//- a finite set of input symbols Σ  {=,>}
+//- a transition function {dfa_arrow_trn_table}
+//- a start state q0 ∈ Q {S_START}
+//- a finite set of accept states F {S_ARROW_END}
+
+#include <fstream>
+#include <iostream>
+#include <optional>
+#include <sstream>
+#include <stack>
+#include <string>
+
+void preprocess(std::stringstream& ss);
+
+enum States {
+  S_START,
+  S_I,
+  S_IF,
+  S_F,
+  S_FO,
+  S_FOR,
+  S_W,
+  S_WH,
+  S_WHI,
+  S_WHIL,
+  S_WHILE,
+  S_END_IF,
+  S_END_FOR,
+  S_END_WHILE,
+  S_EQ,
+  S_GT,
+  S_ARROW_END
+};
+
+static States dfa_keyw_trn_table[512][512];
+static States dfa_arrow_trn_table[512][512];
+
+std::stringstream in_ss;
+std::stringstream out_ss;
+
+bool is_alpha(char c) {
+  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+bool is_maybe_keyw(char c) { return is_alpha(c) || c == '_'; }
+
+static void dfa_init() {
+  /* dfa_keyw_trn_table */
+  dfa_keyw_trn_table[S_START][S_I] = S_I;
+  dfa_keyw_trn_table[S_I][S_IF] = S_IF;
+  dfa_keyw_trn_table[S_START][S_F] = S_F;
+  dfa_keyw_trn_table[S_F][S_FO] = S_FO;
+  dfa_keyw_trn_table[S_FO][S_FOR] = S_FOR;
+  dfa_keyw_trn_table[S_START][S_W] = S_W;
+  dfa_keyw_trn_table[S_W][S_WH] = S_WH;
+  dfa_keyw_trn_table[S_WH][S_WHI] = S_WHI;
+  dfa_keyw_trn_table[S_WHI][S_WHIL] = S_WHIL;
+  dfa_keyw_trn_table[S_WHIL][S_WHILE] = S_WHILE;
+
+  dfa_keyw_trn_table[S_IF][S_END_IF] = S_END_IF;
+  dfa_keyw_trn_table[S_FOR][S_END_FOR] = S_END_FOR;
+  dfa_keyw_trn_table[S_WHILE][S_END_WHILE] = S_END_WHILE;
+
+  /* dfa_arrow_trn_table */
+  dfa_arrow_trn_table[S_START][S_EQ] = S_EQ;
+  dfa_arrow_trn_table[S_EQ][S_GT] = S_GT;
+  dfa_arrow_trn_table[S_GT][S_ARROW_END] = S_ARROW_END;
+}
+
+std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
+  States state = S_START;
+  dfa_init();
+  for (;;) {
+    switch (state) {
+      case S_START: {
+        char letter = ss.get();
+
+        if (letter == 'i') {
+          state = dfa_keyw_trn_table[state][S_I];
+        } else if (letter == 'f') {
+          state = dfa_keyw_trn_table[state][S_F];
+        } else if (letter == 'w') {
+          state = dfa_keyw_trn_table[state][S_W];
+        }
+        break;
+      }
+
+      case S_I: {
+        char foo = ss.get();
+        if (foo == 'f') {
+          state = dfa_keyw_trn_table[state][S_IF];
+          break;
+        } else {
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+      case S_IF: {
+        state = dfa_keyw_trn_table[state][S_END_IF];
+        break;
+      }
+
+      case S_END_IF: {
+        if (!is_maybe_keyw(ss.get()))
+          return "if";
+        else {
+          ss.unget();
+          ss.unget();
+
+          return std::nullopt;
+        }
+      }
+      case S_F: {
+        if (ss.get() == 'o') {
+          state = dfa_keyw_trn_table[state][S_FO];
+          break;
+        } else {
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+      case S_FO: {
+        if (ss.get() == 'r') {
+          state = dfa_keyw_trn_table[state][S_FOR];
+          break;
+        } else {
+          ss.unget();
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+      case S_FOR: {
+        state = dfa_keyw_trn_table[state][S_END_FOR];
+        break;
+      }
+
+      case S_END_FOR: {
+        if (!is_maybe_keyw(ss.get()))
+
+          return "for";
+
+        else {
+          ss.unget();
+          ss.unget();
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+
+      case S_W: {
+        if (ss.get() == 'h') {
+          state = dfa_keyw_trn_table[state][S_WH];
+          break;
+        } else {
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+      case S_WH: {
+        if (ss.get() == 'i') {
+          state = dfa_keyw_trn_table[state][S_WHI];
+          break;
+        } else {
+          ss.unget();
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+
+      case S_WHI: {
+        if (ss.get() == 'l') {
+          state = dfa_keyw_trn_table[state][S_WHIL];
+          break;
+        } else {
+          ss.unget();
+          ss.unget();
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+
+      case S_WHIL: {
+        if (ss.get() == 'e') {
+          state = dfa_keyw_trn_table[state][S_WHILE];
+          break;
+        } else {
+          ss.unget();
+          ss.unget();
+          ss.unget();
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+
+      case S_WHILE: {
+        state = dfa_keyw_trn_table[state][S_END_WHILE];
+        break;
+      }
+
+      case S_END_WHILE: {
+        if (!is_maybe_keyw(ss.get()))
+          return "while";
+        else {
+          ss.unget();
+          ss.unget();
+          ss.unget();
+          ss.unget();
+          ss.unget();
+          return std::nullopt;
+        }
+      }
+      default:
+        return std::nullopt;
+    }
+  }
+}
+
+bool dfa_is_arrow(std::stringstream& ss) {
+  int state = S_START;
+  for (;;) {
+    switch (state) {
+      case S_START: {
+        if (ss.get() == '=') {
+          state = dfa_arrow_trn_table[state][S_EQ];
+        } else {
+          ss.unget();
+          return false;
+        }
+        break;
+      }
+
+      case S_EQ: {
+        if (ss.get() == '>') {
+          state = dfa_arrow_trn_table[state][S_GT];
+        } else {
+          ss.unget();
+          ss.unget();
+          return false;
+        }
+        break;
+      }
+
+      case S_GT: {
+        state = dfa_arrow_trn_table[state][S_ARROW_END];
+        break;
+      }
+      case S_ARROW_END: {
+        if (!is_maybe_keyw(ss.get())) {
+          return true;
+        }
+        return false;
+      }
+      default:
+        return false;
+    }
+  }
+}
+
+int countIndent(std::string& s) {
+  int cnt = 0;
+  for (char c : s) {
+    if (c == ' ')
+      cnt += 1;
+    else if (c == '\t')
+      cnt += 4;
+    else
+      break;
+  }
+  return cnt;
+}
+
+// this is the pseudo-code.please,don't think this is would to be used at
+// production
+//  so you also need to make function that also adds brackets( () ) to the
+//  if,for,while declarations. it also significant for the bison parser
+void process_stack(std::stringstream& ss) {
+  std::stack<int> st;
+  st.push(0);
+
+  auto trimRight = [](const std::string& s) {
+    size_t end = s.find_last_not_of(" \t\r\n");
+    return (end == std::string::npos) ? std::string() : s.substr(0, end + 1);
+  };
+
+  std::string line;
+  std::string res_clear;
+  while (std::getline(ss, line)) {
+    res_clear = trimRight(line);
+    if (res_clear.ends_with("=>")) {
+      res_clear.erase(res_clear.size() - 2);
+    }
+    if (ss.eof()) break;
+    int indent_count = countIndent(line);
+    if (indent_count > st.top()) {
+      out_ss << "{\n";
+      out_ss << res_clear + '\n';
+
+      st.push(indent_count);
+    } else if (indent_count == st.top()) {
+      out_ss << res_clear + '\n';
+
+    } else {
+      st.pop();
+      out_ss << "}\n";
+    }
+  }
+
+  while (st.size() > 1) {
+    st.pop();
+    out_ss << "}\n";
+  }
+}
+
+void preprocess(std::stringstream& ss) {
+  std::string res;
+  res = dfa_is_needed_keyw(ss).value_or("");
+  if (res != "") {
+    out_ss << res + " ";
+    process_stack(ss);
+  } else if (dfa_is_arrow(ss)) {
+    process_stack(ss);
+  } else {
+    //    buf_write(in_file, buf_read_ch(curr_file));
+    std::string line;
+    std::getline(in_ss, line);
+    ss << line;
+  }
+}
+
+int main(int argc, char* argv[]) {
+  if (argc < 2) {
+    std::cerr << "Usage: " << argv[0] << " <input.ps>\n";
+    return 1;
+  }
+
+  // 1. Открываем файл
+  std::ifstream file(argv[1]);
+  if (!file.is_open()) {
+    std::cerr << "Error: Cannot open file '" << argv[1] << "'\n";
+    return 1;
+  }
+
+  // 2. Читаем ВЕСЬ файл в строку
+  std::string content;
+  std::string chunk;
+  while (std::getline(file, chunk)) {
+    content += chunk + "\n";
+  }
+
+  // 3. Заливаем строку в ГЛОБАЛЬНЫЙ in_ss
+  in_ss.str(content);  // Заменили содержимое
+  in_ss.clear();       // Сбросили флаги (на случай, если был eof)
+  in_ss.seekg(0);      // Встали в начало для чтения
+
+  // 4. Вызываем ПРЕПРОЦЕССОР
+  //    Передаём in_ss, потому что preprocess принимает stringstream&
+  preprocess(in_ss);
+
+  // 5. Выводим результат из ГЛОБАЛЬНОГО out_ss
+  std::cout << out_ss.str();
+
+  return 0;
+}

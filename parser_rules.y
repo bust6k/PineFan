@@ -1,0 +1,318 @@
+%require "3.8"
+%define parse.error verbose
+%define parse.assert  
+
+%language "c++"
+%define api.parser.class {Parser}
+%define api.namespace {PineFan}
+%define api.value.type variant
+%define api.token.constructor
+
+%defines "parser.hpp"
+
+%code requires {
+#include<cstdio>
+#include "ast.hpp"
+#include<vector>
+  namespace PineFan {
+  class Lexer;
+ }
+}
+
+%code {
+#include "lexer.hpp"
+}
+
+%{
+extern void yyerror(const char *s);
+extern Vector *program_root;
+
+%}
+
+%union {
+    int ival;
+    char *sval;
+    struct ast_node *node;
+}
+
+%token indicator_function
+%token strategy_function
+%token if_statement
+%token else_statement
+%token for_statement
+%token step
+%token to
+%token return_statement
+%token while_statement
+%token break_statement
+%token continue_statement
+%token switch_statement
+%token case_statement
+%token default_statement
+%token var
+%token const_statement
+%token simple
+%token logical_and
+%token logical_or
+%token logical_not
+%token dont_equal
+%token bitwise_and
+%token bitwise_or
+%token bitwise_xor
+%token bitwise_not
+%token bitwise_shift_to_left
+%token bitwise_shift_to_right
+%token semicolon
+%token import_statement
+%token as
+%token input
+%token int_type
+%token bool_type
+%token float_type
+%token color_type
+%token string_as_type
+%token left_paren
+%token right_paren
+%token left_brace
+%token right_brace
+%token assign
+%token re_assign
+%token equals
+%token greater_than
+%token lesser_than
+%token greater_than_or_equals
+%token lesser_than_or_equals
+%token bitwise_and_with_equals
+%token bitwise_or_with_equals
+%token bitwise_xor_with_equals
+%token bitwise_not_with_equals
+%token bitwise_shift_right_with_equals
+%token bitwise_shift_left_with_equals
+%token comma
+%token dot
+%token colon
+
+%token <ival> number
+%token <sval> identifier string
+
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt return_stmt break_stmt continue_stmt switch_stmt case_stmt default_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%start program
+
+%nonassoc if_statement
+%nonassoc else_statement
+
+%right assign re_assign
+%right bitwise_and_with_equals bitwise_or_with_equals bitwise_xor_with_equals bitwise_not_with_equals
+%right bitwise_shift_left_with_equals bitwise_shift_right_with_equals
+
+%left logical_or
+%left logical_and
+%left equals dont_equal greater_than lesser_than greater_than_or_equals lesser_than_or_equals
+
+%left bitwise_or
+%left bitwise_xor
+%left bitwise_and
+%left bitwise_shift_to_left bitwise_shift_to_right
+
+%left '+' '-'
+
+%left '*' '/' '%'
+
+%nonassoc logical_not bitwise_not
+%nonassoc '(' '[' '.'
+
+%nonassoc left_paren left_brace
+
+%%
+
+program:
+    %empty {}
+    | statement
+    { vec_push(program_root,$1); }
+    | program statement
+      { vec_push(program_root, $2);}
+    ;
+
+statement:
+    indicator_stmt
+    | strategy_stmt
+    | if_stmt
+    | for_stmt
+    | while_stmt
+    | return_stmt
+    | break_stmt
+    | continue_stmt
+    | switch_stmt
+    | case_stmt
+    | default_stmt
+    | var_stmt
+    | const_stmt
+    | simple_stmt
+    | import_stmt
+    | assignment_stmt
+    | assignment_re_stmt
+    ;
+ 
+block:
+    left_brace statement right_brace
+     { $$ = $2; }    
+    | statement
+    { $$ = $1; }
+    ;
+
+
+
+indicator_stmt:
+    indicator_function left_paren string right_paren
+    { $$ = new_indicator_node($3); }
+    ;
+
+strategy_stmt:
+    strategy_function left_paren string right_paren
+    { $$ = new_strategy_node($3); }
+    ;
+
+if_stmt:
+    if_statement left_paren expr right_paren block
+    { $$ = new_if_node($3,$5,NULL); }
+    | if_statement left_paren expr right_paren block else_statement block
+    { $$ = new_if_node($3,$5,$7); }
+    ;
+
+for_stmt:
+    for_statement identifier assign expr to expr block
+    { $$ = new_for_node($2, $4, $6, NULL, $7); }
+    | for_statement identifier assign expr to expr step expr block
+    { $$ = new_for_node($2, $4, $6, $8, $9); }
+    | for_statement  expr block
+    { $$ = new_for_node(NULL, $2, NULL, NULL, $3); }
+    ;
+
+while_stmt:
+    while_statement expr block
+    { $$ = new_while_node($2, $3); }
+    ;
+
+return_stmt:
+    return_statement  expr
+    { $$ = new_return_node($2); }
+    | return_statement
+    { $$ = new_return_node(NULL); }
+    ;
+
+break_stmt:
+    break_statement
+    { $$ = new_break_node(); }
+    ;
+
+continue_stmt:
+    continue_statement
+    { $$ = new_continue_node(); }
+    ;
+
+switch_stmt:
+    switch_statement expr block
+    { $$ = new_switch_node($2, $3); }
+    ;
+
+case_stmt:
+    case_statement expr colon  block
+    { $$ = new_case_node($2, $4); }
+    | case_statement expr comma expr colon block
+    { $$ = new_case_node_range($2, $4, $6); }
+    ;
+
+default_stmt:
+    default_statement colon  block
+    { $$ = new_default_node($3); }
+    ;
+
+var_stmt:
+    var identifier assign expr
+    { $$ = new_var_node($2); }
+    | var identifier
+    { $$ = new_var_node($2); }
+    ;
+
+const_stmt:
+    const_statement identifier assign expr
+    { $$ = new_const_node($2, $4); }
+    ;
+
+simple_stmt:
+    simple identifier
+    { $$ = new_simple_node($2); }
+    ;
+
+import_stmt:
+    import_statement string
+     { $$ = new_import_node($2); }
+    ;
+
+assignment_stmt:
+     identifier assign expr
+    { $$ = new_assign_node($1, $3); }
+    ;
+
+assignment_re_stmt:
+    identifier re_assign expr
+    { $$ = new_assign_re_node($1, $3); }
+    ;
+
+
+expr:
+    number
+    { $$ = new_number_node($1); }
+    | identifier
+    { $$ = new_var_node($1); }
+    | string
+    { $$ = new_string_node($1); }
+    | expr '+' expr
+    { $$ = new_binop_node("+", $1, $3); }
+    | expr '-' expr
+    { $$ = new_binop_node("-", $1, $3); }
+    | expr '*' expr
+    { $$ = new_binop_node("*", $1, $3); }
+    | expr '/' expr
+    { $$ = new_binop_node("/", $1, $3); }
+    | expr '%' expr
+    { $$ = new_binop_node("%", $1, $3); }
+    | expr logical_and expr
+    { $$ = new_binop_node("&&", $1, $3); }
+    | expr logical_or expr
+    { $$ = new_binop_node("||", $1, $3); }
+    | expr equals expr
+    { $$ = new_binop_node("==", $1, $3); }
+    | expr dont_equal expr
+    { $$ = new_binop_node("!=", $1, $3); }
+    | expr greater_than expr
+    { $$ = new_binop_node(">", $1, $3); }
+    | expr lesser_than expr
+    { $$ = new_binop_node("<", $1, $3); }
+    | expr greater_than_or_equals expr
+    { $$ = new_binop_node(">=", $1, $3); }
+    | expr lesser_than_or_equals expr
+    { $$ = new_binop_node("<=", $1, $3); }
+    | expr bitwise_and expr
+    { $$ = new_binop_node("&", $1, $3); }
+    | expr bitwise_or expr
+    { $$ = new_binop_node("|", $1, $3); }
+    | expr bitwise_xor expr
+    { $$ = new_binop_node("^", $1, $3); }
+    | expr bitwise_shift_to_left expr
+    { $$ = new_binop_node("<<", $1, $3); }
+    | expr bitwise_shift_to_right expr
+    { $$ = new_binop_node(">>", $1, $3); }
+    | logical_not expr
+    { $$ = new_unop_node("!", $2); }
+    | bitwise_not expr
+    { $$ = new_unop_node("~", $2); }
+    | '-'  expr %prec '*'
+    { $$ = new_unop_node("-", $2); }
+    | '+'  expr %prec '*'
+    { $$ = new_unop_node("+", $2); }
+    | left_paren expr right_paren
+    { $$ = $2; }
+    ;
+
+%%

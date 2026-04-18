@@ -1,0 +1,43 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
+#define MIN_SIZE 128
+
+  typedef struct {
+      void **body;
+      int len;
+      int nalloc;
+  } Vector;
+  
+  typedef struct {
+  int *body;
+  int len;
+  int nalloc;
+  } VectorInt;
+  
+  Vector *make_vector(void);
+  Vector *make_vector1(void *e);
+  static int max(int a, int b);
+  static int roundup(int n);
+  static void extend(Vector *vec, int delta);
+  Vector *do_make_vector(int size);
+  Vector *vec_copy(Vector *src);
+  void vec_push(Vector *vec, void *elem);
+  void vec_append(Vector *a, Vector *b);
+  void *vec_pop(Vector *vec);
+  void *vec_get(Vector *vec, int index);
+  void vec_set(Vector *vec, int index, void *val);
+  void *vec_head(Vector *vec);
+  void *vec_tail(Vector *vec);
+  Vector *vec_reverse(Vector *vec);
+  void *vec_body(Vector *vec);
+  int vec_len(Vector *vec);
+  static VectorInt *do_make_vector_int(int size);
+  VectorInt *make_vector_int();
+  static void extend_int(VectorInt *vec, int delta);
+  void vec_push_int(VectorInt *vec,int elem);
+  int vec_get_int(VectorInt *vec, int index);
+  void vec_free(Vector *vec);
+  void vec_free_int(VectorInt *vec);
+  
+#endif //VECTOR_H
