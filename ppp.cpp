@@ -83,7 +83,7 @@ static void dfa_init() {
 
 std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
   States state = S_START;
-  dfa_init();
+
   for (;;) {
     switch (state) {
       case S_START: {
@@ -289,7 +289,6 @@ int countIndent(std::string& s) {
 //  if,for,while declarations. it also significant for the bison parser
 void process_stack(std::stringstream& ss) {
   std::stack<int> st;
-  bool prevOpened;
   st.push(0);
 
   auto trimRight = [](const std::string& s) {
@@ -299,6 +298,7 @@ void process_stack(std::stringstream& ss) {
 
   std::string line;
   std::string res_clear;
+
   while (std::getline(ss, line)) {
     res_clear = trimRight(line);
     if (res_clear.ends_with("=>")) {
@@ -314,28 +314,13 @@ void process_stack(std::stringstream& ss) {
     int indent_count = countIndent(line);
 
     if (indent_count > st.top()) {
-      //      out_ss << res_clear;
-      out_ss << "{";
-      out_ss << res_clear;
-      out_ss << '\n';
-      prevOpened = true;
-      continue;
+      out_ss << "{\n";
 
       st.push(indent_count);
     } else if (indent_count == st.top()) {
-      if (!prevOpened) {
-        out_ss << res_clear + '\n';
-        prevOpened = false;
-        continue;
-      } else {
-        out_ss << res_clear;
-        prevOpened = false;
-        continue;
-      }
     } else {
       st.pop();
       out_ss << "}\n";
-      prevOpened = false;
     }
     out_ss << res_clear + '\n';
   }
@@ -348,36 +333,58 @@ void process_stack(std::stringstream& ss) {
 
 void preprocess(std::stringstream& ss) {
   std::string res;
-
-  while (true) {
+  bool is_found;
+  while (!is_found) {
+    auto pos_before = ss.tellg();
     res = dfa_is_needed_keyw(ss).value_or("");
+
     if (res != "") {
       out_ss << res << " ";
       process_stack(ss);
+      is_found = true;
       continue;
     }
-
-    if (dfa_is_arrow(ss)) {
+    bool is_arrow;
+    is_arrow = dfa_is_arrow(ss);
+    if (is_arrow) {
       process_stack(ss);
+      is_found = true;
       continue;
     }
-
+    ss.clear();
+    ss.seekg(pos_before);
     std::string line;
     if (std::getline(in_ss, line)) {
-      ss << line << "\n";
+      out_ss << line << "\n";
     } else {
-      break;
+      return;
     }
   }
 }
+/*
+void preprocess(std::stringstream& ss) {
+  std::string res;
+  res = dfa_is_needed_keyw(ss).value_or("");
+  if (res != "") {
+    out_ss << res + " ";
+    process_stack(ss);
+  } else if (dfa_is_arrow(ss)) {
+    process_stack(ss);
+  } else {
+    //    buf_write(in_file, buf_read_ch(curr_file));
+    std::string line;
+    std::getline(in_ss, line);
+    ss << line;
+  }
+}
 
-
+*/
 int main(int argc, char* argv[]) {
   if (argc < 2) {
     std::cerr << "Usage: " << argv[0] << " <input.ps>\n";
     return 1;
   }
-
+  dfa_init();
   // 1. Открываем файл
   std::ifstream file(argv[1]);
   if (!file.is_open()) {
