@@ -106,6 +106,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           break;
         } else {
           ss.unget();
+          ss.unget();
           return std::nullopt;
         }
       }
@@ -120,7 +121,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
         else {
           ss.unget();
           ss.unget();
-
+          ss.unget();
           return std::nullopt;
         }
       }
@@ -234,7 +235,8 @@ bool dfa_is_arrow(std::stringstream& ss) {
   for (;;) {
     switch (state) {
       case S_START: {
-        if (ss.get() == '=') {
+        auto first = ss.get();
+        if (first == '=') {
           state = dfa_arrow_trn_table[state][S_EQ];
         } else {
           ss.unget();
@@ -244,7 +246,8 @@ bool dfa_is_arrow(std::stringstream& ss) {
       }
 
       case S_EQ: {
-        if (ss.get() == '>') {
+        auto first = ss.get();
+        if (first == '>') {
           state = dfa_arrow_trn_table[state][S_GT];
         } else {
           ss.unget();
@@ -354,8 +357,27 @@ void preprocess(std::stringstream& ss) {
     ss.clear();
     ss.seekg(pos_before);
     std::string line;
-    if (std::getline(in_ss, line)) {
-      out_ss << line << "\n";
+
+    auto trimRight = [](const std::string& s) {
+      size_t end = s.find_last_not_of(" \t\r\n");
+      return (end == std::string::npos) ? std::string() : s.substr(0, end + 1);
+    };
+
+    if (std::getline(ss, line)) {
+      std::string clear_line = trimRight(line);
+      if (!clear_line.empty()) {
+        std::string clear_line_copy = clear_line;
+        std::string erased_line = clear_line.erase(clear_line.size() - 2);
+
+        if (clear_line_copy.ends_with("=>")) {
+          out_ss << erased_line << "\n";
+          process_stack(ss);
+          is_found = true;
+          continue;
+        }
+
+        out_ss << clear_line << "\n";
+      }
     } else {
       return;
     }
