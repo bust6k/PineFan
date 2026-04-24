@@ -1,6 +1,5 @@
 // ppp(pinescript preprocessor) - is a preprocessor for the PineScript language.
-// that does to find the keyword(i.e if,for,while) or a function to do it to the
-// C-like form. it needed for simplify the other pipeline especially the parser.
+// that does to find the keyword(i.e if,for,while) or a function to do it to the // C-like form. it needed for simplify the other pipeline especially the parser.
 // for determinig the keywords uses tabs for body selecting it uses the 5-tuple
 // // DFA-keyword (Q,Σ,δ,q0,F) consisting of
 //- a set of states Q
@@ -23,6 +22,8 @@
 #include <sstream>
 #include <stack>
 #include <string>
+
+namespace Ppp {
 
 void preprocess(std::stringstream& ss);
 
@@ -109,6 +110,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
       case S_IF: {
         state = dfa_keyw_trn_table[state][S_END_IF];
@@ -124,6 +126,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
       case S_F: {
         if (ss.get() == 'o') {
@@ -133,6 +136,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
       case S_FO: {
         if (ss.get() == 'r') {
@@ -143,6 +147,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
       case S_FOR: {
         state = dfa_keyw_trn_table[state][S_END_FOR];
@@ -160,6 +165,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
 
       case S_W: {
@@ -170,6 +176,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
       case S_WH: {
         if (ss.get() == 'i') {
@@ -180,6 +187,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
 
       case S_WHI: {
@@ -192,6 +200,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
 
       case S_WHIL: {
@@ -205,6 +214,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
 
       case S_WHILE: {
@@ -223,6 +233,7 @@ std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
           ss.unget();
           return std::nullopt;
         }
+        break;
       }
       default:
         return std::nullopt;
@@ -290,8 +301,15 @@ int countIndent(std::string& s) {
 // production
 //  so you also need to make function that also adds brackets( () ) to the
 //  if,for,while declarations. it also significant for the bison parser
-void process_stack(std::stringstream& ss) {
+
+// TODO: add isNeed var that detemines if it keyword(need the bracket( ( () or a
+// function(don't need)
+// TODO: add dfa checking to add the ( bracket to all the keywords. so it could
+// be couple with the past line
+void process_stack(std::stringstream& ss, bool isFun = false) {
   std::stack<int> st;
+  bool isNotOpened = true;
+
   st.push(0);
 
   auto trimRight = [](const std::string& s) {
@@ -306,6 +324,7 @@ void process_stack(std::stringstream& ss) {
     res_clear = trimRight(line);
     if (res_clear.ends_with("=>")) {
       res_clear.erase(res_clear.size() - 2);
+      isFun = true;
     }
 
     if (ss.eof()) break;
@@ -317,20 +336,36 @@ void process_stack(std::stringstream& ss) {
     int indent_count = countIndent(line);
 
     if (indent_count > st.top()) {
+      if (!isFun) {
+        out_ss << ")";
+      }
       out_ss << "{\n";
-
+      isNotOpened = false;
       st.push(indent_count);
+
     } else if (indent_count == st.top()) {
+      std::string res = dfa_is_needed_keyw(ss).value_or("");
+      if (res != "") {
+        isNotOpened = true;
+      }
+      continue;
     } else {
       st.pop();
+      isNotOpened = true;
       out_ss << "}\n";
     }
-    out_ss << res_clear + '\n';
+    //    if(isOpened){out_ss << res_clear + '\n';}
+    if (isNotOpened) {
+      out_ss << res_clear;
+    } else {
+      out_ss << res_clear << '\n';
+    }
   }
 
   while (st.size() > 1) {
     st.pop();
-    out_ss << "}\n";
+    isNotOpened = true;
+    out_ss << "\n}\n";
   }
 }
 
@@ -342,7 +377,7 @@ void preprocess(std::stringstream& ss) {
     res = dfa_is_needed_keyw(ss).value_or("");
 
     if (res != "") {
-      out_ss << res << " ";
+      out_ss << res << "(";
       process_stack(ss);
       is_found = true;
       continue;
@@ -370,8 +405,8 @@ void preprocess(std::stringstream& ss) {
         std::string erased_line = clear_line.erase(clear_line.size() - 2);
 
         if (clear_line_copy.ends_with("=>")) {
-          out_ss << erased_line << "\n";
-          process_stack(ss);
+          out_ss << erased_line;
+          process_stack(ss, true);
           is_found = true;
           continue;
         }
@@ -401,37 +436,35 @@ void preprocess(std::stringstream& ss) {
 }
 
 */
+
+}  // namespace Ppp
+
 int main(int argc, char* argv[]) {
   if (argc < 2) {
-    std::cerr << "Usage: " << argv[0] << " <input.ps>\n";
+    std::cerr << "Usage: " << argv[0] << " <input.pine>\n";
     return 1;
   }
-  dfa_init();
-  // 1. Открываем файл
+  Ppp::dfa_init();
+
   std::ifstream file(argv[1]);
   if (!file.is_open()) {
     std::cerr << "Error: Cannot open file '" << argv[1] << "'\n";
     return 1;
   }
 
-  // 2. Читаем ВЕСЬ файл в строку
   std::string content;
   std::string chunk;
   while (std::getline(file, chunk)) {
     content += chunk + "\n";
   }
 
-  // 3. Заливаем строку в ГЛОБАЛЬНЫЙ in_ss
-  in_ss.str(content);  // Заменили содержимое
-  in_ss.clear();       // Сбросили флаги (на случай, если был eof)
-  in_ss.seekg(0);      // Встали в начало для чтения
+  Ppp::in_ss.str(content);
+  Ppp::in_ss.clear();
+  Ppp::in_ss.seekg(0);
 
-  // 4. Вызываем ПРЕПРОЦЕССОР
-  //    Передаём in_ss, потому что preprocess принимает stringstream&
-  preprocess(in_ss);
+  Ppp::preprocess(Ppp::in_ss);
 
-  // 5. Выводим результат из ГЛОБАЛЬНОГО out_ss
-  std::cout << out_ss.str();
+  std::cout << Ppp::out_ss.str();
 
   return 0;
 }
