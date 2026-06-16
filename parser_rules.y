@@ -13,7 +13,7 @@ extern Vector* program_root;
 
 %{
 extern void yyerror(const char *s);
-extern Vector *program_root;
+//extern Vector *program_root;
 
 %}
 
@@ -53,7 +53,7 @@ extern Vector *program_root;
 %token semicolon
 %token import_statement
 %token as
-%token input
+%token input_func
 %token int_type
 %token bool_type
 %token float_type

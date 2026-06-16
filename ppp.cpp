@@ -1,6 +1,8 @@
 // ppp(pinescript preprocessor) - is a preprocessor for the PineScript language.
-// that does to find the keyword(i.e if,for,while) or a function to do it to the // C-like form. it needed for simplify the other pipeline especially the parser.
-// for determinig the keywords uses tabs for body selecting it uses the 5-tuple
+// that does to find the keyword(i.e if,for,while) or a function to do it to the
+// // C-like form. it needed for simplify the other pipeline especially the
+// parser. for determinig the keywords uses tabs for body selecting it uses the
+// 5-tuple
 // // DFA-keyword (Q,Σ,δ,q0,F) consisting of
 //- a set of states Q
 //{S_START,S_I,S_IF,S_F,S_FO,S_FOR,S_W,S_WH,S_WHI,S_WHIL,S_WHILE,S_END_IF,S_END_FOR,S_END_WHILE}
@@ -16,455 +18,417 @@
 //- a start state q0 ∈ Q {S_START}
 //- a finite set of accept states F {S_ARROW_END}
 
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <optional>
 #include <sstream>
 #include <stack>
 #include <string>
+#include <vector>
 
+#include "file.hpp"
+#include "ppp.hpp"
+
+//#define _IS_MAIN
+
+namespace Pinefan {
 namespace Ppp {
 
-void preprocess(std::stringstream& ss);
+  void KeywordDFA::reset() {
+    state = KW_START;
+    current_word.clear();
+  }
 
-enum States {
-  S_START,
-  S_I,
-  S_IF,
-  S_F,
-  S_FO,
-  S_FOR,
-  S_W,
-  S_WH,
-  S_WHI,
-  S_WHIL,
-  S_WHILE,
-  S_END_IF,
-  S_END_FOR,
-  S_END_WHILE,
-  S_EQ,
-  S_GT,
-  S_ARROW_END
-};
+  // Process single character, returns true if keyword is fully matched
+  std::optional<std::string> KeywordDFA::feed(char c) {
+    if (!std::isalpha(c)) return std::nullopt;
 
-static States dfa_keyw_trn_table[512][512];
-static States dfa_arrow_trn_table[512][512];
+    current_word += c;
 
-std::stringstream in_ss;
-std::stringstream out_ss;
-
-bool is_alpha(char c) {
-  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-}
-
-bool is_maybe_keyw(char c) { return is_alpha(c) || c == '_'; }
-
-static void dfa_init() {
-  /* dfa_keyw_trn_table */
-  dfa_keyw_trn_table[S_START][S_I] = S_I;
-  dfa_keyw_trn_table[S_I][S_IF] = S_IF;
-  dfa_keyw_trn_table[S_START][S_F] = S_F;
-  dfa_keyw_trn_table[S_F][S_FO] = S_FO;
-  dfa_keyw_trn_table[S_FO][S_FOR] = S_FOR;
-  dfa_keyw_trn_table[S_START][S_W] = S_W;
-  dfa_keyw_trn_table[S_W][S_WH] = S_WH;
-  dfa_keyw_trn_table[S_WH][S_WHI] = S_WHI;
-  dfa_keyw_trn_table[S_WHI][S_WHIL] = S_WHIL;
-  dfa_keyw_trn_table[S_WHIL][S_WHILE] = S_WHILE;
-
-  dfa_keyw_trn_table[S_IF][S_END_IF] = S_END_IF;
-  dfa_keyw_trn_table[S_FOR][S_END_FOR] = S_END_FOR;
-  dfa_keyw_trn_table[S_WHILE][S_END_WHILE] = S_END_WHILE;
-
-  /* dfa_arrow_trn_table */
-  dfa_arrow_trn_table[S_START][S_EQ] = S_EQ;
-  dfa_arrow_trn_table[S_EQ][S_GT] = S_GT;
-  dfa_arrow_trn_table[S_GT][S_ARROW_END] = S_ARROW_END;
-}
-
-std::optional<std::string> dfa_is_needed_keyw(std::stringstream& ss) {
-  States state = S_START;
-
-  for (;;) {
     switch (state) {
-      case S_START: {
-        char letter = ss.get();
-
-        if (letter == 'i') {
-          state = dfa_keyw_trn_table[state][S_I];
-        } else if (letter == 'f') {
-          state = dfa_keyw_trn_table[state][S_F];
-        } else if (letter == 'w') {
-          state = dfa_keyw_trn_table[state][S_W];
-        }
-        break;
-      }
-
-      case S_I: {
-        char foo = ss.get();
-        if (foo == 'f') {
-          state = dfa_keyw_trn_table[state][S_IF];
-          break;
-        } else {
-          ss.unget();
-          ss.unget();
+      case KW_START:
+        if (c == 'i')
+          state = KW_I;
+        else if (c == 'f')
+          state = KW_F;
+        else if (c == 'w')
+          state = KW_W;
+        else if (c == 's')
+          state = KW_S;
+        else if (c == 't')
+          state = KW_T;
+        else
           return std::nullopt;
-        }
         break;
-      }
-      case S_IF: {
-        state = dfa_keyw_trn_table[state][S_END_IF];
-        break;
-      }
 
-      case S_END_IF: {
-        if (!is_maybe_keyw(ss.get()))
-          return "if";
-        else {
-          ss.unget();
-          ss.unget();
-          ss.unget();
+      case KW_I:
+        if (c == 'f')
+          state = KW_ACCEPT_IF;
+        else
           return std::nullopt;
-        }
         break;
-      }
-      case S_F: {
-        if (ss.get() == 'o') {
-          state = dfa_keyw_trn_table[state][S_FO];
-          break;
-        } else {
-          ss.unget();
-          return std::nullopt;
-        }
-        break;
-      }
-      case S_FO: {
-        if (ss.get() == 'r') {
-          state = dfa_keyw_trn_table[state][S_FOR];
-          break;
-        } else {
-          ss.unget();
-          ss.unget();
-          return std::nullopt;
-        }
-        break;
-      }
-      case S_FOR: {
-        state = dfa_keyw_trn_table[state][S_END_FOR];
-        break;
-      }
 
-      case S_END_FOR: {
-        if (!is_maybe_keyw(ss.get()))
-
-          return "for";
-
-        else {
-          ss.unget();
-          ss.unget();
-          ss.unget();
+      case KW_F:
+        if (c == 'o')
+          state = KW_FO;
+        else
           return std::nullopt;
-        }
         break;
-      }
 
-      case S_W: {
-        if (ss.get() == 'h') {
-          state = dfa_keyw_trn_table[state][S_WH];
-          break;
-        } else {
-          ss.unget();
+      case KW_S:
+        if (c == 'w')
+          state = KW_SW;
+        else
           return std::nullopt;
-        }
         break;
-      }
-      case S_WH: {
-        if (ss.get() == 'i') {
-          state = dfa_keyw_trn_table[state][S_WHI];
-          break;
-        } else {
-          ss.unget();
-          ss.unget();
-          return std::nullopt;
-        }
-        break;
-      }
 
-      case S_WHI: {
-        if (ss.get() == 'l') {
-          state = dfa_keyw_trn_table[state][S_WHIL];
-          break;
-        } else {
-          ss.unget();
-          ss.unget();
-          ss.unget();
+      case KW_T:
+        if (c == 'y')
+          state = KW_TY;
+        else
           return std::nullopt;
-        }
         break;
-      }
 
-      case S_WHIL: {
-        if (ss.get() == 'e') {
-          state = dfa_keyw_trn_table[state][S_WHILE];
-          break;
-        } else {
-          ss.unget();
-          ss.unget();
-          ss.unget();
-          ss.unget();
+      case KW_FO:
+        if (c == 'r')
+          state = KW_ACCEPT_FOR;
+        else
           return std::nullopt;
-        }
         break;
-      }
 
-      case S_WHILE: {
-        state = dfa_keyw_trn_table[state][S_END_WHILE];
-        break;
-      }
-
-      case S_END_WHILE: {
-        if (!is_maybe_keyw(ss.get()))
-          return "while";
-        else {
-          ss.unget();
-          ss.unget();
-          ss.unget();
-          ss.unget();
-          ss.unget();
+      case KW_W:
+        if (c == 'h')
+          state = KW_WH;
+        else
           return std::nullopt;
-        }
         break;
-      }
+
+      case KW_WH:
+        if (c == 'i')
+          state = KW_WHI;
+        else
+          return std::nullopt;
+        break;
+
+      case KW_SW:
+        if (c == 'i')
+          state = KW_SWI;
+        else
+          return std::nullopt;
+        break;
+
+      case KW_WHI:
+        if (c == 'l')
+          state = KW_WHIL;
+        else
+          return std::nullopt;
+        break;
+
+      case KW_WHIL:
+        if (c == 'e')
+          state = KW_ACCEPT_WHILE;
+        else
+          return std::nullopt;
+        break;
+
+      case KW_SWI:
+        if (c == 't')
+          state = KW_SWIT;
+        else
+          return std::nullopt;
+        break;
+
+      case KW_SWIT:
+        if (c == 'c')
+          state = KW_SWITC;
+        else
+          return std::nullopt;
+        break;
+
+      case KW_SWITC:
+        if (c == 'h')
+          state = KW_ACCEPT_SWITCH;
+        else
+          return std::nullopt;
+        break;
+
+      case KW_TY:
+        if (c == 'p')
+          state = KW_TYP;
+        else
+          return std::nullopt;
+        break;
+
+      case KW_TYP:
+        if (c == 'e')
+          state = KW_ACCEPT_TYPE;
+        else
+          return std::nullopt;
+        break;
+
       default:
         return std::nullopt;
     }
+
+    // Check if we reached accepting state
+    if (state == KW_ACCEPT_IF) return "if";
+    if (state == KW_ACCEPT_FOR) return "for";
+    if (state == KW_ACCEPT_WHILE) return "while";
+    if (state == KW_ACCEPT_SWITCH) return "switch";
+    if (state == KW_ACCEPT_TYPE) return "type";
+
+    return std::nullopt;
   }
+
+
+// Helper functions
+inline bool is_whitespace(char c) { return c == ' ' || c == '\t'; }
+
+inline bool is_alpha(char c) {
+  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
-bool dfa_is_arrow(std::stringstream& ss) {
-  int state = S_START;
-  for (;;) {
-    switch (state) {
-      case S_START: {
-        auto first = ss.get();
-        if (first == '=') {
-          state = dfa_arrow_trn_table[state][S_EQ];
-        } else {
-          ss.unget();
-          return false;
-        }
-        break;
-      }
+std::string trim_right(const std::string& s) {
+  size_t end = s.find_last_not_of(" \t\r\n");
+  return (end == std::string::npos) ? "" : s.substr(0, end + 1);
+}
 
-      case S_EQ: {
-        auto first = ss.get();
-        if (first == '>') {
-          state = dfa_arrow_trn_table[state][S_GT];
-        } else {
-          ss.unget();
-          ss.unget();
-          return false;
-        }
-        break;
+bool is_arrow(const std::string& line) {
+  // Look for "=>" as separate tokens
+  for (size_t i = 0; i + 1 < line.length(); ++i) {
+    if (line[i] == '=' && line[i + 1] == '>') {
+      // Check that it's not part of a word (should be separate)
+      if ((i == 0 || !is_alpha(line[i - 1])) &&
+          (i + 2 >= line.length() || !is_alpha(line[i + 2]))) {
+        return true;
       }
-
-      case S_GT: {
-        state = dfa_arrow_trn_table[state][S_ARROW_END];
-        break;
-      }
-      case S_ARROW_END: {
-        if (!is_maybe_keyw(ss.get())) {
-          return true;
-        }
-        return false;
-      }
-      default:
-        return false;
     }
   }
+  return false;
 }
 
-int countIndent(std::string& s) {
-  int cnt = 0;
-  for (char c : s) {
-    if (c == ' ')
-      cnt += 1;
-    else if (c == '\t')
-      cnt += 4;
-    else
-      break;
+std::string remove_arrow(std::string line) {
+  size_t pos = line.find("=>");
+  if (pos != std::string::npos) {
+    // Remove "=>" and surrounding whitespace
+    line.erase(pos, 2);
+    // Clean up extra spaces
+    if (pos > 0 && is_whitespace(line[pos - 1])) {
+      line.erase(pos - 1, 1);
+    }
+    if (pos < line.length() && is_whitespace(line[pos])) {
+      line.erase(pos, 1);
+    }
   }
-  return cnt;
+  return trim_right(line);
 }
 
-// this is the pseudo-code.please,don't think this is would to be used at
-// production
-//  so you also need to make function that also adds brackets( () ) to the
-//  if,for,while declarations. it also significant for the bison parser
+// Find keyword in line at specific position (considering boundaries)
+std::optional<std::string> find_keyword_at(const std::string& line,
+                                           size_t start_pos) {
+  KeywordDFA dfa;
+  size_t i = start_pos;
 
-// TODO: add isNeed var that detemines if it keyword(need the bracket( ( () or a
-// function(don't need)
-// TODO: add dfa checking to add the ( bracket to all the keywords. so it could
-// be couple with the past line
-void process_stack(std::stringstream& ss, bool isFun = false) {
-  std::stack<int> st;
-  bool isNotOpened = true;
+  // Skip whitespace
+  while (i < line.length() && is_whitespace(line[i])) ++i;
 
-  st.push(0);
+  // Check if it's start of a word
+  if (i >= line.length() || !is_alpha(line[i])) return std::nullopt;
 
-  auto trimRight = [](const std::string& s) {
-    size_t end = s.find_last_not_of(" \t\r\n");
-    return (end == std::string::npos) ? std::string() : s.substr(0, end + 1);
-  };
+  // Feed characters to DFA until we either match or fail
+  while (i < line.length() && is_alpha(line[i])) {
+    auto result = dfa.feed(line[i]);
+    if (result.has_value()) {
+      // Check boundary after keyword
+      if (i + 1 < line.length() && is_alpha(line[i + 1])) {
+        // Part of larger word (e.g., "iframe")
+        return std::nullopt;
+      }
+      return result;
+    }
+    ++i;
+  }
 
+  return std::nullopt;
+}
+// Process lines and build output with braces
+void preprocess(const std::string& input, std::string& output) {
+  // Parse input into lines
+  std::vector<std::string> lines;
   std::string line;
-  std::string res_clear;
+  std::istringstream iss(input);
 
-  while (std::getline(ss, line)) {
-    res_clear = trimRight(line);
-    if (res_clear.ends_with("=>")) {
-      res_clear.erase(res_clear.size() - 2);
-      isFun = true;
-    }
-
-    if (ss.eof()) break;
-    if (res_clear.empty()) {
-      out_ss << '\n';
-      continue;
-    }
-
-    int indent_count = countIndent(line);
-
-    if (indent_count > st.top()) {
-      if (!isFun) {
-        out_ss << ")";
-      }
-      out_ss << "{\n";
-      isNotOpened = false;
-      st.push(indent_count);
-
-    } else if (indent_count == st.top()) {
-      std::string res = dfa_is_needed_keyw(ss).value_or("");
-      if (res != "") {
-        isNotOpened = true;
-      }
-      continue;
-    } else {
-      st.pop();
-      isNotOpened = true;
-      out_ss << "}\n";
-    }
-    //    if(isOpened){out_ss << res_clear + '\n';}
-    if (isNotOpened) {
-      out_ss << res_clear;
-    } else {
-      out_ss << res_clear << '\n';
-    }
+  while (std::getline(iss, line)) {
+    lines.push_back(line);
   }
 
-  while (st.size() > 1) {
-    st.pop();
-    isNotOpened = true;
-    out_ss << "\n}\n";
+  // First pass: classify each line
+  std::vector<LineInfo> infos;
+
+  for (size_t idx = 0; idx < lines.size(); ++idx) {
+    const auto& l = lines[idx];
+    LineInfo info;
+    info.content = trim_right(l);
+    info.indent = 0;
+
+    // Count indentation
+    for (char c : l) {
+      if (c == ' ')
+        info.indent++;
+      else if (c == '\t')
+        info.indent += 4;
+      else
+        break;
+    }
+
+    // Check if it's a function (has =>)
+    if (is_arrow(info.content)) {
+      info.type = LineInfo::FUNCTION;
+      info.content = remove_arrow(info.content);
+      info.keyword = "";
+    }
+    // Check if it's a keyword line (starts with if/for/while)
+    else {
+      auto kw = find_keyword_at(info.content, 0);
+      if (kw.has_value()) {
+        info.type = LineInfo::KEYWORD;
+        info.keyword = kw.value();
+      } else {
+        info.type = LineInfo::NORMAL;
+        info.keyword = "";
+      }
+    }
+
+    infos.push_back(info);
   }
-}
 
-void preprocess(std::stringstream& ss) {
-  std::string res;
-  bool is_found;
-  while (!is_found) {
-    auto pos_before = ss.tellg();
-    res = dfa_is_needed_keyw(ss).value_or("");
+  // Second pass: generate output with brace insertion
+  std::stack<int> indent_stack;
+  indent_stack.push(0);
 
-    if (res != "") {
-      out_ss << res << "(";
-      process_stack(ss);
-      is_found = true;
+  for (size_t idx = 0; idx < infos.size(); ++idx) {
+    auto& info = infos[idx];
+    int current_indent = info.indent;
+
+    while (current_indent > indent_stack.top()) {
+      indent_stack.push(current_indent);
+      output += "{\n";
+    }
+
+    // Close blocks when indent decreases
+    while (current_indent < indent_stack.top()) {
+      indent_stack.pop();
+      output += "}\n";
+    }
+
+    // Skip empty lines (just copy)
+    if (info.content.empty()) {
+      output += "\n";
       continue;
     }
-    bool is_arrow;
-    is_arrow = dfa_is_arrow(ss);
-    if (is_arrow) {
-      process_stack(ss);
-      is_found = true;
-      continue;
-    }
-    ss.clear();
-    ss.seekg(pos_before);
-    std::string line;
 
-    auto trimRight = [](const std::string& s) {
-      size_t end = s.find_last_not_of(" \t\r\n");
-      return (end == std::string::npos) ? std::string() : s.substr(0, end + 1);
-    };
+    // Handle line based on type
+    switch (info.type) {
+      case LineInfo::KEYWORD: {
+        // For KEYWORD: add "if (" and then open brace on next line
+        output += info.keyword + " (";
 
-    if (std::getline(ss, line)) {
-      std::string clear_line = trimRight(line);
-      if (!clear_line.empty()) {
-        std::string clear_line_copy = clear_line;
-        std::string erased_line = clear_line.erase(clear_line.size() - 2);
-
-        if (clear_line_copy.ends_with("=>")) {
-          out_ss << erased_line;
-          process_stack(ss, true);
-          is_found = true;
-          continue;
+        // Find the condition part (everything after keyword)
+        size_t kw_pos = info.content.find(info.keyword);
+        std::string condition;
+        if (kw_pos != std::string::npos) {
+          condition = info.content.substr(kw_pos + info.keyword.length());
+          // Trim condition
+          size_t start = condition.find_first_not_of(" \t");
+          if (start != std::string::npos) {
+            condition = condition.substr(start);
+          } else {
+            condition = "";
+          }
         }
 
-        out_ss << clear_line << "\n";
+        // Remove trailing spaces
+        condition = trim_right(condition);
+        output += condition + ") ";
+
+        break;
       }
-    } else {
-      return;
+
+      case LineInfo::FUNCTION: {
+        // For FUNCTION: just write content (arrow removed), then open brace
+        output += info.content + ' ';
+
+        break;
+      }
+
+      case LineInfo::NORMAL: {
+        // Normal line: write as is (with proper spacing)
+        output += info.content + "\n";
+        break;
+      }
     }
   }
+
+  // Close any remaining blocks
+  while (indent_stack.size() > 1) {
+    indent_stack.pop();
+    output += "}\n";
+  }
 }
-/*
-void preprocess(std::stringstream& ss) {
-  std::string res;
-  res = dfa_is_needed_keyw(ss).value_or("");
-  if (res != "") {
-    out_ss << res + " ";
-    process_stack(ss);
-  } else if (dfa_is_arrow(ss)) {
-    process_stack(ss);
-  } else {
-    //    buf_write(in_file, buf_read_ch(curr_file));
+
+int preprocess_files(int argc,char* argv[]) {
+  for (int i = 1; i < argc; i++) {
+    std::ifstream curr_file(argv[i]);
+
+    if (!curr_file.is_open()) {
+      std::cerr << std::format("Error: Cannot open file {}\n",argv[i]);
+      
+      return 1;
+    }
+
+    std::string content;
     std::string line;
-    std::getline(in_ss, line);
-    ss << line;
+
+    while (std::getline(curr_file, line)) {
+      content += line + "\n";
+    }
+
+    std::string output;
+
+    Pinefan::Ppp::preprocess(content, output);
+
+    std::string f_name(argv[i]);
+
+    auto* file = new Pinefan::File::Prp_file(f_name, output);
+
+    file->Pinefan::File::Prp_file::add_preprocessed_file(file);
+
+    auto* f =  file->Pinefan::File::Prp_file::get_preprocessed_file(i -  1);
+
+    std::cout << "\e[92m" << f_name << "\e[0m" << std::endl << std::endl << std::endl; 
+    std::cout << f->get_content();
+    
+    delete file;
   }
-}
-
-*/
-
-}  // namespace Ppp
-
-int main(int argc, char* argv[]) {
-  if (argc < 2) {
-    std::cerr << "Usage: " << argv[0] << " <input.pine>\n";
-    return 1;
-  }
-  Ppp::dfa_init();
-
-  std::ifstream file(argv[1]);
-  if (!file.is_open()) {
-    std::cerr << "Error: Cannot open file '" << argv[1] << "'\n";
-    return 1;
-  }
-
-  std::string content;
-  std::string chunk;
-  while (std::getline(file, chunk)) {
-    content += chunk + "\n";
-  }
-
-  Ppp::in_ss.str(content);
-  Ppp::in_ss.clear();
-  Ppp::in_ss.seekg(0);
-
-  Ppp::preprocess(Ppp::in_ss);
-
-  std::cout << Ppp::out_ss.str();
+  
+  
 
   return 0;
 }
+}  // namespace Ppp
+}  // namespace Pinefan
+
+
+#ifdef _IS_MAIN
+int main(int argc, char* argv[]) {
+  if (argc < 2) {
+    std::cerr << std::format("Usage: \e[92m{}\e[0m \e[94m{:<2}\e[0m", argv[0],
+                             " <input..n.pine> \n");
+    
+    return 1;
+  }
+return Pinefan::Ppp::preprocess_files(argc,argv);
+}
+
+#endif //_IS_MAIN

@@ -44,6 +44,14 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "parser_rules.y"
+
+#include <stdio.h>
+#include "ast.h"
+//#include "vector.h" // был закомментирован или включён условно
+
+#line 55 "parser_rules.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -84,7 +92,7 @@ extern int yydebug;
     semicolon = 285,               /* semicolon  */
     import_statement = 286,        /* import_statement  */
     as = 287,                      /* as  */
-    input = 288,                   /* input  */
+    input_func = 288,              /* input_func  */
     int_type = 289,                /* int_type  */
     bool_type = 290,               /* bool_type  */
     float_type = 291,              /* float_type  */
@@ -121,13 +129,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "parser_rules.y"
+#line 20 "parser_rules.y"
 
     int ival;
     char *sval;
     struct ast_node *node;
 
-#line 131 "parser_rules.tab.h"
+#line 139 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

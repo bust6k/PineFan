@@ -120,7 +120,7 @@ void common_var(std::string_view name, ast_node* value, std::ofstream& output) {
       break;
 
     default:
-      throw "unknown var type";
+      //throw "unknown var";
       break;
   }
 }

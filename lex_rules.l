@@ -1,12 +1,5 @@
-%option noyywrap noinput nodefault
-%option nounput 
-%option c++
-%option batch
-%option yyclass="PineFan::Lexer"
-
+%option noyywrap
 %{
-#include "parser.hpp"
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdarg.h>
@@ -15,6 +8,7 @@
 #include<string.h>
 #include<stdbool.h>
 #include "error.h"
+#include "parser_rules.tab.h"
 
 /*
 typedef enum{
@@ -102,7 +96,7 @@ const { col += 5; return const_statement; }
 simple { col += 6; return simple; }
 import { col += 6; return import_statement; }
 as { col += 2; return as; }
-input { col += 5; return input; }
+input { col += 5; return input_func; }
 int { col += 3; return int_type; }
 bool { col += 4; return bool_type; }
 float { col += 5; return float_type; }
@@ -168,7 +162,4 @@ and { col += 3; return logical_and; }
 
 %%
 
-int PineFan::Lexer::yylex(PineFan::Parser::semantic_type* yylval,
-                           PineFan::Parser::location_type* yylloc) {
-    return yylex(); 
-}
+

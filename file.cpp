@@ -33,13 +33,5 @@ Prp_file* Prp_file::get_preprocessed_file(int i) {
 }
 
 // struct File* get_file_out(int i) { return vec_get(outputs, i); }
-
-/*
-void file_init() {
-  inputs = do_make_vector(15);
-  outputs = do_make_vector(15);
-}
-*/
-
 }  // namespace File
 }  // namespace Pinefan

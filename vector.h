@@ -1,4 +1,7 @@
-#ifndef VECTOR_H
+#ifdef __cplusplus
+#pragma once
+extern "C" {
+#endif //__cplusplus
 #define VECTOR_H
 
 #define MIN_SIZE 128
@@ -39,5 +42,7 @@
   int vec_get_int(VectorInt *vec, int index);
   void vec_free(Vector *vec);
   void vec_free_int(VectorInt *vec);
-  
-#endif //VECTOR_H
+
+#ifdef __cplusplus
+  }  
+#endif //__cplusplus

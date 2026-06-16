@@ -11,7 +11,7 @@ TARGET = g
 
 # Generated files
 LEX_SRC = lex.yy.c
-BISON_SRC = parser_rules.y
+BISON_SRC = parser_rules.tab.c
 BISON_HEADER = parser_rules.tab.h
 
 # C source files (excluding generated ones, they have separate rules)
