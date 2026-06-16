@@ -1,26 +1,14 @@
-%require "3.8"
-%define parse.error verbose
-%define parse.assert  
-
-%language "c++"
-%define api.parser.class {Parser}
-%define api.namespace {PineFan}
-%define api.value.type variant
-%define api.token.constructor
-
-%defines "parser.hpp"
-
 %code requires {
-#include<cstdio>
-#include "ast.hpp"
-#include<vector>
-  namespace PineFan {
-  class Lexer;
- }
+#include <stdio.h>
+#include "ast.h"
+//#include "vector.h" // был закомментирован или включён условно
 }
 
 %code {
-#include "lexer.hpp"
+#include "vector.h"
+extern int yylex(void);
+extern void yyerror(const char* s);
+extern Vector* program_root;
 }
 
 %{
