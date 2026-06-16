@@ -1,11 +1,12 @@
 # PineFan Makefile
 # Compiles Flex/Bison lexer and parser, then links C and C++ object files
 
+TARGET_ARCH = x86_64
 CXX = g++
 CC = gcc
 
-CXXFLAGS = -std=c++20 -Wno-write-strings
-CFLAGS = -Wno-write-strings
+override CXXFLAGS += -std=c++20 -Wno-write-strings
+override CFLAGS += -Wno-write-strings
 
 TARGET = g
 
@@ -15,17 +16,17 @@ BISON_SRC = parser_rules.tab.c
 BISON_HEADER = parser_rules.tab.h
 
 # C source files (excluding generated ones, they have separate rules)
-C_SOURCES = error.c ast.c vector.c
+C_SOURCES := $(wildcard *.c)
 
 # C++ source files
-CPP_SOURCES = generate.cpp ppp.cpp file.cpp
+CPP_SOURCES := $(wildcard *.cpp)
 
 # Object files
-C_OBJECTS = $(C_SOURCES:.c=.o)
-CPP_OBJECTS = $(CPP_SOURCES:.cpp=.o)
-LEX_OBJ = $(LEX_SRC:.c=.o)
-BISON_OBJ = $(BISON_SRC:.c=.o)
-OBJECTS = $(C_OBJECTS) $(CPP_OBJECTS) $(LEX_OBJ) $(BISON_OBJ)
+C_OBJECTS := $(C_SOURCES:.c=.o)
+CPP_OBJECTS := $(CPP_SOURCES:.cpp=.o)
+LEX_OBJ := $(LEX_SRC:.c=.o)
+BISON_OBJ := $(BISON_SRC:.c=.o)
+OBJECTS := $(C_OBJECTS) $(CPP_OBJECTS) $(LEX_OBJ) $(BISON_OBJ)
 
 .PHONY: all clean force
 
@@ -45,11 +46,12 @@ $(BISON_SRC) $(BISON_HEADER): parser_rules.y
 
 # Compile C sources
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $? -o $@
 
 # Compile C++ sources
+# TODO: if $? don't work(and in other ones,too) so then change to $< instead
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $? -o $@
 
 # Explicit rule for lex.yy.o to ensure header dependency
 $(LEX_OBJ): $(LEX_SRC) $(BISON_HEADER)
