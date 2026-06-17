@@ -1,5 +1,6 @@
 indicator("my indicator sksodd")
 strategy(" ofofof")
+
 xss_aa = "appa"
 
 if   x > 3){

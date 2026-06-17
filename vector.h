@@ -2,8 +2,6 @@
 #pragma once
 extern "C" {
 #endif //__cplusplus
-#define VECTOR_H
-
 #define MIN_SIZE 128
 
   typedef struct {
