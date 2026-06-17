@@ -4,7 +4,8 @@
 
 namespace Pinefan {
 namespace File {
-//std::vector<Prp_file*> preprocessed_files;
+
+std::vector<Prp_file*> preprocessed_files;
 int open_prp_files_count = 0;
 // int open_out_count = 0;
 

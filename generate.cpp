@@ -15,11 +15,12 @@
 
 extern "C" {
 #include "ast.h"
-#include "file.hpp"
 #include "parser_rules.tab.h"
 #include "vector.h"
 //here is the C Vector
 }
+
+#include "file.hpp"
 
 #include "ppp.hpp"
 

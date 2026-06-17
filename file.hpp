@@ -38,7 +38,7 @@ class Prp_file {
               // determine the version. The 4 lower bits can say what's version
               // of PS is used for file
 };
-inline std::vector<Prp_file*> preprocessed_files;
+extern std::vector<Prp_file*> preprocessed_files;
 
 
 
