@@ -40,7 +40,5 @@ class Prp_file {
 };
 extern std::vector<Prp_file*> preprocessed_files;
 
-
-
 }  // namespace File
 }  // namespace Pinefan

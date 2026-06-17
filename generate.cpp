@@ -17,11 +17,10 @@ extern "C" {
 #include "ast.h"
 #include "parser_rules.tab.h"
 #include "vector.h"
-//here is the C Vector
+// here is the C Vector
 }
 
 #include "file.hpp"
-
 #include "ppp.hpp"
 
 #define PINEFAN_VERSION "v0.0.1\n"
@@ -30,7 +29,7 @@ int line = 1;
 int col = 0;
 
 std::vector<struct ast_node*> program_cpp_root;
- Vector* program_root;
+Vector* program_root;
 
 void convert_program_root() {
   if (!program_root) return;
@@ -121,7 +120,7 @@ void common_var(std::string_view name, ast_node* value, std::ofstream& output) {
       break;
 
     default:
-      //throw "unknown var";
+      // throw "unknown var";
       break;
   }
 }
@@ -142,8 +141,10 @@ int main(int argc, char* argv[]) {
 
     read_source_file(prped_file->get_name());
 
-    std::string pure_name(prped_file->get_name().begin(),
-                          prped_file->get_name().end() - 5);
+    std::string name = prped_file->get_name();
+
+    std::string pure_name(name.begin(),
+                          name.end() - 5);
 
     std::ofstream output_file(pure_name +
                               Pinefan::File::output_exstension.data());
@@ -181,4 +182,5 @@ int main(int argc, char* argv[]) {
 
   }  // for of file's reading
 
+Pinefan::Ppp::clean_prp_files();
 }  // end of function

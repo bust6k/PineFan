@@ -18,6 +18,8 @@
 //- a start state q0 ∈ Q {S_START}
 //- a finite set of accept states F {S_ARROW_END}
 
+#include "ppp.hpp"
+
 #include <format>
 #include <fstream>
 #include <iostream>
@@ -28,159 +30,157 @@
 #include <vector>
 
 #include "file.hpp"
-#include "ppp.hpp"
 
-//#define _IS_MAIN
+// #define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {
 
-  void KeywordDFA::reset() {
-    state = KW_START;
-    current_word.clear();
-  }
+void KeywordDFA::reset() {
+  state = KW_START;
+  current_word.clear();
+}
 
-  // Process single character, returns true if keyword is fully matched
-  std::optional<std::string> KeywordDFA::feed(char c) {
-    if (!std::isalpha(c)) return std::nullopt;
+// Process single character, returns true if keyword is fully matched
+std::optional<std::string> KeywordDFA::feed(char c) {
+  if (!std::isalpha(c)) return std::nullopt;
 
-    current_word += c;
+  current_word += c;
 
-    switch (state) {
-      case KW_START:
-        if (c == 'i')
-          state = KW_I;
-        else if (c == 'f')
-          state = KW_F;
-        else if (c == 'w')
-          state = KW_W;
-        else if (c == 's')
-          state = KW_S;
-        else if (c == 't')
-          state = KW_T;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_I:
-        if (c == 'f')
-          state = KW_ACCEPT_IF;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_F:
-        if (c == 'o')
-          state = KW_FO;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_S:
-        if (c == 'w')
-          state = KW_SW;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_T:
-        if (c == 'y')
-          state = KW_TY;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_FO:
-        if (c == 'r')
-          state = KW_ACCEPT_FOR;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_W:
-        if (c == 'h')
-          state = KW_WH;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_WH:
-        if (c == 'i')
-          state = KW_WHI;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_SW:
-        if (c == 'i')
-          state = KW_SWI;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_WHI:
-        if (c == 'l')
-          state = KW_WHIL;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_WHIL:
-        if (c == 'e')
-          state = KW_ACCEPT_WHILE;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_SWI:
-        if (c == 't')
-          state = KW_SWIT;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_SWIT:
-        if (c == 'c')
-          state = KW_SWITC;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_SWITC:
-        if (c == 'h')
-          state = KW_ACCEPT_SWITCH;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_TY:
-        if (c == 'p')
-          state = KW_TYP;
-        else
-          return std::nullopt;
-        break;
-
-      case KW_TYP:
-        if (c == 'e')
-          state = KW_ACCEPT_TYPE;
-        else
-          return std::nullopt;
-        break;
-
-      default:
+  switch (state) {
+    case KW_START:
+      if (c == 'i')
+        state = KW_I;
+      else if (c == 'f')
+        state = KW_F;
+      else if (c == 'w')
+        state = KW_W;
+      else if (c == 's')
+        state = KW_S;
+      else if (c == 't')
+        state = KW_T;
+      else
         return std::nullopt;
-    }
+      break;
 
-    // Check if we reached accepting state
-    if (state == KW_ACCEPT_IF) return "if";
-    if (state == KW_ACCEPT_FOR) return "for";
-    if (state == KW_ACCEPT_WHILE) return "while";
-    if (state == KW_ACCEPT_SWITCH) return "switch";
-    if (state == KW_ACCEPT_TYPE) return "type";
+    case KW_I:
+      if (c == 'f')
+        state = KW_ACCEPT_IF;
+      else
+        return std::nullopt;
+      break;
 
-    return std::nullopt;
+    case KW_F:
+      if (c == 'o')
+        state = KW_FO;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_S:
+      if (c == 'w')
+        state = KW_SW;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_T:
+      if (c == 'y')
+        state = KW_TY;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_FO:
+      if (c == 'r')
+        state = KW_ACCEPT_FOR;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_W:
+      if (c == 'h')
+        state = KW_WH;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_WH:
+      if (c == 'i')
+        state = KW_WHI;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_SW:
+      if (c == 'i')
+        state = KW_SWI;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_WHI:
+      if (c == 'l')
+        state = KW_WHIL;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_WHIL:
+      if (c == 'e')
+        state = KW_ACCEPT_WHILE;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_SWI:
+      if (c == 't')
+        state = KW_SWIT;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_SWIT:
+      if (c == 'c')
+        state = KW_SWITC;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_SWITC:
+      if (c == 'h')
+        state = KW_ACCEPT_SWITCH;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_TY:
+      if (c == 'p')
+        state = KW_TYP;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_TYP:
+      if (c == 'e')
+        state = KW_ACCEPT_TYPE;
+      else
+        return std::nullopt;
+      break;
+
+    default:
+      return std::nullopt;
   }
 
+  // Check if we reached accepting state
+  if (state == KW_ACCEPT_IF) return "if";
+  if (state == KW_ACCEPT_FOR) return "for";
+  if (state == KW_ACCEPT_WHILE) return "while";
+  if (state == KW_ACCEPT_SWITCH) return "switch";
+  if (state == KW_ACCEPT_TYPE) return "type";
+
+  return std::nullopt;
+}
 
 // Helper functions
 inline bool is_whitespace(char c) { return c == ' ' || c == '\t'; }
@@ -377,13 +377,13 @@ void preprocess(const std::string& input, std::string& output) {
   }
 }
 
-int preprocess_files(int argc,char* argv[]) {
+int preprocess_files(int argc, char* argv[]) {
   for (int i = 1; i < argc; i++) {
     std::ifstream curr_file(argv[i]);
 
     if (!curr_file.is_open()) {
-      std::cerr << std::format("Error: Cannot open file {}\n",argv[i]);
-      
+      std::cerr << std::format("Error: Cannot open file {}\n", argv[i]);
+
       return 1;
     }
 
@@ -404,31 +404,40 @@ int preprocess_files(int argc,char* argv[]) {
 
     file->Pinefan::File::Prp_file::add_preprocessed_file(file);
 
-    auto* f =  file->Pinefan::File::Prp_file::get_preprocessed_file(i -  1);
+    auto* f = file->Pinefan::File::Prp_file::get_preprocessed_file(i - 1);
 
-    std::cout << "\e[92m" << f_name << "\e[0m" << std::endl << std::endl << std::endl; 
+    std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
+              << std::endl
+              << std::endl;
     std::cout << f->get_content();
-    
-    delete file;
+
+    // delete file;
   }
-  
-  
 
   return 0;
 }
+
+void clean_prp_files() {
+  for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
+    auto* f = Pinefan::File::preprocessed_files.at(i);
+    delete f;
+  }
+}
+
 }  // namespace Ppp
 }  // namespace Pinefan
-
 
 #ifdef _IS_MAIN
 int main(int argc, char* argv[]) {
   if (argc < 2) {
     std::cerr << std::format("Usage: \e[92m{}\e[0m \e[94m{:<2}\e[0m", argv[0],
                              " <input..n.pine> \n");
-    
+
     return 1;
   }
-return Pinefan::Ppp::preprocess_files(argc,argv);
+  auto res = Pinefan::Ppp::preprocess_files(argc, argv);
+  clean_prp_files();
+  return res;
 }
 
-#endif //_IS_MAIN
+#endif  //_IS_MAIN
