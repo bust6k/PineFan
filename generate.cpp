@@ -149,6 +149,7 @@ int main(int argc, char* argv[]) {
     std::ofstream output_file(pure_name +
                               Pinefan::File::output_exstension.data());
 
+    program_root = make_vector();
     int r = yyparse();
 
     if (r) exit(1);
