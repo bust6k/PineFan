@@ -9,10 +9,10 @@
 #include <format>
 #include <fstream>
 #include <iostream>
+#include <stack>
 #include <string>
 #include <string_view>
 #include <vector>
-#include <stack>
 
 extern "C" {
 #include "ast.h"
@@ -43,6 +43,14 @@ void convert_program_root() {
   }
 }
 
+void fast_toupper(char* str) {
+  for (int i = 0; str[i]; i++) {
+    if (str[i] >= 'a' && str[i] <= 'z') {
+      str[i] -= 32;
+    }
+  }
+}
+
 extern int yylex(void);
 extern FILE* yyin;
 int line_count = 0;
@@ -65,7 +73,7 @@ void yyerror(const char* s) {
   const std::string_view& message(s);
 
   auto* file = Pinefan::File::preprocessed_files.back();
-
+  if (line > 1) line--;
   std::cerr << std::format(
       "\e[91m[ERROR]\e[0m: {} \e[92mline\e[0m {} \e[94mcolumn\e[0m {}: {}\n",
       file->get_name(), line, col, message);
@@ -125,28 +133,31 @@ void common_var(std::string_view name, ast_node* value, std::ofstream& output) {
   }
 }
 
-void if_stmt(struct ast_node* cond,struct ast_node* then,std::ofstream& output) {
-std::stack<int> indent_stack;
+void if_stmt(struct ast_node* cond, struct ast_node* then,
+             std::ofstream& output) {
+  std::stack<int> indent_stack;
 
-int start_lev = 2;
+  int start_lev = 2;
 
-indent_stack.push(start_lev); // the start level of indentation
+  indent_stack.push(start_lev);  // the start level of indentation
 
-output << std::format("{} ","if");
+  output << std::format("{} ", "if");
 
-while(cond) {
-//TODO: make generation of condition based on ast kind 
-cond++;
-}
+  while (cond) {
+    // TODO: make generation of condition based on ast kind
+    cond++;
+  }
 
-output << std::format("{}\n",':');
+  output << std::format("{}\n", ':');
 
-while(then) {
-then++;
+  while (then) {
+    then++;
 
-if(then->type == AST_IF || then->type == AST_WHILE || then->type == AST_FOR) indent_stack.push(++start_lev);
-//TODO: make generation based on invokation of other generation functions
-}
+    if (then->type == AST_IF || then->type == AST_WHILE ||
+        then->type == AST_FOR)
+      indent_stack.push(++start_lev);
+    // TODO: make generation based on invokation of other generation functions
+  }
 }
 
 extern "C" {
@@ -154,126 +165,215 @@ void yy_scan_string(const char* str);
 void yy_delete_buffer(int);
 }
 
+void up_const_names_recursive(ast_node* node, const char* name) {
+  if (!node) return;
+
+  switch (node->type) {
+    case AST_ASSIGN:
+    case AST_CONST:
+      if (strcmp(node->assign.name, name) == 0) {
+        fast_toupper(node->assign.name);
+      }
+      up_const_names_recursive(node->assign.value, name);
+      break;
+
+    case AST_FOR:
+      if (strcmp(node->for_node.var, name) == 0) {
+        fast_toupper(node->for_node.var);
+      }
+      up_const_names_recursive(node->for_node.start, name);
+      up_const_names_recursive(node->for_node.end, name);
+      up_const_names_recursive(node->for_node.step, name);
+      up_const_names_recursive(node->for_node.body, name);
+      break;
+
+    case AST_WHILE:
+      up_const_names_recursive(node->while_node.cond, name);
+      up_const_names_recursive(node->while_node.body, name);
+      break;
+
+    case AST_IF:
+      up_const_names_recursive(node->if_node.cond, name);
+      up_const_names_recursive(node->if_node.then, name);
+      up_const_names_recursive(node->if_node.else_, name);
+      break;
+
+    case AST_RETURN:
+      up_const_names_recursive(node->return_node.value, name);
+      break;
+
+    case AST_BINOP:
+      up_const_names_recursive(node->binop.left, name);
+      up_const_names_recursive(node->binop.right, name);
+      break;
+
+    case AST_UNOP:
+      up_const_names_recursive(node->unop.operand, name);
+      break;
+
+    case AST_CALL:
+      for (int i = 0; i < node->call.arg_count; i++) {
+        up_const_names_recursive(node->call.args[i], name);
+      }
+      break;
+
+    case AST_VAR:
+    case AST_SIMPLE:
+      if (strcmp(node->var.name, name) == 0) {
+        fast_toupper(node->var.name);
+      }
+      break;
+
+    case AST_INDICATOR:
+    case AST_STRATEGY:
+    case AST_IMPORT:
+      // skip string literals (per your request)
+      break;
+
+    case AST_NUMBER:
+    case AST_STRING:
+    default:
+      // leaf nodes — nothing to do
+      break;
+  }
+}
+
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
-    if (!node) return;
+  if (!node) return;
 
-    std::string indent_str(indent, ' ');
-    std::string indent_next(indent + 4, ' ');
+  std::string indent_str(indent, ' ');
+  std::string indent_next(indent + 4, ' ');
 
-    switch (node->type) {
-        case AST_IF: {
-            output << indent_str << "if ";
-            generate_code(node->if_node.cond, output, 0);
-            output << ":\n";
-            generate_code(node->if_node.then, output, indent + 4);
-            if (node->if_node.else_) {
-                output << indent_str << "else:\n";
-                generate_code(node->if_node.else_, output, indent + 4);
-            }
-            break;
-        }
-
-        case AST_BINOP: {
-            output << "(";
-            generate_code(node->binop.left, output, 0);
-            output << " " << node->binop.op << " ";
-            generate_code(node->binop.right, output, 0);
-            output << ")";
-            break;
-        }
-
-        case AST_NUMBER: {
-            output << node->number.value;
-            break;
-        }
-
-        case AST_VAR: {
-            output << node->var.name;
-            break;
-        }
-
-        case AST_STRING: {
-            output << "\"" << node->string.value << "\"";
-            break;
-        }
-
-        case AST_CALL: {
-            output << node->call.name << "(";
-            for (int i = 0; i < node->call.arg_count; i++) {
-                generate_code(node->call.args[i], output, 0);
-                if (i + 1 < node->call.arg_count) output << ", ";
-            }
-            output << ")";
-            break;
-        }
-
-        case AST_UNOP: {
-            output << node->unop.op;
-            generate_code(node->unop.operand, output, 0);
-            break;
-        }
-
-        case AST_RETURN: {
-            output << indent_str << "return ";
-            generate_code(node->return_node.value, output, 0);
-            output << "\n";
-            break;
-        }
-
-        case AST_ASSIGN: {
-            output << indent_str << node->assign.name << " = ";
-            generate_code(node->assign.value, output, 0);
-            output << "\n";
-            break;
-        }
-
-        case AST_CONST: {
-            output << indent_str << node->assign.name << " = ";
-            generate_code(node->assign.value, output, 0);
-            output << "\n";
-            break;
-        }
-
-        case AST_FOR: {
-            output << indent_str << "for ";
-            // TODO: generate iterator variable and range
-            output << "/* for loop */\n";
-            generate_code(node->for_node.body, output, indent + 4);
-            break;
-        }
-
-        case AST_WHILE: {
-            output << indent_str << "while ";
-            generate_code(node->while_node.cond, output, 0);
-            output << ":\n";
-            generate_code(node->while_node.body, output, indent + 4);
-            break;
-        }
-
-        case AST_BREAK: {
-            output << indent_str << "break\n";
-            break;
-        }
-
-        case AST_CONTINUE: {
-            output << indent_str << "continue\n";
-            break;
-        }
-
-        case AST_INDICATOR: {
-        indicator(node->string.value,output);
-	}
-
-        case AST_STRATEGY: {
-         strategy(node->string.value,output);
-            break;
-        }
-
-        default: {
-            output << indent_str << "# TODO: unknown node type " << node->type << "\n";
-            break;
-        }
+  switch (node->type) {
+    case AST_IF: {
+      output << indent_str << "if ";
+      generate_code(node->if_node.cond, output, 0);
+      output << ":\n";
+      generate_code(node->if_node.then, output, indent + 4);
+      if (node->if_node.else_) {
+        output << indent_str << "else:\n";
+        generate_code(node->if_node.else_, output, indent + 4);
+      }
+      break;
     }
+
+    case AST_BINOP: {
+      output << "(";
+      generate_code(node->binop.left, output, 0);
+      output << " " << node->binop.op << " ";
+      generate_code(node->binop.right, output, 0);
+      output << ")";
+      break;
+    }
+
+    case AST_NUMBER: {
+      output << node->number.value;
+      break;
+    }
+
+    case AST_VAR: {
+      output << node->var.name;
+      break;
+    }
+
+    case AST_STRING: {
+      output << "\"" << node->string.value << "\"";
+      break;
+    }
+
+    case AST_CALL: {
+      output << node->call.name << "(";
+      for (int i = 0; i < node->call.arg_count; i++) {
+        generate_code(node->call.args[i], output, 0);
+        if (i + 1 < node->call.arg_count) output << ", ";
+      }
+      output << ")";
+      break;
+    }
+
+    case AST_UNOP: {
+      output << node->unop.op;
+      generate_code(node->unop.operand, output, 0);
+      break;
+    }
+
+    case AST_RETURN: {
+      output << indent_str << "return ";
+      generate_code(node->return_node.value, output, 0);
+      output << "\n";
+      break;
+    }
+
+    case AST_ASSIGN: {
+      output << indent_str << node->assign.name << " = ";
+      generate_code(node->assign.value, output, 0);
+      output << "\n";
+      break;
+    }
+
+    case AST_CONST: {
+      output << "#constant variable!" << std::endl;
+      up_const_names_recursive(node, node->assign.name);
+      output << indent_str << node->assign.name << " = ";
+      generate_code(node->assign.value, output, 0);
+      output << "\n";
+      break;
+    }
+
+    case AST_FOR: {
+      // PineScript: for var = start to end [by step]
+      // Python: for var in range(start, end + 1, step)
+
+      output << indent_str << "for ";
+      output << node->for_node.var;  // имя переменной (char*)
+      output << " in range(";
+      generate_code(node->for_node.start, output, 0);
+      output << ", ";
+      generate_code(node->for_node.end, output, 0);
+      output << " + 1";  // PineScript includes end, Python range excludes end
+
+      if (node->for_node.step) {
+        output << ", ";
+        generate_code(node->for_node.step, output, 0);
+      }
+
+      output << "):\n";
+      generate_code(node->for_node.body, output, indent + 4);
+      break;
+    }
+    case AST_WHILE: {
+      output << indent_str << "while ";
+      generate_code(node->while_node.cond, output, 0);
+      output << ":\n";
+      generate_code(node->while_node.body, output, indent + 4);
+      break;
+    }
+
+    case AST_BREAK: {
+      output << indent_str << "break\n";
+      break;
+    }
+
+    case AST_CONTINUE: {
+      output << indent_str << "continue\n";
+      break;
+    }
+
+    case AST_INDICATOR: {
+      indicator(node->string.value, output);
+    }
+
+    case AST_STRATEGY: {
+      strategy(node->string.value, output);
+      break;
+    }
+
+    default: {
+      output << indent_str << "# TODO: unknown node type " << node->type
+             << "\n";
+      break;
+    }
+  }
 }
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
@@ -288,8 +388,7 @@ int main(int argc, char* argv[]) {
 
     std::string name = prped_file->get_name();
 
-    std::string pure_name(name.begin(),
-                          name.end() - 5);
+    std::string pure_name(name.begin(), name.end() - 5);
 
     std::ofstream output_file(pure_name +
                               Pinefan::File::output_exstension.data());
@@ -306,12 +405,10 @@ int main(int argc, char* argv[]) {
 
     for (int j = 0; j < program_cpp_root.size(); j++) {
       auto* val = program_cpp_root.at(j);
-      generate_code(val,output_file);
+      generate_code(val, output_file);
+    }
+  }
 
-    }  // for of AST
-
-  }  // for of file's reading
-
-ast_free(program_cpp_root.at(0));
-Pinefan::Ppp::clean_prp_files();
-}  // end of function
+  ast_free(program_cpp_root.at(0));
+  Pinefan::Ppp::clean_prp_files();
+}

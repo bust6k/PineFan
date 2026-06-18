@@ -1,3 +1,5 @@
+%define parse.error verbose
+
 %code requires {
 #include <stdio.h>
 #include "ast.h"
@@ -65,6 +67,11 @@ extern void yyerror(const char *s);
 %token equals
 %token greater_than
 %token lesser_than
+%token plus
+%token minus
+%token multiply
+%token divide
+%token divide_with_remind
 %token greater_than_or_equals
 %token lesser_than_or_equals
 %token bitwise_and_with_equals
@@ -115,7 +122,7 @@ program:
     | statement
     { vec_push(program_root,$1); }
     | program statement
-      { vec_push(program_root, $2);}
+      {vec_push(program_root, $2);}
     ;
 
 statement:
@@ -252,15 +259,15 @@ expr:
     { $$ = new_var_node($1); }
     | string
     { $$ = new_string_node($1); }
-    | expr '+' expr
+    | expr plus expr
     { $$ = new_binop_node("+", $1, $3); }
-    | expr '-' expr
+    | expr minus expr
     { $$ = new_binop_node("-", $1, $3); }
-    | expr '*' expr
+    | expr multiply expr
     { $$ = new_binop_node("*", $1, $3); }
-    | expr '/' expr
+    | expr divide expr
     { $$ = new_binop_node("/", $1, $3); }
-    | expr '%' expr
+    | expr divide_with_remind expr
     { $$ = new_binop_node("%", $1, $3); }
     | expr logical_and expr
     { $$ = new_binop_node("&&", $1, $3); }
@@ -292,9 +299,9 @@ expr:
     { $$ = new_unop_node("!", $2); }
     | bitwise_not expr
     { $$ = new_unop_node("~", $2); }
-    | '-'  expr %prec '*'
+    | minus  expr %prec multiply
     { $$ = new_unop_node("-", $2); }
-    | '+'  expr %prec '*'
+    | plus  expr %prec multiply
     { $$ = new_unop_node("+", $2); }
     | left_paren expr right_paren
     { $$ = $2; }

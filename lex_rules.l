@@ -117,6 +117,11 @@ and { col += 3; return logical_and; }
 ":=" { col += 2; return re_assign; }
 ">" { col++; return greater_than; }
 "<" { col++; return lesser_than; }
+"+" { col++; return plus; }
+"-" { col++; return minus; }
+"*" { col++; return multiply; }
+"/" { col++; return divide; }
+"%" { col++; return divide_with_remind; }
 ">=" { col += 2; return greater_than_or_equals; }
 "<=" { col += 2; return lesser_than_or_equals; }
 "&=" { col += 2; return bitwise_and_with_equals; }

@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "parser_rules.y"
+#line 3 "parser_rules.y"
 
 #include <stdio.h>
 #include "ast.h"
@@ -106,20 +106,25 @@ extern int yydebug;
     equals = 300,                  /* equals  */
     greater_than = 301,            /* greater_than  */
     lesser_than = 302,             /* lesser_than  */
-    greater_than_or_equals = 303,  /* greater_than_or_equals  */
-    lesser_than_or_equals = 304,   /* lesser_than_or_equals  */
-    bitwise_and_with_equals = 305, /* bitwise_and_with_equals  */
-    bitwise_or_with_equals = 306,  /* bitwise_or_with_equals  */
-    bitwise_xor_with_equals = 307, /* bitwise_xor_with_equals  */
-    bitwise_not_with_equals = 308, /* bitwise_not_with_equals  */
-    bitwise_shift_right_with_equals = 309, /* bitwise_shift_right_with_equals  */
-    bitwise_shift_left_with_equals = 310, /* bitwise_shift_left_with_equals  */
-    comma = 311,                   /* comma  */
-    dot = 312,                     /* dot  */
-    colon = 313,                   /* colon  */
-    number = 314,                  /* number  */
-    identifier = 315,              /* identifier  */
-    string = 316                   /* string  */
+    plus = 303,                    /* plus  */
+    minus = 304,                   /* minus  */
+    multiply = 305,                /* multiply  */
+    divide = 306,                  /* divide  */
+    divide_with_remind = 307,      /* divide_with_remind  */
+    greater_than_or_equals = 308,  /* greater_than_or_equals  */
+    lesser_than_or_equals = 309,   /* lesser_than_or_equals  */
+    bitwise_and_with_equals = 310, /* bitwise_and_with_equals  */
+    bitwise_or_with_equals = 311,  /* bitwise_or_with_equals  */
+    bitwise_xor_with_equals = 312, /* bitwise_xor_with_equals  */
+    bitwise_not_with_equals = 313, /* bitwise_not_with_equals  */
+    bitwise_shift_right_with_equals = 314, /* bitwise_shift_right_with_equals  */
+    bitwise_shift_left_with_equals = 315, /* bitwise_shift_left_with_equals  */
+    comma = 316,                   /* comma  */
+    dot = 317,                     /* dot  */
+    colon = 318,                   /* colon  */
+    number = 319,                  /* number  */
+    identifier = 320,              /* identifier  */
+    string = 321                   /* string  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -128,13 +133,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "parser_rules.y"
+#line 19 "parser_rules.y"
 
     int ival;
     char *sval;
     struct ast_node *node;
 
-#line 138 "parser_rules.tab.h"
+#line 143 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
