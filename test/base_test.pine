@@ -1,4 +1,4 @@
-if x > 3
+for x > 3
    y = 5
 
 indicator("my indicator sksodd")
@@ -6,13 +6,6 @@ strategy(" ofofof")
 
 xss_aa = "appa"
 
-if  x > 3
+while  x < 3
   y = 8
 
-
-
-indicator("REAL")
-
-strategy("FOO")
-
-strategy    ("DLDLDL")

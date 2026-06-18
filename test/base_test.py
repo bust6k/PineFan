@@ -3,14 +3,14 @@
 
 # - source: test/base_test.pine
 
+for /* for loop */
+    y = 5
 # indicator
+print("my indicator sksodd")
+# strategy
 print("my indicator sksodd")
 # strategy
 print(" ofofof")
 xss_aa = "appa"
-# indicator
-print("REAL")
-# strategy
-print("FOO")
-# strategy
-print("DLDLDL")
+while (x < 3):
+    y = 8
