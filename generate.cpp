@@ -17,7 +17,6 @@ extern "C" {
 #include "ast.h"
 #include "parser_rules.tab.h"
 #include "vector.h"
-// here is the C Vector
 }
 
 #include "file.hpp"
@@ -155,6 +154,7 @@ int main(int argc, char* argv[]) {
     if (r) exit(1);
 
     convert_program_root();
+    vec_free(program_root);
 
     prologue(output_file, prped_file->get_name());
 
@@ -183,5 +183,6 @@ int main(int argc, char* argv[]) {
 
   }  // for of file's reading
 
+ast_free(program_cpp_root.at(0));
 Pinefan::Ppp::clean_prp_files();
 }  // end of function

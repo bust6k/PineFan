@@ -1,6 +1,4 @@
-#ifndef AST_H
-#define AST_H
-
+#pragma once
 typedef struct ast_node { int type;
     union {
         struct { char *name; struct ast_node *value; } assign;
@@ -68,4 +66,3 @@ ast_node* new_assign_re_node(char *name, ast_node *value);
 
 void ast_free(ast_node *node);
 
-#endif //AST_H

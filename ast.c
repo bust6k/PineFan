@@ -169,7 +169,91 @@ ast_node* new_assign_re_node(char* name, ast_node* value) {
 }
 
 void ast_free(ast_node* node) {
-  if (!node) return;
-  // TODO: рекурсивное освобождение
-  free(node);
+    if (!node) return;
+
+    switch (node->type) {
+        case AST_ASSIGN:
+        case AST_CONST:
+            free(node->assign.name);
+            ast_free(node->assign.value);
+            break;
+
+        case AST_IF:
+            ast_free(node->if_node.cond);
+            ast_free(node->if_node.then);
+            ast_free(node->if_node.else_);
+            break;
+
+        case AST_FOR:
+            free(node->for_node.var);
+            ast_free(node->for_node.start);
+            ast_free(node->for_node.end);
+            ast_free(node->for_node.step);
+            ast_free(node->for_node.body);
+            break;
+
+        case AST_WHILE:
+            ast_free(node->while_node.cond);
+            ast_free(node->while_node.body);
+            break;
+
+        case AST_RETURN:
+            ast_free(node->return_node.value);
+            break;
+
+        case AST_VAR:
+        case AST_SIMPLE:
+            free(node->var.name);
+            break;
+
+        case AST_NUMBER:
+            // nothing to free
+            break;
+
+        case AST_STRING:
+        case AST_INDICATOR:
+        case AST_STRATEGY:
+        case AST_IMPORT:
+            free(node->string.value);
+            break;
+
+        case AST_BINOP:
+            free(node->binop.op);
+            ast_free(node->binop.left);
+            ast_free(node->binop.right);
+            break;
+
+        case AST_UNOP:
+            free(node->unop.op);
+            ast_free(node->unop.operand);
+            break;
+
+        case AST_CALL:
+            free(node->call.name);
+            if (node->call.args) {
+                for (int i = 0; i < node->call.arg_count; i++) {
+                    ast_free(node->call.args[i]);
+                }
+                free(node->call.args);
+            }
+            break;
+
+        case AST_BREAK:
+        case AST_CONTINUE:
+            // nothing to free
+            break;
+
+        case AST_SWITCH:
+        case AST_CASE:
+        case AST_CASE_RANGE:
+        case AST_DEFAULT:
+            // TODO: implement when these nodes are properly filled
+            break;
+
+        default:
+            // unknown type — free nothing
+            break;
+    }
+
+    free(node);
 }

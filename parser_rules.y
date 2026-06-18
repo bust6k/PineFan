@@ -1,7 +1,6 @@
 %code requires {
 #include <stdio.h>
 #include "ast.h"
-//#include "vector.h" // был закомментирован или включён условно
 }
 
 %code {
@@ -13,8 +12,6 @@ extern Vector* program_root;
 
 %{
 extern void yyerror(const char *s);
-//extern Vector *program_root;
-
 %}
 
 %union {

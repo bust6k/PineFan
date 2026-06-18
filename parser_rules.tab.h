@@ -49,9 +49,8 @@ extern int yydebug;
 
 #include <stdio.h>
 #include "ast.h"
-//#include "vector.h" // был закомментирован или включён условно
 
-#line 55 "parser_rules.tab.h"
+#line 54 "parser_rules.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -129,13 +128,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "parser_rules.y"
+#line 17 "parser_rules.y"
 
     int ival;
     char *sval;
     struct ast_node *node;
 
-#line 139 "parser_rules.tab.h"
+#line 138 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

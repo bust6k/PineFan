@@ -1,9 +1,3 @@
-// Copyright 2012 Rui Ueyama. Released under the MIT license.
-
-/*
- * Vectors are containers of void pointers that can change in size.
- */
-
 #include "vector.h"
 
 #include <assert.h>
@@ -24,7 +18,7 @@ static void extend(Vector* vec, int delta) {
   int nelem = max(roundup(vec->len + delta), MIN_SIZE);
   void* newbody = malloc(sizeof(void*) * nelem);
   memcpy(newbody, vec->body, sizeof(void*) * vec->len);
-  // free(vec->body);
+  if(vec->nalloc != 0) free(vec->body);
   vec->body = newbody;
   vec->nalloc = nelem;
 }
@@ -43,27 +37,8 @@ Vector* do_make_vector(int size) {
   return r;
 }
 
-static VectorInt* do_make_vector_int(int size) {
-  VectorInt* r = malloc(sizeof(VectorInt));
-  size = roundup(size);
-  if (size > 0) r->body = malloc(sizeof(void*) * size);
-  r->len = 0;
-  r->nalloc = size;
-  return r;
-}
+
 Vector* make_vector() { return do_make_vector(0); }
-
-VectorInt* make_vector_int() { return do_make_vector_int(0); }
-
-static void extend_int(VectorInt* vec, int delta) {
-  if (vec->len + delta <= vec->nalloc) return;
-  int nelem = max(roundup(vec->len + delta), MIN_SIZE);
-  void* newbody = malloc(sizeof(void*) * nelem);
-  memcpy(newbody, vec->body, sizeof(void*) * vec->len);
-  // free(vec->body);
-  vec->body = newbody;
-  vec->nalloc = nelem;
-}
 
 Vector* make_vector1(void* e) {
   Vector* r = do_make_vector(0);
@@ -74,13 +49,9 @@ Vector* make_vector1(void* e) {
 Vector* vec_copy(Vector* src) {
   Vector* r = do_make_vector(src->len);
   memcpy(r->body, src->body, sizeof(void*) * src->len);
+  if(src->nalloc != 0) free(src->body);
   r->len = src->len;
   return r;
-}
-
-void vec_push_int(VectorInt* vec, int elem) {
-  extend_int(vec, 1);
-  vec->body[vec->len++] = elem;
 }
 
 void vec_append(Vector* a, Vector* b) {
@@ -96,11 +67,6 @@ void* vec_pop(Vector* vec) {
 
 void* vec_get(Vector* vec, int index) {
   assert(index < vec->len);
-  return vec->body[index];
-}
-
-int vec_get_int(VectorInt* vec, int index) {
-  assert(0 <= index && index < vec->len);
   return vec->body[index];
 }
 
@@ -131,11 +97,8 @@ void* vec_body(Vector* vec) { return vec->body; }
 int vec_len(Vector* vec) { return vec->len; }
 
 void vec_free(Vector* vec) {
-  free(vec->body);
+  if(vec->nalloc != 0) free(vec->body);
   free(vec);
 }
 
-void vec_free_int(VectorInt* vec) {
-  free(vec->body);
-  free(vec);
-}
+
