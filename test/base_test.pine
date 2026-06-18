@@ -4,7 +4,7 @@ for x > 3
 indicator("my indicator sksodd")
 strategy(" ofofof")
 
-xss_aa = "appa"
+const xss_aa = "appa"
 
 while  x < 3
   y = 8

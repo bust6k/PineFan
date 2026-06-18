@@ -26,7 +26,9 @@ C_OBJECTS := $(C_SOURCES:.c=.o)
 CPP_OBJECTS := $(CPP_SOURCES:.cpp=.o)
 LEX_OBJ := $(LEX_SRC:.c=.o)
 BISON_OBJ := $(BISON_SRC:.c=.o)
-OBJECTS := $(C_OBJECTS) $(CPP_OBJECTS) $(LEX_OBJ) $(BISON_OBJ)
+
+# Place C++ objects first to match manual order
+OBJECTS := $(CPP_OBJECTS) $(C_OBJECTS) $(LEX_OBJ) $(BISON_OBJ)
 
 .PHONY: all clean force
 
@@ -44,14 +46,17 @@ $(LEX_SRC): lex_rules.l
 $(BISON_SRC) $(BISON_HEADER): parser_rules.y
 	bison -d -o $(BISON_SRC) $<
 
+# Explicit dependency for generate.o
+generate.o: $(BISON_HEADER)
+
+
 # Compile C sources
 %.o: %.c
-	$(CC) $(CFLAGS) -c $? -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Compile C++ sources
-# TODO: if $? don't work(and in other ones,too) so then change to $< instead
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $? -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Explicit rule for lex.yy.o to ensure header dependency
 $(LEX_OBJ): $(LEX_SRC) $(BISON_HEADER)
