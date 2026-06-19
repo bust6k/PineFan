@@ -87,6 +87,7 @@ else { col += 4; return else_statement; }
 for { col += 3; return for_statement; }
 return { col += 6; return return_statement; }
 continue { col += 8; return continue_statement; }
+to { col += 2; return to; }
 switch { col += 6; return switch_statement; }
 break { col += 5; return break_statement; }
 default { col += 7; return default_statement; }
@@ -105,6 +106,8 @@ string { col += 6; return string_as_type; }
 and { col += 3; return logical_and; }
 "(" { col++; return left_paren; }
 ")" { col++; return right_paren; }
+"[" { col++; return left_quad_brace; }
+"]" { col++; return right_quad_brace; }
 "{" { col++; return left_brace; }
 "}" { col++; return right_brace; }
 "<<==" { col += 4; return bitwise_shift_left_with_equals; }

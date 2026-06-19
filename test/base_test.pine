@@ -1,28 +1,5 @@
-
-if x + 3
+for i = 0 to 50
    y = 5
 
-indicator("my indicator sksodd")
-strategy(" ofofof")
-
-const xss_aa = "appa"
-
-break
-continue
-
-//haha 
-
-if x + 3
-   if y > 1
-      y = 7
-
-xss_aa = ff
-
-//foo = -xss_a
-ff = +5
-
-//call(foo,aur)
-
-while xss_aa  * 4 + 3
-  y = 8
-
+switch i
+   y = 5

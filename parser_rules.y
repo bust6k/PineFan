@@ -60,6 +60,8 @@ extern void yyerror(const char *s);
 %token string_as_type
 %token left_paren
 %token right_paren
+%token left_quad_brace
+%token right_quad_brace
 %token left_brace
 %token right_brace
 %token assign
@@ -87,7 +89,7 @@ extern void yyerror(const char *s);
 %token <ival> number
 %token <sval> identifier string
 
-%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt return_stmt break_stmt continue_stmt switch_stmt case_stmt default_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_stmt default_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 %nonassoc if_statement
@@ -106,20 +108,18 @@ extern void yyerror(const char *s);
 %left bitwise_and
 %left bitwise_shift_to_left bitwise_shift_to_right
 
-%left '+' '-'
+%left plus minus
 
-%left '*' '/' '%'
+%left multiply divide divide_with_remind
 
 %nonassoc logical_not bitwise_not
-%nonassoc '(' '[' '.'
-
+%nonassoc  left_quad_brace right_quad_brace dot
 %nonassoc left_paren left_brace
 
 %%
 
 program:
-    %empty {}
-    | statement
+     statement
     { vec_push(program_root,$1); }
     | program statement
       {vec_push(program_root, $2);}
@@ -131,7 +131,7 @@ statement:
     | if_stmt
     | for_stmt
     | while_stmt
-    | return_stmt
+    | return_stmt_expr
     | break_stmt
     | continue_stmt
     | switch_stmt
@@ -172,26 +172,24 @@ if_stmt:
     ;
 
 for_stmt:
-    for_statement identifier assign expr to expr block
-    { $$ = new_for_node($2, $4, $6, NULL, $7); }
-    | for_statement identifier assign expr to expr step expr block
-    { $$ = new_for_node($2, $4, $6, $8, $9); }
-    | for_statement  expr block
-    { $$ = new_for_node(NULL, $2, NULL, NULL, $3); }
+    for_statement left_paren identifier assign expr to expr right_paren block
+    { $$ = new_for_node($3, $5, $7, NULL, $9); }
+    | for_statement left_paren identifier assign expr to expr step expr right_paren block
+    { $$ = new_for_node($3, $5, $7, $9, $11); }
+    | for_statement  left_paren expr right_paren block
+    { $$ = new_for_node(NULL, $3, NULL, NULL, $5); }
     ;
 
 while_stmt:
-    while_statement expr block
-    { $$ = new_while_node($2, $3); }
+    while_statement left_paren expr right_paren block
+    { $$ = new_while_node($3, $5); }
     ;
 
-return_stmt:
-    return_statement  expr
+
+return_stmt_expr:
+     return_statement  expr
     { $$ = new_return_node($2); }
-    | return_statement
-    { $$ = new_return_node(NULL); }
     ;
-
 break_stmt:
     break_statement
     { $$ = new_break_node(); }
@@ -203,8 +201,8 @@ continue_stmt:
     ;
 
 switch_stmt:
-    switch_statement expr block
-    { $$ = new_switch_node($2, $3); }
+    switch_statement left_paren expr right_paren block
+    { $$ = new_switch_node($3, $5); }
     ;
 
 case_stmt:

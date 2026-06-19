@@ -3,22 +3,6 @@
 
 # - source: test/base_test.pine
 
-if (x + 3):
+for i in range(0, 50 + 1):
     y = 5
-# indicator
-print("my indicator sksodd")
-# strategy
-print("my indicator sksodd")
-# strategy
-print(" ofofof")
-#constant variable!
-XSS_AA = "appa"
-break
-continue
-if (x + 3):
-    if (y > 1):
-        y = 7
-xss_aa = ff
-ff = +5
-while (xss_aa * (4 + 3)):
-    y = 8
+# TODO: unknown node type 14

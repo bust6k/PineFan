@@ -99,32 +99,34 @@ extern int yydebug;
     string_as_type = 293,          /* string_as_type  */
     left_paren = 294,              /* left_paren  */
     right_paren = 295,             /* right_paren  */
-    left_brace = 296,              /* left_brace  */
-    right_brace = 297,             /* right_brace  */
-    assign = 298,                  /* assign  */
-    re_assign = 299,               /* re_assign  */
-    equals = 300,                  /* equals  */
-    greater_than = 301,            /* greater_than  */
-    lesser_than = 302,             /* lesser_than  */
-    plus = 303,                    /* plus  */
-    minus = 304,                   /* minus  */
-    multiply = 305,                /* multiply  */
-    divide = 306,                  /* divide  */
-    divide_with_remind = 307,      /* divide_with_remind  */
-    greater_than_or_equals = 308,  /* greater_than_or_equals  */
-    lesser_than_or_equals = 309,   /* lesser_than_or_equals  */
-    bitwise_and_with_equals = 310, /* bitwise_and_with_equals  */
-    bitwise_or_with_equals = 311,  /* bitwise_or_with_equals  */
-    bitwise_xor_with_equals = 312, /* bitwise_xor_with_equals  */
-    bitwise_not_with_equals = 313, /* bitwise_not_with_equals  */
-    bitwise_shift_right_with_equals = 314, /* bitwise_shift_right_with_equals  */
-    bitwise_shift_left_with_equals = 315, /* bitwise_shift_left_with_equals  */
-    comma = 316,                   /* comma  */
-    dot = 317,                     /* dot  */
-    colon = 318,                   /* colon  */
-    number = 319,                  /* number  */
-    identifier = 320,              /* identifier  */
-    string = 321                   /* string  */
+    left_quad_brace = 296,         /* left_quad_brace  */
+    right_quad_brace = 297,        /* right_quad_brace  */
+    left_brace = 298,              /* left_brace  */
+    right_brace = 299,             /* right_brace  */
+    assign = 300,                  /* assign  */
+    re_assign = 301,               /* re_assign  */
+    equals = 302,                  /* equals  */
+    greater_than = 303,            /* greater_than  */
+    lesser_than = 304,             /* lesser_than  */
+    plus = 305,                    /* plus  */
+    minus = 306,                   /* minus  */
+    multiply = 307,                /* multiply  */
+    divide = 308,                  /* divide  */
+    divide_with_remind = 309,      /* divide_with_remind  */
+    greater_than_or_equals = 310,  /* greater_than_or_equals  */
+    lesser_than_or_equals = 311,   /* lesser_than_or_equals  */
+    bitwise_and_with_equals = 312, /* bitwise_and_with_equals  */
+    bitwise_or_with_equals = 313,  /* bitwise_or_with_equals  */
+    bitwise_xor_with_equals = 314, /* bitwise_xor_with_equals  */
+    bitwise_not_with_equals = 315, /* bitwise_not_with_equals  */
+    bitwise_shift_right_with_equals = 316, /* bitwise_shift_right_with_equals  */
+    bitwise_shift_left_with_equals = 317, /* bitwise_shift_left_with_equals  */
+    comma = 318,                   /* comma  */
+    dot = 319,                     /* dot  */
+    colon = 320,                   /* colon  */
+    number = 321,                  /* number  */
+    identifier = 322,              /* identifier  */
+    string = 323                   /* string  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -139,7 +141,7 @@ union YYSTYPE
     char *sval;
     struct ast_node *node;
 
-#line 143 "parser_rules.tab.h"
+#line 145 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
