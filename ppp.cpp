@@ -49,17 +49,20 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
   switch (state) {
     case KW_START:
-      if (c == 'i')
+      if (c == 'i') {
         state = KW_I;
-      else if (c == 'f')
+      } else if (c == 'f') {
         state = KW_F;
-      else if (c == 'w')
+      } else if (c == 'w') {
         state = KW_W;
-      else if (c == 't')
+      } else if (c == 't') {
         state = KW_T;
-      else
+      } else if (c == 's') {
+        state = KW_S;
+      } else {
         return std::nullopt;
-      break;
+      }
+      // break;
 
     case KW_I:
       if (c == 'f')
@@ -81,6 +84,36 @@ std::optional<std::string> KeywordDFA::feed(char c) {
       else
         return std::nullopt;
       break;
+
+    case KW_S:
+      if (c == 'w')
+        state = KW_SW;
+      else
+        return std::nullopt;
+
+    case KW_SW:
+      if (c == 'i')
+        state = KW_SWI;
+      else
+        return std::nullopt;
+
+    case KW_SWI:
+      if (c == 't')
+        state = KW_SWIT;
+      else
+        return std::nullopt;
+
+    case KW_SWIT:
+      if (c == 'c')
+        state = KW_SWITC;
+      else
+        return std::nullopt;
+
+    case KW_SWITC:
+      if (c == 'h')
+        state = KW_ACCEPT_SWITCH;
+      else
+        return std::nullopt;
 
     case KW_FO:
       if (c == 'r')
@@ -138,6 +171,7 @@ std::optional<std::string> KeywordDFA::feed(char c) {
   if (state == KW_ACCEPT_FOR) return "for";
   if (state == KW_ACCEPT_WHILE) return "while";
   if (state == KW_ACCEPT_TYPE) return "type";
+  if (state == KW_ACCEPT_SWITCH) return "switch";
 
   return std::nullopt;
 }
@@ -301,15 +335,10 @@ void preprocess(const std::string& input, std::string& output) {
         break;
     }
 
-    auto kw_switch = find_switch_keyword_at(info.content, 0);
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = std::string::npos;
 
     if (left_part.has_value()) is_func = left_part->find("()");
-
-    if (kw_switch.has_value()) {
-      info.type = LineInfo::SWITCH;
-    }
 
     if (is_func != std::string::npos) {
       info.is_switch_stmt = true;
@@ -320,10 +349,8 @@ void preprocess(const std::string& input, std::string& output) {
         info.content_after = info.content.substr(*arr_pos + 2);
       }
     }
-    // Check if it's a function (has =>)
 
-    else if (is_arrow(info.content) && is_func != std::string::npos &&
-             !kw_switch.has_value()) {
+    if (is_arrow(info.content) && is_func != std::string::npos) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
       info.keyword = "";
@@ -347,7 +374,6 @@ void preprocess(const std::string& input, std::string& output) {
   indent_stack.push(0);
 
   SwitchState switch_state = SWITCH_NONE;
-  std::stack<int> switch_indent_stack;
   bool has_default = false;
   int switch_indent = 0;
   int case_cnt = 0;
@@ -356,56 +382,6 @@ void preprocess(const std::string& input, std::string& output) {
     auto& info = infos[idx];
     int current_indent = info.indent;
 
-    // --- ОБРАБОТКА SWITCH ---
-    if (info.type == LineInfo::SWITCH) {
-      switch_state = SWITCH_OPEN;
-      switch_indent = info.indent;
-      case_cnt = 0;
-      switch_indent_stack.push(switch_indent);
-
-      size_t kw_pos = info.content.find("switch");
-      std::string condition = trim_right(info.content.substr(kw_pos + 6));
-      output += "switch (" + condition + ") {\n";
-      continue;
-    }
-
-    if (switch_state != SWITCH_NONE) {
-      if (info.indent > switch_indent) {
-        if (info.arrow_before.empty()) {
-          if (!case_cnt) {
-            output += "default {\n";
-          } else {
-            output += "\n}\n default {\n";
-          }
-
-          has_default = true;
-          switch_state = SWITCH_IN_DEFAULT;
-        } else {
-          if (!case_cnt) {
-            output += "case " + info.arrow_before + " {\n";
-          } else {
-            output += "\n}\ncase " + info.arrow_before + " {\n";
-          }
-          switch_state = SWITCH_IN_CASE;
-          case_cnt++;
-        }
-      } else {
-        output += info.content + "\n";
-      }
-    } else {
-      // Закрываем switch
-      output += "}\n";
-      if (has_default) {
-        output += "}\n";
-      }
-      switch_state = SWITCH_NONE;
-      if (!switch_indent_stack.empty()) switch_indent_stack.pop();
-      has_default = false;
-
-      continue;
-    }
-
-    // --- ОБЫЧНАЯ ЛОГИКА (if, for, while) ---
     while (current_indent > indent_stack.top()) {
       indent_stack.push(current_indent);
       output += "{\n";
@@ -415,7 +391,6 @@ void preprocess(const std::string& input, std::string& output) {
       output += "}\n";
     }
 
-    // --- ОБРАБОТКА СТРОК ---
     if (info.content.empty()) {
       output += "\n";
       continue;
