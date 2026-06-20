@@ -245,9 +245,7 @@ std::optional<std::string> find_expr_at_switch(const std::string& line,
 
   std::string expr;
   while (i < line.length()) {
-    // Проверяем, не наткнулись ли на "=>"
     if (i + 1 < line.length() && line[i] == '=' && line[i + 1] == '>') {
-      // Нашли стрелку, возвращаем выражение (обрезаем пробелы)
       size_t end = expr.find_last_not_of(" \t");
       if (end != std::string::npos) {
         expr = expr.substr(0, end + 1);
@@ -261,6 +259,19 @@ std::optional<std::string> find_expr_at_switch(const std::string& line,
   return std::nullopt;
 }
 
+std::optional<int> find_arrow_pos(std::string& line, size_t start_pos) {
+  size_t i = start_pos;
+  while (i < line.length() && is_whitespace(line[i])) ++i;
+
+  if (i >= line.length()) return std::nullopt;
+
+  while (i < line.length()) {
+    if (i + 1 < line.length() && line[i] == '=' && line[i + 1] == '>') return i;
+  }
+
+  return std::nullopt;
+}
+
 // Process lines and build output with braces
 void preprocess(const std::string& input, std::string& output) {
   // Parse input into lines
@@ -269,33 +280,7 @@ void preprocess(const std::string& input, std::string& output) {
   std::istringstream iss(input);
 
   while (std::getline(iss, line)) {
-    size_t arrow_pos = line.find("=>");
-    if (arrow_pos != std::string::npos &&
-        line.find("()") == std::string::npos) {
-      std::string before = line.substr(0, arrow_pos);
-      std::string arrow = "=>";
-      std::string after = line.substr(arrow_pos + 2);
-
-      size_t end = before.find_last_not_of(" \t");
-      if (end != std::string::npos) {
-        before = before.substr(0, end + 1);
-      } else {
-        before = "";
-      }
-
-      // Remove leading spaces from after
-      size_t start = after.find_first_not_of(" \t");
-      if (start != std::string::npos) {
-        after = after.substr(start);
-      } else {
-        after = "";
-      }
-      lines.push_back(before);
-      lines.push_back(arrow);
-      lines.push_back(after);
-    } else {
-      lines.push_back(line);
-    }
+    lines.push_back(line);
   }
   // First pass: classify each line
   std::vector<LineInfo> infos;
@@ -325,6 +310,16 @@ void preprocess(const std::string& input, std::string& output) {
     if (kw_switch.has_value()) {
       info.type = LineInfo::SWITCH;
     }
+
+    if (is_func != std::string::npos) {
+      info.is_switch_stmt = true;
+      info.arrow_before = *left_part;
+
+      auto arr_pos = find_arrow_pos(info.content, 0);
+      if (arr_pos.has_value()) {
+        info.content_after = info.content.substr(*arr_pos + 2);
+      }
+    }
     // Check if it's a function (has =>)
 
     else if (is_arrow(info.content) && is_func != std::string::npos &&
@@ -332,9 +327,7 @@ void preprocess(const std::string& input, std::string& output) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
       info.keyword = "";
-    }
-    // Check if it's a keyword line (starts with if/for/while)
-    else {
+    } else {
       auto kw = find_keyword_at(info.content, 0);
       if (kw.has_value()) {
         info.type = LineInfo::KEYWORD;
@@ -378,50 +371,38 @@ void preprocess(const std::string& input, std::string& output) {
 
     if (switch_state != SWITCH_NONE) {
       if (info.indent > switch_indent) {
-        auto arrow_pos = info.content.find("=>");
-        if (arrow_pos != std::string::npos) {
-          std::string left = trim_right(info.content.substr(0, arrow_pos));
-          if (left.empty()) {
-            if (!case_cnt) {
-              output += "default {\n";
-            } else {
-              output += "\n}\n default {\n";
-            }
-
-            has_default = true;
-            switch_state = SWITCH_IN_DEFAULT;
+        if (info.arrow_before.empty()) {
+          if (!case_cnt) {
+            output += "default {\n";
           } else {
-            if (!case_cnt) {
-              output += "case " + left + " {\n";
-            } else {
-              output += "\n}\ncase " + left + " {\n";
-            }
-            switch_state = SWITCH_IN_CASE;
-            case_cnt++;
+            output += "\n}\n default {\n";
           }
+
+          has_default = true;
+          switch_state = SWITCH_IN_DEFAULT;
         } else {
-          output += info.content + "\n";
+          if (!case_cnt) {
+            output += "case " + info.arrow_before + " {\n";
+          } else {
+            output += "\n}\ncase " + info.arrow_before + " {\n";
+          }
+          switch_state = SWITCH_IN_CASE;
+          case_cnt++;
         }
       } else {
-        // Закрываем switch
-        output += "}\n";
-        if (has_default) {
-          output += "}\n";
-        }
-        switch_state = SWITCH_NONE;
-        switch_indent_stack.pop();
-        has_default = false;
+        output += info.content + "\n";
       }
-      continue;
-
+    } else {
       // Закрываем switch
       output += "}\n";
       if (has_default) {
         output += "}\n";
       }
       switch_state = SWITCH_NONE;
-      switch_indent_stack.pop();
+      if (!switch_indent_stack.empty()) switch_indent_stack.pop();
       has_default = false;
+
+      continue;
     }
 
     // --- ОБЫЧНАЯ ЛОГИКА (if, for, while) ---
