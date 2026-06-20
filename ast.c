@@ -121,7 +121,9 @@ ast_node* new_continue_node(void) {
 ast_node* new_switch_node(ast_node* expr, ast_node* body) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_SWITCH;
-  return node;  // TODO
+  node->switch_node.expr = expr;
+  node->switch_node.body = body;
+  return node; 
 }
 
 ast_node* new_case_node(ast_node* value, ast_node* body) {

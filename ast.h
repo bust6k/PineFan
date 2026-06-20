@@ -6,6 +6,7 @@ typedef struct ast_node { int type;
         struct { char *var; struct ast_node *start, *end, *step, *body; } for_node;
         struct { struct ast_node *cond, *body; } while_node;
         struct { struct ast_node *value; } return_node;
+	struct { struct ast_node *expr; struct ast_node *body; } switch_node;
         struct { char *name; } var;
         struct { int value; } number;
         struct { char *value; } string;

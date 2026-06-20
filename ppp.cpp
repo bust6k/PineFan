@@ -55,8 +55,6 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_F;
       else if (c == 'w')
         state = KW_W;
-      else if (c == 's')
-        state = KW_S;
       else if (c == 't')
         state = KW_T;
       else
@@ -73,13 +71,6 @@ std::optional<std::string> KeywordDFA::feed(char c) {
     case KW_F:
       if (c == 'o')
         state = KW_FO;
-      else
-        return std::nullopt;
-      break;
-
-    case KW_S:
-      if (c == 'w')
-        state = KW_SW;
       else
         return std::nullopt;
       break;
@@ -111,14 +102,6 @@ std::optional<std::string> KeywordDFA::feed(char c) {
       else
         return std::nullopt;
       break;
-
-    case KW_SW:
-      if (c == 'i')
-        state = KW_SWI;
-      else
-        return std::nullopt;
-      break;
-
     case KW_WHI:
       if (c == 'l')
         state = KW_WHIL;
@@ -132,28 +115,6 @@ std::optional<std::string> KeywordDFA::feed(char c) {
       else
         return std::nullopt;
       break;
-
-    case KW_SWI:
-      if (c == 't')
-        state = KW_SWIT;
-      else
-        return std::nullopt;
-      break;
-
-    case KW_SWIT:
-      if (c == 'c')
-        state = KW_SWITC;
-      else
-        return std::nullopt;
-      break;
-
-    case KW_SWITC:
-      if (c == 'h')
-        state = KW_ACCEPT_SWITCH;
-      else
-        return std::nullopt;
-      break;
-
     case KW_TY:
       if (c == 'p')
         state = KW_TYP;
@@ -176,7 +137,6 @@ std::optional<std::string> KeywordDFA::feed(char c) {
   if (state == KW_ACCEPT_IF) return "if";
   if (state == KW_ACCEPT_FOR) return "for";
   if (state == KW_ACCEPT_WHILE) return "while";
-  if (state == KW_ACCEPT_SWITCH) return "switch";
   if (state == KW_ACCEPT_TYPE) return "type";
 
   return std::nullopt;
@@ -252,6 +212,55 @@ std::optional<std::string> find_keyword_at(const std::string& line,
 
   return std::nullopt;
 }
+
+std::optional<std::string> find_switch_keyword_at(const std::string& line,
+                                                  size_t start_pos) {
+  size_t i = start_pos;
+  while (i < line.length() && is_whitespace(line[i])) ++i;
+
+  if (i >= line.length()) return std::nullopt;
+
+  // Check for exact "switch" word
+  const char* kw = "switch";
+  size_t kw_len = 6;
+
+  if (line.compare(i, kw_len, kw) != 0) return std::nullopt;
+
+  // Check boundary after "switch"
+  size_t next = i + kw_len;
+  if (next < line.length() && is_alpha(line[next])) {
+    // Part of larger word (e.g., "switchable")
+    return std::nullopt;
+  }
+
+  return std::string("switch");
+}
+
+std::optional<std::string> find_expr_at_switch(const std::string& line,
+                                               size_t start_pos) {
+  size_t i = start_pos;
+  while (i < line.length() && is_whitespace(line[i])) ++i;
+
+  if (i >= line.length()) return std::nullopt;
+
+  std::string expr;
+  while (i < line.length()) {
+    // Проверяем, не наткнулись ли на "=>"
+    if (i + 1 < line.length() && line[i] == '=' && line[i + 1] == '>') {
+      // Нашли стрелку, возвращаем выражение (обрезаем пробелы)
+      size_t end = expr.find_last_not_of(" \t");
+      if (end != std::string::npos) {
+        expr = expr.substr(0, end + 1);
+      }
+      return expr.empty() ? std::nullopt : std::optional<std::string>(expr);
+    }
+    expr += line[i];
+    ++i;
+  }
+
+  return std::nullopt;
+}
+
 // Process lines and build output with braces
 void preprocess(const std::string& input, std::string& output) {
   // Parse input into lines
@@ -282,6 +291,11 @@ void preprocess(const std::string& input, std::string& output) {
         break;
     }
 
+    auto kw_switch = find_switch_keyword_at(info.content, 0);
+
+    if (kw_switch.has_value()) {
+      info.type = LineInfo::SWITCH;
+    }
     // Check if it's a function (has =>)
     if (is_arrow(info.content)) {
       info.type = LineInfo::FUNCTION;
@@ -311,15 +325,17 @@ void preprocess(const std::string& input, std::string& output) {
     auto& info = infos[idx];
     int current_indent = info.indent;
 
-    while (current_indent > indent_stack.top()) {
-      indent_stack.push(current_indent);
-      output += "{\n";
-    }
+    if (info.type != LineInfo::SWITCH) {
+      while (current_indent > indent_stack.top()) {
+        indent_stack.push(current_indent);
+        output += "{\n";
+      }
 
-    // Close blocks when indent decreases
-    while (current_indent < indent_stack.top()) {
-      indent_stack.pop();
-      output += "}\n";
+      // Close blocks when indent decreases
+      while (current_indent < indent_stack.top()) {
+        indent_stack.pop();
+        output += "}\n";
+      }
     }
 
     // Skip empty lines (just copy)
@@ -330,6 +346,47 @@ void preprocess(const std::string& input, std::string& output) {
 
     // Handle line based on type
     switch (info.type) {
+      case LineInfo::SWITCH: {
+        bool has_default = false;
+        std::stack<int> switch_indent_stack;
+        output += "switch (";
+
+        // Find the condition part (everything after keyword)
+        size_t kw_pos = info.content.find(info.keyword);
+        std::string condition;
+        if (kw_pos != std::string::npos) {
+          condition = info.content.substr(kw_pos + info.keyword.length());
+          // Trim condition
+          size_t start = condition.find_first_not_of(" \t");
+          if (start != std::string::npos) {
+            condition = condition.substr(start);
+          } else {
+            condition = "";
+          }
+        }
+
+        // Remove trailing spaces
+        condition = trim_right(condition);
+        output += condition + "){\n";
+
+        while (current_indent < indent_stack.top()) {
+          if (is_arrow(info.content)) {
+            if (switch_indent_stack.empty()) {
+              output += "{\n";
+              switch_indent_stack.push(1);
+            } else if (!switch_indent_stack.empty() &&
+                       find_expr_at_switch(info.content, 0)) {
+              output += "} {\n";
+            } else {
+              output += "default{\n";
+            }
+          }
+        }
+        output += "}\n";
+        if (has_default) output += "}\n";
+        indent_stack.pop();
+      }
+
       case LineInfo::KEYWORD: {
         // For KEYWORD: add "if (" and then open brace on next line
         output += info.keyword + " (";

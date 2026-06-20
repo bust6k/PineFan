@@ -2,4 +2,5 @@ for i = 0 to 50
    y = 5
 
 switch i
-   y = 5
+   y => ta.sma(20,1)
+   5 => ta.rma(40 - 5,1)
