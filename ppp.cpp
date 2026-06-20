@@ -307,7 +307,10 @@ std::optional<int> find_arrow_pos(std::string& line, size_t start_pos) {
   if (i >= line.length()) return std::nullopt;
 
   while (i < line.length()) {
-    if (i + 1 < line.length() && line[i] == '=' && line[i + 1] == '>') return i;
+    if (i + 1 < line.length() && line[i] == '=' && line[i + 1] == '>')
+      return i;
+    else
+      ++i;
   }
 
   return std::nullopt;
@@ -343,13 +346,24 @@ void preprocess(const std::string& input, std::string& output) {
     }
 
     auto left_part = find_expr_at_switch(info.content, 0);
-    size_t is_func = std::string::npos;
+    size_t is_func = 0;
 
     if (left_part.has_value()) is_func = left_part->find("()");
+    if (!left_part.has_value() && find_arrow_pos(info.content, 0).has_value())
+      is_func = 10;
 
-    if (is_func != std::string::npos) {
+    if (is_func == std::string::npos) {
       info.is_switch_stmt = true;
-      info.arrow_before = *left_part;
+      info.arrow_before = left_part.value();
+
+      auto arr_pos = find_arrow_pos(info.content, 0);
+      if (arr_pos.has_value()) {
+        info.content_after = info.content.substr(*arr_pos + 2);
+      }
+    } else if (is_func == 10) {
+      info.is_switch_stmt = true;
+      info.is_default = true;
+      info.arrow_before = "default";
 
       auto arr_pos = find_arrow_pos(info.content, 0);
       if (arr_pos.has_value()) {
@@ -403,6 +417,14 @@ void preprocess(const std::string& input, std::string& output) {
       continue;
     }
 
+    if (info.is_switch_stmt == true) {
+      output +=
+          info.arrow_before + "{\n" + remove_arrow(info.content_after) + "\n};";
+    } else if (info.is_switch_stmt == true && info.is_default == true) {
+      output +=
+          info.arrow_before + "{\n" + remove_arrow(info.content_after) + "\n};";
+    }
+
     switch (info.type) {
       case LineInfo::KEYWORD: {
         output += info.keyword + " (";
@@ -428,7 +450,7 @@ void preprocess(const std::string& input, std::string& output) {
       }
 
       case LineInfo::NORMAL: {
-        output += info.content + "\n";
+       if(!info.is_switch_stmt && !info.is_default) output += info.content + "\n";
         break;
       }
 

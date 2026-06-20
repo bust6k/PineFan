@@ -64,6 +64,7 @@ struct LineInfo {
   std::string arrow_before;   // for switch-case: before of => arrow
   std::string content_after;  // for switch-case: there's the case's body
   bool is_switch_stmt;
+  bool is_default;
   int indent;
 };
 
