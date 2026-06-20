@@ -42,6 +42,7 @@ void KeywordDFA::reset() {
 }
 
 // Process single character, returns true if keyword is fully matched
+
 std::optional<std::string> KeywordDFA::feed(char c) {
   if (!std::isalpha(c)) return std::nullopt;
 
@@ -49,20 +50,19 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
   switch (state) {
     case KW_START:
-      if (c == 'i') {
+      if (c == 'i')
         state = KW_I;
-      } else if (c == 'f') {
+      else if (c == 'f')
         state = KW_F;
-      } else if (c == 'w') {
+      else if (c == 'w')
         state = KW_W;
-      } else if (c == 't') {
-        state = KW_T;
-      } else if (c == 's') {
+      else if (c == 's')
         state = KW_S;
-      } else {
+      else if (c == 't')
+        state = KW_T;
+      else
         return std::nullopt;
-      }
-      // break;
+      break;
 
     case KW_I:
       if (c == 'f')
@@ -78,42 +78,19 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       break;
 
+    case KW_S:
+      if (c == 'w')
+        state = KW_SW;
+      else
+        return std::nullopt;
+      break;
+
     case KW_T:
       if (c == 'y')
         state = KW_TY;
       else
         return std::nullopt;
       break;
-
-    case KW_S:
-      if (c == 'w')
-        state = KW_SW;
-      else
-        return std::nullopt;
-
-    case KW_SW:
-      if (c == 'i')
-        state = KW_SWI;
-      else
-        return std::nullopt;
-
-    case KW_SWI:
-      if (c == 't')
-        state = KW_SWIT;
-      else
-        return std::nullopt;
-
-    case KW_SWIT:
-      if (c == 'c')
-        state = KW_SWITC;
-      else
-        return std::nullopt;
-
-    case KW_SWITC:
-      if (c == 'h')
-        state = KW_ACCEPT_SWITCH;
-      else
-        return std::nullopt;
 
     case KW_FO:
       if (c == 'r')
@@ -135,6 +112,14 @@ std::optional<std::string> KeywordDFA::feed(char c) {
       else
         return std::nullopt;
       break;
+
+    case KW_SW:
+      if (c == 'i')
+        state = KW_SWI;
+      else
+        return std::nullopt;
+      break;
+
     case KW_WHI:
       if (c == 'l')
         state = KW_WHIL;
@@ -148,6 +133,28 @@ std::optional<std::string> KeywordDFA::feed(char c) {
       else
         return std::nullopt;
       break;
+
+    case KW_SWI:
+      if (c == 't')
+        state = KW_SWIT;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_SWIT:
+      if (c == 'c')
+        state = KW_SWITC;
+      else
+        return std::nullopt;
+      break;
+
+    case KW_SWITC:
+      if (c == 'h')
+        state = KW_ACCEPT_SWITCH;
+      else
+        return std::nullopt;
+      break;
+
     case KW_TY:
       if (c == 'p')
         state = KW_TYP;
@@ -170,8 +177,8 @@ std::optional<std::string> KeywordDFA::feed(char c) {
   if (state == KW_ACCEPT_IF) return "if";
   if (state == KW_ACCEPT_FOR) return "for";
   if (state == KW_ACCEPT_WHILE) return "while";
-  if (state == KW_ACCEPT_TYPE) return "type";
   if (state == KW_ACCEPT_SWITCH) return "switch";
+  if (state == KW_ACCEPT_TYPE) return "type";
 
   return std::nullopt;
 }
