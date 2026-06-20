@@ -54,6 +54,13 @@ struct LineInfo {
   int indent;
 };
 
+enum SwitchState {
+  SWITCH_NONE,
+  SWITCH_OPEN,
+  SWITCH_IN_CASE,
+  SWITCH_IN_DEFAULT
+};
+
 // Main preprocessing function
 void preprocess(const std::string& input, std::string& output);
 int preprocess_files(int argc, char* argv[]);

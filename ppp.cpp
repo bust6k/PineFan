@@ -318,85 +318,83 @@ void preprocess(const std::string& input, std::string& output) {
   }
 
   // Second pass: generate output with brace insertion
+  // Second pass: generate output with brace insertion
   std::stack<int> indent_stack;
   indent_stack.push(0);
+
+  SwitchState switch_state = SWITCH_NONE;
+  std::stack<int> switch_indent_stack;
+  bool has_default = false;
+  int switch_indent = 0;
 
   for (size_t idx = 0; idx < infos.size(); ++idx) {
     auto& info = infos[idx];
     int current_indent = info.indent;
 
-    if (info.type != LineInfo::SWITCH) {
-      while (current_indent > indent_stack.top()) {
-        indent_stack.push(current_indent);
-        output += "{\n";
-      }
+    // --- ОБРАБОТКА SWITCH ---
+    if (info.type == LineInfo::SWITCH) {
+      switch_state = SWITCH_OPEN;
+      switch_indent = info.indent;
+      switch_indent_stack.push(switch_indent);
 
-      // Close blocks when indent decreases
-      while (current_indent < indent_stack.top()) {
-        indent_stack.pop();
-        output += "}\n";
-      }
+      size_t kw_pos = info.content.find("switch");
+      std::string condition = trim_right(info.content.substr(kw_pos + 6));
+      output += "switch (" + condition + ") {\n";
+      continue;
     }
 
-    // Skip empty lines (just copy)
+    if (switch_state != SWITCH_NONE) {
+      if (info.indent > switch_indent) {
+        auto arrow_pos = info.content.find("=>");
+        if (arrow_pos != std::string::npos) {
+          std::string left = trim_right(info.content.substr(0, arrow_pos));
+          if (left.empty()) {
+            output += "default {\n";
+            has_default = true;
+            switch_state = SWITCH_IN_DEFAULT;
+          } else {
+            output += "case " + left + " {\n";
+            switch_state = SWITCH_IN_CASE;
+          }
+        } else {
+          output += info.content + "\n";
+        }
+      } else {
+        // Закрываем switch
+        output += "}\n";
+        if (has_default) {
+          output += "}\n";
+        }
+        switch_state = SWITCH_NONE;
+        switch_indent_stack.pop();
+        has_default = false;
+      }
+      continue;
+    }
+
+    // --- ОБЫЧНАЯ ЛОГИКА (if, for, while) ---
+    while (current_indent > indent_stack.top()) {
+      indent_stack.push(current_indent);
+      output += "{\n";
+    }
+    while (current_indent < indent_stack.top()) {
+      indent_stack.pop();
+      output += "}\n";
+    }
+
+    // --- ОБРАБОТКА СТРОК ---
     if (info.content.empty()) {
       output += "\n";
       continue;
     }
 
-    // Handle line based on type
     switch (info.type) {
-      case LineInfo::SWITCH: {
-        bool has_default = false;
-        std::stack<int> switch_indent_stack;
-        output += "switch (";
-
-        // Find the condition part (everything after keyword)
-        size_t kw_pos = info.content.find(info.keyword);
-        std::string condition;
-        if (kw_pos != std::string::npos) {
-          condition = info.content.substr(kw_pos + info.keyword.length());
-          // Trim condition
-          size_t start = condition.find_first_not_of(" \t");
-          if (start != std::string::npos) {
-            condition = condition.substr(start);
-          } else {
-            condition = "";
-          }
-        }
-
-        // Remove trailing spaces
-        condition = trim_right(condition);
-        output += condition + "){\n";
-
-        while (current_indent < indent_stack.top()) {
-          if (is_arrow(info.content)) {
-            if (switch_indent_stack.empty()) {
-              output += "{\n";
-              switch_indent_stack.push(1);
-            } else if (!switch_indent_stack.empty() &&
-                       find_expr_at_switch(info.content, 0)) {
-              output += "} {\n";
-            } else {
-              output += "default{\n";
-            }
-          }
-        }
-        output += "}\n";
-        if (has_default) output += "}\n";
-        indent_stack.pop();
-      }
-
       case LineInfo::KEYWORD: {
-        // For KEYWORD: add "if (" and then open brace on next line
         output += info.keyword + " (";
-
-        // Find the condition part (everything after keyword)
         size_t kw_pos = info.content.find(info.keyword);
         std::string condition;
         if (kw_pos != std::string::npos) {
           condition = info.content.substr(kw_pos + info.keyword.length());
-          // Trim condition
           size_t start = condition.find_first_not_of(" \t");
           if (start != std::string::npos) {
             condition = condition.substr(start);
@@ -404,26 +402,23 @@ void preprocess(const std::string& input, std::string& output) {
             condition = "";
           }
         }
-
-        // Remove trailing spaces
         condition = trim_right(condition);
         output += condition + ") ";
-
         break;
       }
 
       case LineInfo::FUNCTION: {
-        // For FUNCTION: just write content (arrow removed), then open brace
         output += info.content + ' ';
-
         break;
       }
 
       case LineInfo::NORMAL: {
-        // Normal line: write as is (with proper spacing)
         output += info.content + "\n";
         break;
       }
+
+      default:
+        break;
     }
   }
 
@@ -433,6 +428,8 @@ void preprocess(const std::string& input, std::string& output) {
     output += "}\n";
   }
 }
+
+
 
 int preprocess_files(int argc, char* argv[]) {
   for (int i = 1; i < argc; i++) {
