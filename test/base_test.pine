@@ -1,6 +1,11 @@
+switch i 
+   y => ta.sma(20,1)
+   => "error\n"
+
 while x > 5 + 5
    y = 7 + 5
 
 switch i
    y => ta.sma(20,1)
    5 => ta.rma(40 - 5,1)
+   => ta.ema(40,1)

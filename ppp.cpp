@@ -31,7 +31,7 @@
 
 #include "file.hpp"
 
-// #define _IS_MAIN
+#define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {
@@ -269,9 +269,34 @@ void preprocess(const std::string& input, std::string& output) {
   std::istringstream iss(input);
 
   while (std::getline(iss, line)) {
-    lines.push_back(line);
-  }
+    size_t arrow_pos = line.find("=>");
+    if (arrow_pos != std::string::npos &&
+        line.find("()") == std::string::npos) {
+      std::string before = line.substr(0, arrow_pos);
+      std::string arrow = "=>";
+      std::string after = line.substr(arrow_pos + 2);
 
+      size_t end = before.find_last_not_of(" \t");
+      if (end != std::string::npos) {
+        before = before.substr(0, end + 1);
+      } else {
+        before = "";
+      }
+
+      // Remove leading spaces from after
+      size_t start = after.find_first_not_of(" \t");
+      if (start != std::string::npos) {
+        after = after.substr(start);
+      } else {
+        after = "";
+      }
+      lines.push_back(before);
+      lines.push_back(arrow);
+      lines.push_back(after);
+    } else {
+      lines.push_back(line);
+    }
+  }
   // First pass: classify each line
   std::vector<LineInfo> infos;
 
@@ -292,12 +317,18 @@ void preprocess(const std::string& input, std::string& output) {
     }
 
     auto kw_switch = find_switch_keyword_at(info.content, 0);
+    auto left_part = find_expr_at_switch(info.content, 0);
+    size_t is_func = std::string::npos;
+
+    if (left_part.has_value()) is_func = left_part->find("()");
 
     if (kw_switch.has_value()) {
       info.type = LineInfo::SWITCH;
     }
     // Check if it's a function (has =>)
-    if (is_arrow(info.content)) {
+
+    else if (is_arrow(info.content) && is_func != std::string::npos &&
+             !kw_switch.has_value()) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
       info.keyword = "";
@@ -326,6 +357,7 @@ void preprocess(const std::string& input, std::string& output) {
   std::stack<int> switch_indent_stack;
   bool has_default = false;
   int switch_indent = 0;
+  int case_cnt = 0;
 
   for (size_t idx = 0; idx < infos.size(); ++idx) {
     auto& info = infos[idx];
@@ -335,6 +367,7 @@ void preprocess(const std::string& input, std::string& output) {
     if (info.type == LineInfo::SWITCH) {
       switch_state = SWITCH_OPEN;
       switch_indent = info.indent;
+      case_cnt = 0;
       switch_indent_stack.push(switch_indent);
 
       size_t kw_pos = info.content.find("switch");
@@ -349,12 +382,22 @@ void preprocess(const std::string& input, std::string& output) {
         if (arrow_pos != std::string::npos) {
           std::string left = trim_right(info.content.substr(0, arrow_pos));
           if (left.empty()) {
-            output += "default {\n";
+            if (!case_cnt) {
+              output += "default {\n";
+            } else {
+              output += "\n}\n default {\n";
+            }
+
             has_default = true;
             switch_state = SWITCH_IN_DEFAULT;
           } else {
-            output += "case " + left + " {\n";
+            if (!case_cnt) {
+              output += "case " + left + " {\n";
+            } else {
+              output += "\n}\ncase " + left + " {\n";
+            }
             switch_state = SWITCH_IN_CASE;
+            case_cnt++;
           }
         } else {
           output += info.content + "\n";
@@ -370,6 +413,15 @@ void preprocess(const std::string& input, std::string& output) {
         has_default = false;
       }
       continue;
+
+      // Закрываем switch
+      output += "}\n";
+      if (has_default) {
+        output += "}\n";
+      }
+      switch_state = SWITCH_NONE;
+      switch_indent_stack.pop();
+      has_default = false;
     }
 
     // --- ОБЫЧНАЯ ЛОГИКА (if, for, while) ---
@@ -428,8 +480,6 @@ void preprocess(const std::string& input, std::string& output) {
     output += "}\n";
   }
 }
-
-
 
 int preprocess_files(int argc, char* argv[]) {
   for (int i = 1; i < argc; i++) {
@@ -490,7 +540,7 @@ int main(int argc, char* argv[]) {
     return 1;
   }
   auto res = Pinefan::Ppp::preprocess_files(argc, argv);
-  clean_prp_files();
+  Pinefan::Ppp::clean_prp_files();
   return res;
 }
 
