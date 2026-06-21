@@ -288,14 +288,6 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
          output << "\nelse ";
 	 output << ":\n";
 	 }
-      /* 
-       for(struct ast_node* i = node->switch_node.cases;i != NULL;i =
-       node->switch_node.cases->switch_case.next) {
-       output << indent_str << "elif ";
-       generate_code(i->case_stmt.expr,output,0);
-       output << ":\n";
-       }
-       */
       break;
     }
 
