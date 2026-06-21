@@ -18,7 +18,7 @@ static void extend(Vector* vec, int delta) {
   int nelem = max(roundup(vec->len + delta), MIN_SIZE);
   void* newbody = malloc(sizeof(void*) * nelem);
   memcpy(newbody, vec->body, sizeof(void*) * vec->len);
-  if(vec->nalloc != 0) free(vec->body);
+  if (vec->nalloc != 0) free(vec->body);
   vec->body = newbody;
   vec->nalloc = nelem;
 }
@@ -37,7 +37,6 @@ Vector* do_make_vector(int size) {
   return r;
 }
 
-
 Vector* make_vector() { return do_make_vector(0); }
 
 Vector* make_vector1(void* e) {
@@ -49,7 +48,7 @@ Vector* make_vector1(void* e) {
 Vector* vec_copy(Vector* src) {
   Vector* r = do_make_vector(src->len);
   memcpy(r->body, src->body, sizeof(void*) * src->len);
-  if(src->nalloc != 0) free(src->body);
+  if (src->nalloc != 0) free(src->body);
   r->len = src->len;
   return r;
 }
@@ -97,8 +96,6 @@ void* vec_body(Vector* vec) { return vec->body; }
 int vec_len(Vector* vec) { return vec->len; }
 
 void vec_free(Vector* vec) {
-  if(vec->nalloc != 0) free(vec->body);
+  if (vec->nalloc != 0) free(vec->body);
   free(vec);
 }
-
-

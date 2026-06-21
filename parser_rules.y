@@ -89,7 +89,7 @@ extern void yyerror(const char *s);
 %token <ival> number
 %token <sval> identifier string
 
-%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_stmt default_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 %nonassoc if_statement
@@ -135,8 +135,10 @@ statement:
     | break_stmt
     | continue_stmt
     | switch_stmt
+    | case_list
+    | default_case
+    | switch_block_stmts
     | case_stmt
-    | default_stmt
     | var_stmt
     | const_stmt
     | simple_stmt
@@ -190,6 +192,7 @@ return_stmt_expr:
      return_statement  expr
     { $$ = new_return_node($2); }
     ;
+
 break_stmt:
     break_statement
     { $$ = new_break_node(); }
@@ -201,21 +204,46 @@ continue_stmt:
     ;
 
 switch_stmt:
-    switch_statement left_paren expr right_paren block
-    { $$ = new_switch_node($3, $5); }
+    switch_statement left_paren expr right_paren left_brace case_list default_case right_brace
+    { $$ = new_switch_node($3, $6, $7); }
+    ;
+
+case_list:
+    case_list case_stmt
+    {
+        $2->switch_case.next = $1;
+        $$ = $2;
+    }
+    | /* empty */
+    {
+        $$ = NULL;
+    }
     ;
 
 case_stmt:
-    case_statement expr colon  block
-    { $$ = new_case_node($2, $4); }
-    | case_statement expr comma expr colon block
-    { $$ = new_case_node_range($2, $4, $6); }
+    expr left_brace switch_block_stmts right_brace
+    {
+        $$ = new_case_node($1, $3);
+    }
     ;
 
-default_stmt:
-    default_statement colon  block
-    { $$ = new_default_node($3); }
+default_case:
+    default_statement left_brace switch_block_stmts right_brace
+    {
+        $$ = $3;
+    }
+    | /* empty */
+    {
+        $$ = NULL;
+    }
     ;
+
+switch_block_stmts:
+   statement
+   {$$ = $1;}
+   | switch_block_stmts statement
+   {$$ = new_switch_block_node($1,$2);}
+   ;
 
 var_stmt:
     var identifier assign expr

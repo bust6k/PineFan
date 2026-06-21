@@ -117,26 +117,49 @@ ast_node* new_continue_node(void) {
   node->type = AST_CONTINUE;
   return node;
 }
-
-ast_node* new_switch_node(ast_node* expr, ast_node* body) {
-  ast_node* node = calloc(1, sizeof(ast_node));
-  node->type = AST_SWITCH;
-  node->switch_node.expr = expr;
-  node->switch_node.body = body;
-  return node; 
+ast_node* new_switch_node(ast_node* expr, ast_node* cases, ast_node* default_body) {
+    ast_node* node = calloc(1, sizeof(ast_node));
+    node->type = AST_SWITCH;
+    node->switch_node.expr = expr;
+    node->switch_node.cases = cases;
+    node->switch_node.default_body = default_body;
+  
+    size_t count = 0;
+    ast_node *c = cases;
+    while (c) {
+        count++;
+        c = c->switch_case.next;
+    }
+    node->switch_node.case_count = count;
+  
+    return node;
 }
 
-ast_node* new_case_node(ast_node* value, ast_node* body) {
+ast_node* new_switch_block_node(ast_node* prev,ast_node* th) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_SWITCH_BLOCK;
+node->switch_block_node.prev = prev;
+node->switch_block_node.th = th;
+
+return node;
+}
+
+ast_node* new_case_node(ast_node* expr, ast_node* switch_blk_node) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_CASE;
-  return node;  // TODO
+  node->case_stmt.expr = expr;
+  node->case_stmt.switch_blk_node = switch_blk_node;
+
+  return node;
 }
 
+/*
 ast_node* new_case_node_range(ast_node* from, ast_node* to, ast_node* body) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_CASE_RANGE;
   return node;  // TODO
 }
+*/
 
 ast_node* new_default_node(ast_node* body) {
   ast_node* node = calloc(1, sizeof(ast_node));
@@ -171,91 +194,91 @@ ast_node* new_assign_re_node(char* name, ast_node* value) {
 }
 
 void ast_free(ast_node* node) {
-    if (!node) return;
+  if (!node) return;
 
-    switch (node->type) {
-        case AST_ASSIGN:
-        case AST_CONST:
-            free(node->assign.name);
-            ast_free(node->assign.value);
-            break;
+  switch (node->type) {
+    case AST_ASSIGN:
+    case AST_CONST:
+      free(node->assign.name);
+      ast_free(node->assign.value);
+      break;
 
-        case AST_IF:
-            ast_free(node->if_node.cond);
-            ast_free(node->if_node.then);
-            ast_free(node->if_node.else_);
-            break;
+    case AST_IF:
+      ast_free(node->if_node.cond);
+      ast_free(node->if_node.then);
+      ast_free(node->if_node.else_);
+      break;
 
-        case AST_FOR:
-            free(node->for_node.var);
-            ast_free(node->for_node.start);
-            ast_free(node->for_node.end);
-            ast_free(node->for_node.step);
-            ast_free(node->for_node.body);
-            break;
+    case AST_FOR:
+      free(node->for_node.var);
+      ast_free(node->for_node.start);
+      ast_free(node->for_node.end);
+      ast_free(node->for_node.step);
+      ast_free(node->for_node.body);
+      break;
 
-        case AST_WHILE:
-            ast_free(node->while_node.cond);
-            ast_free(node->while_node.body);
-            break;
+    case AST_WHILE:
+      ast_free(node->while_node.cond);
+      ast_free(node->while_node.body);
+      break;
 
-        case AST_RETURN:
-            ast_free(node->return_node.value);
-            break;
+    case AST_RETURN:
+      ast_free(node->return_node.value);
+      break;
 
-        case AST_VAR:
-        case AST_SIMPLE:
-            free(node->var.name);
-            break;
+    case AST_VAR:
+    case AST_SIMPLE:
+      free(node->var.name);
+      break;
 
-        case AST_NUMBER:
-            // nothing to free
-            break;
+    case AST_NUMBER:
+      // nothing to free
+      break;
 
-        case AST_STRING:
-        case AST_INDICATOR:
-        case AST_STRATEGY:
-        case AST_IMPORT:
-            free(node->string.value);
-            break;
+    case AST_STRING:
+    case AST_INDICATOR:
+    case AST_STRATEGY:
+    case AST_IMPORT:
+      free(node->string.value);
+      break;
 
-        case AST_BINOP:
-            free(node->binop.op);
-            ast_free(node->binop.left);
-            ast_free(node->binop.right);
-            break;
+    case AST_BINOP:
+      free(node->binop.op);
+      ast_free(node->binop.left);
+      ast_free(node->binop.right);
+      break;
 
-        case AST_UNOP:
-            free(node->unop.op);
-            ast_free(node->unop.operand);
-            break;
+    case AST_UNOP:
+      free(node->unop.op);
+      ast_free(node->unop.operand);
+      break;
 
-        case AST_CALL:
-            free(node->call.name);
-            if (node->call.args) {
-                for (int i = 0; i < node->call.arg_count; i++) {
-                    ast_free(node->call.args[i]);
-                }
-                free(node->call.args);
-            }
-            break;
+    case AST_CALL:
+      free(node->call.name);
+      if (node->call.args) {
+        for (int i = 0; i < node->call.arg_count; i++) {
+          ast_free(node->call.args[i]);
+        }
+        free(node->call.args);
+      }
+      break;
 
-        case AST_BREAK:
-        case AST_CONTINUE:
-            // nothing to free
-            break;
+    case AST_BREAK:
+    case AST_CONTINUE:
+      // nothing to free
+      break;
 
-        case AST_SWITCH:
-        case AST_CASE:
-        case AST_CASE_RANGE:
-        case AST_DEFAULT:
-            // TODO: implement when these nodes are properly filled
-            break;
+    case AST_SWITCH:
+    case AST_CASE:
+    case AST_CASE_RANGE:
+    case AST_DEFAULT:
+      // TODO: implement when these nodes are properly filled
+      break;
 
-        default:
-            // unknown type — free nothing
-            break;
-    }
+    default:
+      // unknown type — free nothing
+      break;
+  }
 
-    free(node);
+  free(node);
 }

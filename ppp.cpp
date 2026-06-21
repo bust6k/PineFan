@@ -31,7 +31,7 @@
 
 #include "file.hpp"
 
-#define _IS_MAIN
+//#define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {
@@ -371,7 +371,8 @@ void preprocess(const std::string& input, std::string& output) {
       }
     }
 
-    if (is_arrow(info.content) && is_func != std::string::npos && is_func != 10) {
+    if (is_arrow(info.content) && is_func != std::string::npos &&
+        is_func != 10) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
       info.keyword = "";
@@ -418,11 +419,11 @@ void preprocess(const std::string& input, std::string& output) {
     }
 
     if (info.is_switch_stmt == true && info.is_default == false) {
-      output +=
-          info.arrow_before + " {\n" + remove_arrow(info.content_after) + "\n};\n";
+      output += info.arrow_before + " {\n" + remove_arrow(info.content_after) +
+                "\n};\n";
     } else if (info.is_switch_stmt == true && info.is_default == true) {
-      output +=
-          info.arrow_before + " {\n" + remove_arrow(info.content_after) + "\n};\n";
+      output += info.arrow_before + " {\n" + remove_arrow(info.content_after) +
+                "\n};\n";
     }
 
     switch (info.type) {
@@ -450,7 +451,8 @@ void preprocess(const std::string& input, std::string& output) {
       }
 
       case LineInfo::NORMAL: {
-       if(!info.is_switch_stmt && !info.is_default) output += info.content + "\n";
+        if (!info.is_switch_stmt && !info.is_default)
+          output += info.content + "\n";
         break;
       }
 
