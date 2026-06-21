@@ -258,8 +258,16 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_SWITCH: {
+      
+      output << "\n#in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan\n";
+      output << "#translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement\n";
+      output << "#elif is all the other conditions\n"; 
+      output << "#and else - it's an optional last condition like default in switch-statement\n\n";
+
       output << indent_str << "if ";
+      
       generate_code(node->switch_node.expr, output, 0);
+      
       struct ast_node* first_case = node->switch_node.cases;
       struct ast_node* const_first_case = node->switch_node.expr;
 
@@ -274,6 +282,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       generate_code(first_case->case_stmt.switch_blk_node, output);
 
       first_case = node->switch_node.cases;
+      
       while (first_case->switch_case.next != NULL) {
         output << indent_str << "\nelif ";
         generate_code(const_first_case, output, 0);

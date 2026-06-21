@@ -4,6 +4,12 @@
 # - source: test/base_test.pine
 
 foo = "RMA"
+
+#in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan
+#translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+#elif is all the other conditions
+#and else - it's an optional last condition like default in switch-statement
+
 if foo == fooa:
 # indicator
 print("soo")
@@ -19,5 +25,22 @@ print("it's a fooo")
 elif foo == "RMA":
 # strategy
 print("ll")
+
+else :
+
+#in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan
+#translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+#elif is all the other conditions
+#and else - it's an optional last condition like default in switch-statement
+
+if foo == foo:
+# indicator
+print("sorry")
+# strategy
+print("sorry")
+
+elif foo == "FOO":
+# strategy
+print("real")
 
 else :

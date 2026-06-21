@@ -5,3 +5,8 @@ switch foo
    "RMA" => strategy("ll")
    "WMA" => indicator("it's a fooo")
    => indicator("cant process")
+
+switch foo
+   foo => indicator("sorry")
+   "FOO" => strategy("real")
+   => indicator("gonna out!")
