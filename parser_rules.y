@@ -135,10 +135,6 @@ statement:
     | break_stmt
     | continue_stmt
     | switch_stmt
-    | case_list
-    | default_case
-    | switch_block_stmts
-    | case_stmt
     | var_stmt
     | const_stmt
     | simple_stmt
@@ -167,9 +163,9 @@ strategy_stmt:
     ;
 
 if_stmt:
-    if_statement left_paren expr right_paren block
+    if_statement left_paren expr right_paren block %prec if_statement 
     { $$ = new_if_node($3,$5,NULL); }
-    | if_statement left_paren expr right_paren block else_statement block
+    | if_statement left_paren expr right_paren block else_statement block %prec else_statement
     { $$ = new_if_node($3,$5,$7); }
     ;
 
