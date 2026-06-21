@@ -17,7 +17,8 @@ extern int col;
 
 %%
 
-\n { line++; col = 0; }
+\n { line++; col = 0;}
+
 (\t|\f|\v|\r) { col++; }
 
 indicator { col += 9; return indicator_function; }

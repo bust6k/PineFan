@@ -31,7 +31,7 @@
 
 #include "file.hpp"
 
-//#define _IS_MAIN
+// #define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {

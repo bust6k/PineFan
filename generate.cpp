@@ -257,6 +257,48 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       break;
     }
 
+    case AST_SWITCH: {
+      output << indent_str << "if ";
+      generate_code(node->switch_node.expr, output, 0);
+      struct ast_node* first_case = node->switch_node.cases;
+      struct ast_node* const_first_case = node->switch_node.expr;
+
+      while (first_case->switch_case.next != NULL) {
+        first_case = first_case->switch_case.next;
+      }
+
+      output << " == ";
+            generate_code(first_case->case_stmt.expr, output, 0);
+
+      output << ":\n";
+
+       first_case = node->switch_node.cases;
+          while (first_case->switch_case.next != NULL) {
+          
+          output << indent_str << "\nelif ";
+          generate_code(const_first_case,output,0);
+	  output << " == ";
+	  generate_code(first_case->case_stmt.expr,output,0);
+          output << ":\n";
+        
+          first_case = first_case->switch_case.next;
+	  }
+
+	 if(node->switch_node.default_body != NULL) {
+         output << "\nelse ";
+	 output << ":\n";
+	 }
+      /* 
+       for(struct ast_node* i = node->switch_node.cases;i != NULL;i =
+       node->switch_node.cases->switch_case.next) {
+       output << indent_str << "elif ";
+       generate_code(i->case_stmt.expr,output,0);
+       output << ":\n";
+       }
+       */
+      break;
+    }
+
     case AST_BINOP: {
       output << "(";
       generate_code(node->binop.left, output, 0);
@@ -377,7 +419,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 }
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
-
+  // yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);

@@ -117,31 +117,32 @@ ast_node* new_continue_node(void) {
   node->type = AST_CONTINUE;
   return node;
 }
-ast_node* new_switch_node(ast_node* expr, ast_node* cases, ast_node* default_body) {
-    ast_node* node = calloc(1, sizeof(ast_node));
-    node->type = AST_SWITCH;
-    node->switch_node.expr = expr;
-    node->switch_node.cases = cases;
-    node->switch_node.default_body = default_body;
-  
-    size_t count = 0;
-    ast_node *c = cases;
-    while (c) {
-        count++;
-        c = c->switch_case.next;
-    }
-    node->switch_node.case_count = count;
-  
-    return node;
+ast_node* new_switch_node(ast_node* expr, ast_node* cases,
+                          ast_node* default_body) {
+  ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_SWITCH;
+  node->switch_node.expr = expr;
+  node->switch_node.cases = cases;
+  node->switch_node.default_body = default_body;
+
+  size_t count = 0;
+  ast_node* c = cases;
+  while (c) {
+    count++;
+    c = c->switch_case.next;
+  }
+  node->switch_node.case_count = count;
+
+  return node;
 }
 
-ast_node* new_switch_block_node(ast_node* prev,ast_node* th) {
-ast_node* node = calloc(1,sizeof(ast_node));
-node->type = AST_SWITCH_BLOCK;
-node->switch_block_node.prev = prev;
-node->switch_block_node.th = th;
+ast_node* new_switch_block_node(ast_node* prev, ast_node* th) {
+  ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_SWITCH_BLOCK;
+  node->switch_block_node.prev = prev;
+  node->switch_block_node.th = th;
 
-return node;
+  return node;
 }
 
 ast_node* new_case_node(ast_node* expr, ast_node* switch_blk_node) {

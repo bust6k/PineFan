@@ -44,7 +44,7 @@ $(LEX_SRC): lex_rules.l
 
 # Generate parser from Bison specification
 $(BISON_SRC) $(BISON_HEADER): parser_rules.y
-	bison -Wcounterexamples -d -o $(BISON_SRC) $<
+	bison --debug  -d -o $(BISON_SRC) $<
 
 # Explicit dependency for generate.o
 generate.o: $(BISON_HEADER)

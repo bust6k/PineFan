@@ -1,7 +1,7 @@
 foo = "RMA"
 
 switch foo
-   foo => ta.sma(40,1)
-   "RMA" => ta.rma(30,1)
-   "WMA" => ta.wma(20,1)
-   => indicator("sorry,but foo don't match")
+   fooa => indicator("soo")
+   "RMA" => strategy("ll")
+   "WMA" => indicator("it's a fooo")
+   => indicator("cant process")

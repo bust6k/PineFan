@@ -29,7 +29,7 @@ typedef struct ast_node {
     } switch_case;
     struct {
       struct ast_node* expr;
-      struct ast_node* cases; 
+      struct ast_node* cases;
       struct ast_node* default_body;
       size_t case_count;
     } switch_node;
@@ -56,13 +56,13 @@ typedef struct ast_node {
       int arg_count;
     } call;
     struct {
-    struct ast_node* prev;
-    struct ast_node* th;
+      struct ast_node* prev;
+      struct ast_node* th;
     } switch_block_node;
   };
   struct {
-  struct ast_node* expr;
-  struct ast_node* switch_blk_node;
+    struct ast_node* expr;
+    struct ast_node* switch_blk_node;
   } case_stmt;
 } ast_node;
 
@@ -108,10 +108,11 @@ ast_node* new_indicator_node(char* name);
 ast_node* new_strategy_node(char* name);
 ast_node* new_break_node(void);
 ast_node* new_continue_node(void);
-ast_node* new_switch_node(ast_node* expr, ast_node* cases, ast_node* default_body);
-ast_node* new_switch_block_node(ast_node* prev,ast_node* th);
+ast_node* new_switch_node(ast_node* expr, ast_node* cases,
+                          ast_node* default_body);
+ast_node* new_switch_block_node(ast_node* prev, ast_node* th);
 ast_node* new_case_node(ast_node* expr, ast_node* switch_blk_node);
-//ast_node* new_case_node_range(ast_node* from, ast_node* to, ast_node* body);
+// ast_node* new_case_node_range(ast_node* from, ast_node* to, ast_node* body);
 ast_node* new_default_node(ast_node* body);
 ast_node* new_const_node(char* name, ast_node* value);
 ast_node* new_simple_node(char* name);

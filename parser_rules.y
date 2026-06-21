@@ -217,14 +217,14 @@ case_list:
     ;
 
 case_stmt:
-    expr left_brace switch_block_stmts right_brace
+    expr left_brace switch_block_stmts right_brace semicolon
     {
         $$ = new_case_node($1, $3);
     }
     ;
 
 default_case:
-    default_statement left_brace switch_block_stmts right_brace
+    default_statement left_brace switch_block_stmts right_brace semicolon
     {
         $$ = $3;
     }
