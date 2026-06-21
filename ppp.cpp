@@ -371,7 +371,7 @@ void preprocess(const std::string& input, std::string& output) {
       }
     }
 
-    if (is_arrow(info.content) && is_func != std::string::npos) {
+    if (is_arrow(info.content) && is_func != std::string::npos && is_func != 10) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
       info.keyword = "";
@@ -403,11 +403,11 @@ void preprocess(const std::string& input, std::string& output) {
     auto& info = infos[idx];
     int current_indent = info.indent;
 
-    while (current_indent > indent_stack.top()) {
+    while (current_indent > indent_stack.top() && !info.content.empty()) {
       indent_stack.push(current_indent);
       output += "{\n";
     }
-    while (current_indent < indent_stack.top()) {
+    while (current_indent < indent_stack.top() && !info.content.empty()) {
       indent_stack.pop();
       output += "}\n";
     }
@@ -417,12 +417,12 @@ void preprocess(const std::string& input, std::string& output) {
       continue;
     }
 
-    if (info.is_switch_stmt == true) {
+    if (info.is_switch_stmt == true && info.is_default == false) {
       output +=
-          info.arrow_before + "{\n" + remove_arrow(info.content_after) + "\n};";
+          info.arrow_before + " {\n" + remove_arrow(info.content_after) + "\n};\n";
     } else if (info.is_switch_stmt == true && info.is_default == true) {
       output +=
-          info.arrow_before + "{\n" + remove_arrow(info.content_after) + "\n};";
+          info.arrow_before + " {\n" + remove_arrow(info.content_after) + "\n};\n";
     }
 
     switch (info.type) {
