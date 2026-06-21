@@ -268,26 +268,29 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       }
 
       output << " == ";
-            generate_code(first_case->case_stmt.expr, output, 0);
+      generate_code(first_case->case_stmt.expr, output, 0);
 
       output << ":\n";
+      generate_code(first_case->case_stmt.switch_blk_node, output);
 
-       first_case = node->switch_node.cases;
-          while (first_case->switch_case.next != NULL) {
-          
-          output << indent_str << "\nelif ";
-          generate_code(const_first_case,output,0);
-	  output << " == ";
-	  generate_code(first_case->case_stmt.expr,output,0);
-          output << ":\n";
+      first_case = node->switch_node.cases;
+      while (first_case->switch_case.next != NULL) {
+        output << indent_str << "\nelif ";
+        generate_code(const_first_case, output, 0);
+        output << " == ";
+        generate_code(first_case->case_stmt.expr, output, 0);
+        output << ":\n";
+        generate_code(first_case->case_stmt.switch_blk_node, output);
+        first_case = first_case->switch_case.next;
+      }
+
+      if (node->switch_node.default_body != NULL) {
+        output << "\nelse ";
+        output << ":\n";
         
-          first_case = first_case->switch_case.next;
-	  }
-
-	 if(node->switch_node.default_body != NULL) {
-         output << "\nelse ";
-	 output << ":\n";
-	 }
+	generate_code(node->switch_node.default_body->case_stmt.switch_blk_node,
+                      output);
+      }
       break;
     }
 
@@ -402,6 +405,14 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       break;
     }
 
+    case AST_SWITCH_BLOCK: {
+      generate_code(node->switch_block_node.th, output);
+      if (node->switch_block_node.prev != NULL) {
+        node->switch_block_node.th = node->switch_block_node.prev;
+        //generate_code(node->switch_block_node.th, output);
+      }
+      break;
+    }
     default: {
       output << indent_str << "# TODO: unknown node type " << node->type
              << "\n";

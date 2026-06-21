@@ -5,9 +5,19 @@
 
 foo = "RMA"
 if foo == fooa:
+# indicator
+print("soo")
+# strategy
+print("soo")
 
 elif foo == "WMA":
+# indicator
+print("it's a fooo")
+# strategy
+print("it's a fooo")
 
 elif foo == "RMA":
+# strategy
+print("ll")
 
 else :
