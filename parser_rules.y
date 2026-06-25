@@ -226,7 +226,7 @@ case_stmt:
 default_case:
     default_statement left_brace switch_block_stmts right_brace semicolon
     {
-        $$ = $3;
+        $$ = new_default_node($3);
     }
     | /* empty */
     {

@@ -64,6 +64,9 @@ typedef struct ast_node {
     struct ast_node* expr;
     struct ast_node* switch_blk_node;
   } case_stmt;
+  struct {
+  struct ast_node* switch_blk_node;
+  } default_stmt;
 } ast_node;
 
 typedef enum ast_node_kind {

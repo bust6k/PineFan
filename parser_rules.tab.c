@@ -1758,7 +1758,7 @@ yyreduce:
   case 36: /* default_case: default_statement left_brace switch_block_stmts right_brace semicolon  */
 #line 228 "parser_rules.y"
     {
-        (yyval.node) = (yyvsp[-2].node);
+        (yyval.node) = new_default_node((yyvsp[-2].node));
     }
 #line 1764 "parser_rules.tab.c"
     break;

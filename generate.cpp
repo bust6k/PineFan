@@ -238,6 +238,26 @@ void up_const_names_recursive(ast_node* node, const char* name) {
   }
 }
 
+void gen_switch_speak(bool is_case,std::ofstream& output,std::string indent_str) {
+if(is_case) {
+      output << "\n#in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan\n";
+      output << "#translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement\n";
+      output << "#elif is all the other conditions\n"; 
+      output << "#and else - it's an optional last condition like default in switch-statement\n\n";
+
+      output << indent_str << "if ";
+     return; 
+} else {
+output << "\n#in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan\n";
+output << "#translates it to if construction\n";
+output << "#where if - it's a default-like condition that executes as always\n";
+
+output << indent_str << "if ";
+return;
+}
+
+}
+
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
   if (!node) return;
 
@@ -257,24 +277,29 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       break;
     }
 
-    case AST_SWITCH: {
-      
-      output << "\n#in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan\n";
-      output << "#translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement\n";
-      output << "#elif is all the other conditions\n"; 
-      output << "#and else - it's an optional last condition like default in switch-statement\n\n";
-
-      output << indent_str << "if ";
-      
-      generate_code(node->switch_node.expr, output, 0);
-      
+    case AST_SWITCH: { 
       struct ast_node* first_case = node->switch_node.cases;
       struct ast_node* const_first_case = node->switch_node.expr;
+      bool is_only_def = false;
 
-      while (first_case->switch_case.next != NULL) {
-        first_case = first_case->switch_case.next;
+      if(first_case == NULL) {
+      gen_switch_speak(false,output,indent_str);
+      output << "True:\n";
+        generate_code(node->switch_node.default_body->default_stmt.switch_blk_node,
+                        output);
+	output << "\n";
+
+     is_only_def = true;   
       }
 
+      
+      else if(first_case != NULL) {
+	gen_switch_speak(true,output,indent_str);
+	while (first_case->switch_case.next != NULL) {
+        first_case = first_case->switch_case.next;
+      }
+      
+      
       output << " == ";
       generate_code(first_case->case_stmt.expr, output, 0);
 
@@ -283,6 +308,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
       first_case = node->switch_node.cases;
       
+      if(first_case != NULL) {
       while (first_case->switch_case.next != NULL) {
         output << indent_str << "\nelif ";
         generate_code(const_first_case, output, 0);
@@ -292,13 +318,16 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         generate_code(first_case->case_stmt.switch_blk_node, output);
         first_case = first_case->switch_case.next;
       }
-
-      if (node->switch_node.default_body != NULL) {
+      }
+      }
+      
+      if (node->switch_node.default_body != NULL && !is_only_def) {
         output << "\nelse ";
         output << ":\n";
         
-	generate_code(node->switch_node.default_body->case_stmt.switch_blk_node,
-                      output);
+	
+        generate_code(node->switch_node.default_body->default_stmt.switch_blk_node,
+                        output);
       }
       break;
     }
@@ -407,6 +436,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
     case AST_INDICATOR: {
       indicator(node->string.value, output);
+      break;
     }
 
     case AST_STRATEGY: {

@@ -162,10 +162,11 @@ ast_node* new_case_node_range(ast_node* from, ast_node* to, ast_node* body) {
 }
 */
 
-ast_node* new_default_node(ast_node* body) {
+ast_node* new_default_node(ast_node*  switch_blk_node) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_DEFAULT;
-  return node;  // TODO
+  node->default_stmt.switch_blk_node = switch_blk_node;
+  return node;  
 }
 
 ast_node* new_const_node(char* name, ast_node* value) {

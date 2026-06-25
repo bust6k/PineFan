@@ -345,6 +345,7 @@ void preprocess(const std::string& input, std::string& output) {
         break;
     }
 
+
     //TODO: there's must be check if in this line have no something but if in other one is has arrow so then you should grab that line
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = 0;
@@ -387,8 +388,10 @@ void preprocess(const std::string& input, std::string& output) {
         info.keyword = "";
       }
     }
-
+    
+    
     infos.push_back(info);
+    
   }
 
   // Second pass: generate output with brace insertion

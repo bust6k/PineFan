@@ -3,6 +3,14 @@
 
 # - source: test/base_test.pine
 
+
+#in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan
+#translates it to if construction
+#where if - it's a default-like condition that executes as always
+if True:
+# indicator
+print("no")
+
 foo = "RMA"
 
 #in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan
@@ -10,16 +18,12 @@ foo = "RMA"
 #elif is all the other conditions
 #and else - it's an optional last condition like default in switch-statement
 
-if foo == fooa:
+if  == fooa:
 # indicator
-print("soo")
-# strategy
 print("soo")
 
 elif foo == "WMA":
 # indicator
-print("it's a fooo")
-# strategy
 print("it's a fooo")
 
 elif foo == "RMA":
@@ -27,16 +31,16 @@ elif foo == "RMA":
 print("ll")
 
 else :
+# indicator
+print("cant process")
 
 #in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan
 #translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
 #elif is all the other conditions
 #and else - it's an optional last condition like default in switch-statement
 
-if foo == foo:
+if  == foo:
 # indicator
-print("sorry")
-# strategy
 print("sorry")
 
 elif foo == "FOO":
@@ -44,3 +48,5 @@ elif foo == "FOO":
 print("real")
 
 else :
+# indicator
+print("gonna out!")

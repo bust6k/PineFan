@@ -1,3 +1,6 @@
+switch f
+    => indicator("no")
+
 foo = "RMA"
 
 switch foo
