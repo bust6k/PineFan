@@ -250,7 +250,7 @@ if(is_case) {
 } else {
 output << "\n#in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan\n";
 output << "#translates it to if construction\n";
-output << "#where if - it's a default-like condition that executes as always\n";
+output << "#where if - it's a default-like condition that executes as always\n\n";
 
 output << indent_str << "if ";
 return;
@@ -299,7 +299,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         first_case = first_case->switch_case.next;
       }
       
-      
+     generate_code(const_first_case,output,0); 
       output << " == ";
       generate_code(first_case->case_stmt.expr, output, 0);
 

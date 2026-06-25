@@ -7,6 +7,7 @@
 #in source code version that was switch-statement. Since Python doesn't it(but only since 3.10),PineFan
 #translates it to if construction
 #where if - it's a default-like condition that executes as always
+
 if True:
 # indicator
 print("no")
@@ -18,7 +19,7 @@ foo = "RMA"
 #elif is all the other conditions
 #and else - it's an optional last condition like default in switch-statement
 
-if  == fooa:
+if foo == fooa:
 # indicator
 print("soo")
 
@@ -39,7 +40,7 @@ print("cant process")
 #elif is all the other conditions
 #and else - it's an optional last condition like default in switch-statement
 
-if  == foo:
+if foo == foo:
 # indicator
 print("sorry")
 
