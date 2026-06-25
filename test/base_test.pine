@@ -1,8 +1,12 @@
+const foo = "rma"
+
+foo = 5
+
 switch f
-    => indicator("no")
+    =>    indicator("no")
 
-foo = "RMA"
 
+foo = f
 switch foo
    fooa => indicator("soo")
    "RMA" => strategy("ll")
@@ -13,3 +17,8 @@ switch foo
    foo => indicator("sorry")
    "FOO" => strategy("real")
    => indicator("gonna out!")
+
+
+
+
+foo = 1
