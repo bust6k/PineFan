@@ -7,16 +7,15 @@
 FOO = "rma"
 # a constant variable!
 XSS = 5
+y = "foo"
 FOO = 5
-if FOO:
-    y = 5
-if (XSS != 5):
+if ( XSS != 5 ):
 # indicator
 print("the error of xss occured!")
 
-#in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
-#translates it to if construction
-#where if - it's a default-like condition that executes as always
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if construction
+# where if - it's a default-like condition that executes as always
 
 if True:
 # indicator
@@ -24,16 +23,16 @@ print("no")
 
 FOO = f
 
-#in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
-#translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
-#elif is all the other conditions
-#and else - it's an optional last condition like default in switch-statement
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
 
 if FOO == fooa:
 # indicator
 print("soo")
 
-elif FOO == "WMA":
+elif FOO == "MA":
 # indicator
 print("it's a fooo")
 
@@ -45,16 +44,16 @@ else :
 # indicator
 print("cant process")
 
-#in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
-#translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
-#elif is all the other conditions
-#and else - it's an optional last condition like default in switch-statement
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
 
 if FOO == FOO:
 # indicator
 print("sorry")
 
-elif FOO == "FOO":
+elif FOO == "xss":
 # strategy
 print("real")
 

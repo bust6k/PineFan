@@ -1977,7 +1977,7 @@ yyreduce:
 
   case 72: /* expr: left_paren expr right_paren  */
 #line 329 "parser_rules.y"
-    { (yyval.node) = (yyvsp[-1].node); }
+    { (yyval.node) = new_paren_expr_node((yyvsp[-1].node)); }
 #line 1982 "parser_rules.tab.c"
     break;
 

@@ -77,6 +77,12 @@ ast_node* new_binop_node(char* op, ast_node* left, ast_node* right) {
   return node;
 }
 
+ast_node* new_paren_expr_node(ast_node* expr) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_PAREN_OP;
+node->paren_expr.expr = expr;
+return node;
+}
 ast_node* new_unop_node(char* op, ast_node* operand) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_UNOP;

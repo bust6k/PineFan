@@ -1,11 +1,10 @@
 const foo = "rma"
 const xss = 5
 
-foo = 5
-if foo
-   y = 5
+y = "foo"
 
-if xss != 5
+foo = 5
+if (xss != 5)
    indicator("the error of xss occured!")
 
 switch f
@@ -15,12 +14,12 @@ foo = f
 switch foo
    fooa => indicator("soo")
    "RMA" => strategy("ll")
-   "WMA" => indicator("it's a fooo")
+   "MA" => indicator("it's a fooo")
    => indicator("cant process")
 
 switch foo
    foo => indicator("sorry")
-   "FOO" => strategy("real")
+   "xss" => strategy("real")
    => indicator("gonna out!")
 
 

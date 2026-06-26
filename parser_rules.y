@@ -326,7 +326,7 @@ expr:
     | plus  expr %prec multiply
     { $$ = new_unop_node("+", $2); }
     | left_paren expr right_paren
-    { $$ = $2; }
+    { $$ = new_paren_expr_node($2); }
     ;
 
 %%

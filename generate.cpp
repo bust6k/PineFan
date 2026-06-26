@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+//TODO:maybe add processing of '(' and ')' in 'expr' in  parser to make a sense of it
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -286,7 +286,7 @@ void up_const_names_recursive(ast_node* node, char* name) {
   for(auto node : program_cpp_root) {
   if(!node) continue;
   transform_constants(node); 
-  if(strcmp(node->assign.name,normal_cpy) == 0) {
+  if(strcmp(node->assign.name,normal_cpy) == 0 && node->type != AST_STRING) {
   
   node->assign.name = fast_toupper(node->assign.name);
   char* f = fast_tolower(node->assign.name);
@@ -298,17 +298,17 @@ void up_const_names_recursive(ast_node* node, char* name) {
 
 void gen_switch_speak(bool is_case,std::ofstream& output,std::string indent_str) {
 if(is_case) {
-      output << "\n#in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan\n";
-      output << "#translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement\n";
-      output << "#elif is all the other conditions\n"; 
-      output << "#and else - it's an optional last condition like default in switch-statement\n\n";
+      output << "\n# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan\n";
+      output << "# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement\n";
+      output << "# elif is all the other conditions\n"; 
+      output << "# and else - it's an optional last condition like default in switch-statement\n\n";
 
       output << indent_str << "if ";
      return; 
 } else {
-output << "\n#in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan\n";
-output << "#translates it to if construction\n";
-output << "#where if - it's a default-like condition that executes as always\n\n";
+output << "\n# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan\n";
+output << "# translates it to if construction\n";
+output << "# where if - it's a default-like condition that executes as always\n\n";
 
 output << indent_str << "if ";
 return;
@@ -393,13 +393,18 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_BINOP: {
-      output << "(";
       generate_code(node->binop.left, output, 0);
       output << " " << node->binop.op << " ";
       generate_code(node->binop.right, output, 0);
-      output << ")";
       break;
     }
+    
+   case AST_PAREN_OP: {
+   output << "( ";
+   generate_code(node->paren_expr.expr,output,0);
+   output << " )";
+   break;
+   }
 
     case AST_NUMBER: {
       output << node->number.value;
