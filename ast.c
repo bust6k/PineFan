@@ -83,6 +83,14 @@ node->type = AST_PAREN_OP;
 node->paren_expr.expr = expr;
 return node;
 }
+
+ast_node* new_comma_expr_node(ast_node* expr) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_COMMA_OP;
+node->comma_expr.expr = expr;
+return node;
+}
+
 ast_node* new_unop_node(char* op, ast_node* operand) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_UNOP;

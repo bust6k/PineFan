@@ -327,6 +327,8 @@ expr:
     { $$ = new_unop_node("+", $2); }
     | left_paren expr right_paren
     { $$ = new_paren_expr_node($2); }
+    | expr comma
+    { $$ = new_comma_expr_node($1); }
     ;
 
 %%

@@ -50,6 +50,9 @@ typedef struct ast_node {
     struct ast_node* expr;
     } paren_expr;
     struct {
+     struct ast_node* expr;
+     } comma_expr;
+    struct {
       char* op;
       struct ast_node* operand;
     } unop;
@@ -83,6 +86,7 @@ typedef enum ast_node_kind {
   AST_STRING,
   AST_BINOP,
   AST_PAREN_OP,
+  AST_COMMA_OP,
   AST_UNOP,
   AST_CALL,
   AST_BREAK,
@@ -110,6 +114,7 @@ ast_node* new_number_node(int value);
 ast_node* new_string_node(char* value);
 ast_node* new_binop_node(char* op, ast_node* left, ast_node* right);
 ast_node* new_paren_expr_node(ast_node* expr);
+ast_node* new_comma_expr_node(ast_node* expr);
 ast_node* new_unop_node(char* op, ast_node* operand);
 ast_node* new_call_node(char* name, ast_node** args, int arg_count);
 ast_node* new_indicator_node(char* name);
