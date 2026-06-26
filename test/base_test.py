@@ -3,11 +3,16 @@
 
 # - source: test/base_test.pine
 
-#a constant variable!
+# a constant variable!
 FOO = "rma"
+# a constant variable!
+XSS = 5
 FOO = 5
 if FOO:
     y = 5
+if (XSS != 5):
+# indicator
+print("the error of xss occured!")
 
 #in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
 #translates it to if construction

@@ -447,7 +447,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_CONST: {
-      output << "#a constant variable!" << std::endl;
+      output << "# a constant variable!" << std::endl;
       up_const_names_recursive(node, node->assign.name);
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);

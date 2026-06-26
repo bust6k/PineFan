@@ -1,8 +1,12 @@
 const foo = "rma"
+const xss = 5
 
 foo = 5
 if foo
    y = 5
+
+if xss != 5
+   indicator("the error of xss occured!")
 
 switch f
     =>    indicator("no")
