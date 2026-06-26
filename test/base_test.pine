@@ -1,10 +1,11 @@
 const foo = "rma"
 
 foo = 5
+if foo
+   y = 5
 
 switch f
     =>    indicator("no")
-
 
 foo = f
 switch foo

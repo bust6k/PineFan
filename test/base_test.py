@@ -6,6 +6,8 @@
 #a constant variable!
 FOO = "rma"
 FOO = 5
+if FOO:
+    y = 5
 
 #in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
 #translates it to if construction
@@ -22,15 +24,15 @@ FOO = f
 #elif is all the other conditions
 #and else - it's an optional last condition like default in switch-statement
 
-if foo == fooa:
+if FOO == fooa:
 # indicator
 print("soo")
 
-elif foo == "WMA":
+elif FOO == "WMA":
 # indicator
 print("it's a fooo")
 
-elif foo == "RMA":
+elif FOO == "RMA":
 # strategy
 print("ll")
 
@@ -43,11 +45,11 @@ print("cant process")
 #elif is all the other conditions
 #and else - it's an optional last condition like default in switch-statement
 
-if foo == foo:
+if FOO == FOO:
 # indicator
 print("sorry")
 
-elif foo == "FOO":
+elif FOO == "FOO":
 # strategy
 print("real")
 

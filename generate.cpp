@@ -53,6 +53,26 @@ char* fast_toupper(char* str) {
  return str;
 }
 
+char* fast_toupper_alloc(char* str) {
+char* cpy = strdup(str);
+for(int i=0;cpy[i];i++){
+if(cpy[i]>='a'&&cpy[i]<='Z') cpy[i] -= 32; 
+}
+return cpy;
+
+}
+
+char* fast_tolower(char* str) {
+char* cpy = strdup(str);
+for(int i=0;cpy[i];i++) {
+if(cpy[i] >= 'A' && cpy[i] <= 'Z') {
+cpy[i] += 32;
+}
+
+}
+return cpy;
+}
+
 char*  is_in_const_table(char* name) {
 if(const_table.find(name) != const_table.end()) {
 return fast_toupper(name);
@@ -64,6 +84,7 @@ void transform_constants(ast_node* node) {
 
     switch (node->type) {
         case AST_VAR:
+	
             if (const_table.count(node->var.name)) {
                 fast_toupper(node->var.name);
             }
@@ -264,10 +285,12 @@ void up_const_names_recursive(ast_node* node, char* name) {
 
   for(auto node : program_cpp_root) {
   if(!node) continue;
-  
+  transform_constants(node); 
   if(strcmp(node->assign.name,normal_cpy) == 0) {
   
   node->assign.name = fast_toupper(node->assign.name);
+  char* f = fast_tolower(node->assign.name);
+  const_table[f] = 42;
   }
   }
   free(normal_cpy);
@@ -301,6 +324,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
   switch (node->type) {
     case AST_IF: {
+      transform_constants(node->if_node.cond);
       output << indent_str << "if ";
       generate_code(node->if_node.cond, output, 0);
       output << ":\n";
