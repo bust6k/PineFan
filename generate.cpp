@@ -107,8 +107,8 @@ void transform_constants(ast_node* node) {
             break;
 
         case AST_CALL:
-            for (int i = 0; i < node->call.arg_count; i++) {
-                transform_constants(node->call.args[i]);
+            for (int i = 0; i < node->call_node.arg_count; i++) {
+                transform_constants(node->call_node.args);
             }
             break;
 
@@ -422,10 +422,10 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_CALL: {
-      output << node->call.name << "(";
-      for (int i = 0; i < node->call.arg_count; i++) {
-        generate_code(node->call.args[i], output, 0);
-        if (i + 1 < node->call.arg_count) output << ", ";
+      output << node->call_node.name << "(";
+      for (int i = 0; i < node->call_node.arg_count; i++) {
+        generate_code(node->call_node.args, output, 0);
+        if (i + 1 < node->call_node.arg_count) output << ", ";
       }
       output << ")";
       break;

@@ -3,61 +3,14 @@
 
 # - source: test/base_test.pine
 
-# a constant variable!
-FOO = "rma"
-# a constant variable!
-XSS = 5
+# TODO: unknown node type 22
+# TODO: unknown node type 22
 y = "foo"
-FOO = 5
-if ( XSS != 5 ):
-# indicator
+foo = 5
+if ( xss != 5 ):
+# strategy
 print("the error of xss occured!")
-
-# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
-# translates it to if construction
-# where if - it's a default-like condition that executes as always
-
-if True:
-# indicator
-print("no")
-
-FOO = f
-
-# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
-# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
-# elif is all the other conditions
-# and else - it's an optional last condition like default in switch-statement
-
-if FOO == fooa:
-# indicator
-print("soo")
-
-elif FOO == "MA":
-# indicator
-print("it's a fooo")
-
-elif FOO == "RMA":
-# strategy
-print("ll")
-
-else :
-# indicator
-print("cant process")
-
-# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
-# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
-# elif is all the other conditions
-# and else - it's an optional last condition like default in switch-statement
-
-if FOO == FOO:
-# indicator
-print("sorry")
-
-elif FOO == "xss":
-# strategy
-print("real")
-
-else :
-# indicator
-print("gonna out!")
-FOO = 1
+foo = f
+# TODO: unknown node type 19
+# TODO: unknown node type 19
+foo = 1

@@ -99,13 +99,30 @@ ast_node* new_unop_node(char* op, ast_node* operand) {
   return node;
 }
 
-ast_node* new_call_node(char* name, ast_node** args, int arg_count) {
+ast_node* new_call_node(char* name, ast_node* args) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_CALL;
-  node->call.name = strdup(name);
-  node->call.args = args;
-  node->call.arg_count = arg_count;
+  node->call_node.name = strdup(name);
+  node->call_node.args = args;
+
+  size_t count = 0;
+  ast_node* a = args;
+  while(a) {
+  count++;
+  a = a->call_arg.next;
+  }
+
+  node->call_node.arg_count = count;
   return node;
+}
+
+ast_node* new_call_arg_node(ast_node* expr) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_CALL_ARG;
+node->call_arg.next = expr;
+node->call_arg.val = expr;
+
+return node;
 }
 
 ast_node* new_indicator_node(char* name) {
@@ -270,13 +287,15 @@ void ast_free(ast_node* node) {
       break;
 
     case AST_CALL:
-      free(node->call.name);
-      if (node->call.args) {
+      free(node->call_node.name);
+      /*
+      if (node->call_no.args) {
         for (int i = 0; i < node->call.arg_count; i++) {
           ast_free(node->call.args[i]);
         }
         free(node->call.args);
       }
+      */
       break;
 
     case AST_BREAK:

@@ -57,10 +57,14 @@ typedef struct ast_node {
       struct ast_node* operand;
     } unop;
     struct {
+    struct ast_node* val;
+    struct ast_node* next;
+    } call_arg;
+    struct {
       char* name;
-      struct ast_node** args;
+      struct ast_node* args;
       int arg_count;
-    } call;
+    } call_node;
     struct {
       struct ast_node* prev;
       struct ast_node* th;
@@ -89,6 +93,7 @@ typedef enum ast_node_kind {
   AST_COMMA_OP,
   AST_UNOP,
   AST_CALL,
+  AST_CALL_ARG,
   AST_BREAK,
   AST_CONTINUE,
   AST_SWITCH,
@@ -116,7 +121,8 @@ ast_node* new_binop_node(char* op, ast_node* left, ast_node* right);
 ast_node* new_paren_expr_node(ast_node* expr);
 ast_node* new_comma_expr_node(ast_node* expr);
 ast_node* new_unop_node(char* op, ast_node* operand);
-ast_node* new_call_node(char* name, ast_node** args, int arg_count);
+ast_node* new_call_node(char* name, ast_node* args);
+ast_node* new_call_arg_node(ast_node* expr);
 ast_node* new_indicator_node(char* name);
 ast_node* new_strategy_node(char* name);
 ast_node* new_break_node(void);

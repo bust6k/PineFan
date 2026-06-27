@@ -89,7 +89,7 @@ extern void yyerror(const char *s);
 %token <ival> number
 %token <sval> identifier string
 
-%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 %nonassoc if_statement
@@ -138,6 +138,7 @@ statement:
     | var_stmt
     | const_stmt
     | simple_stmt
+    | call_arg_stmt
     | import_stmt
     | assignment_stmt
     | assignment_re_stmt
@@ -236,10 +237,28 @@ default_case:
 
 switch_block_stmts:
    statement
-   {$$ = $1;}
+   { $$ = $1;}
    | switch_block_stmts statement
-   {$$ = new_switch_block_node($1,$2);}
+   { $$ = new_switch_block_node($1,$2);}
    ;
+
+call_arg_stmt:
+   identifier left_paren call_list right_paren
+   { $$ = new_call_node($1,$3); }
+   ;
+
+call_list:
+   call_list call_stmt
+   { $2->call_arg.next = $1; $$ = $2; }
+   |
+   { $$ = NULL; }
+   ;
+
+call_stmt:
+  expr comma
+  { $$ = new_call_arg_node($1); }
+  | expr
+  { $$ = new_call_arg_node($1); }
 
 var_stmt:
     var identifier assign expr
@@ -327,8 +346,6 @@ expr:
     { $$ = new_unop_node("+", $2); }
     | left_paren expr right_paren
     { $$ = new_paren_expr_node($2); }
-    | expr comma
-    { $$ = new_comma_expr_node($1); }
     ;
 
 %%
