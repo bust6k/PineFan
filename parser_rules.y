@@ -89,7 +89,7 @@ extern void yyerror(const char *s);
 %token <ival> number
 %token <sval> identifier string
 
-%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt func_stmt call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 %nonassoc if_statement
@@ -138,6 +138,7 @@ statement:
     | var_stmt
     | const_stmt
     | simple_stmt
+    | func_stmt
     | call_arg_stmt
     | import_stmt
     | assignment_stmt
@@ -184,7 +185,28 @@ while_stmt:
     { $$ = new_while_node($3, $5); }
     ;
 
+func_stmt:
+   identifier left_paren arg_list right_paren block
+   { $$ = new_func_node($1,$3,$5); }
+   ; 
 
+arg_list:
+   func_type
+   { $$ = $1;}
+   | arg_list func_type
+    { $$ = $2;} 
+   ;
+
+func_type:
+  identifier identifier
+  { $$ = new_func_type_node($1,$2);}
+  | identifier dot identifier identifier
+  { $$ = new_func_type_dot_node($1,$3,$4);}
+  | identifier  lesser_than func_type greater_than identifier
+  | { $$ = new_array_func_type_node($1,$3,$5);} 
+  | identifier dot identifier lesser_than func_type greater_than identifier
+   { $$ = new_array_func_type_dot_node($1,$3,$5,$7);}
+  ; 
 return_stmt_expr:
      return_statement  expr
     { $$ = new_return_node($2); }
