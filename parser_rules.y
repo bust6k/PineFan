@@ -89,7 +89,7 @@ extern void yyerror(const char *s);
 %token <ival> number
 %token <sval> identifier string
 
-%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 %nonassoc if_statement
@@ -245,6 +245,8 @@ switch_block_stmts:
 call_arg_stmt:
    identifier left_paren call_list right_paren
    { $$ = new_call_node($1,$3); }
+   | identifier dot identifier left_paren call_list right_paren
+   { $$ = new_call_node_dot($1,$3,$5);}
    ;
 
 call_list:
@@ -265,15 +267,23 @@ var_stmt:
     { $$ = new_var_node($2); }
     | var identifier
     { $$ = new_var_node($2); }
+    | var identifier assign call_arg_stmt
+     { $$ = new_var_node($2); }
     ;
 
 const_stmt:
     const_statement identifier assign expr
     { $$ = new_const_node($2, $4); }
+    | const_statement identifier assign call_arg_stmt
+    { $$ = new_const_node($2, $4);}
     ;
 
 simple_stmt:
     simple identifier
+    { $$ = new_simple_node($2); }
+    | simple identifier assign expr
+    { $$ = new_simple_node($2); }
+    |simple identifier assign call_arg_stmt
     { $$ = new_simple_node($2); }
     ;
 
@@ -285,11 +295,15 @@ import_stmt:
 assignment_stmt:
      identifier assign expr
     { $$ = new_assign_node($1, $3); }
+    | identifier assign call_arg_stmt
+    { $$ = new_assign_node($1,$3); }
     ;
 
 assignment_re_stmt:
     identifier re_assign expr
     { $$ = new_assign_re_node($1, $3); }
+    | identifier re_assign call_arg_stmt
+    { $$ = new_assign_re_node($1,$3) ; }
     ;
 
 

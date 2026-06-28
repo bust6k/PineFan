@@ -122,6 +122,7 @@ ast_node* new_paren_expr_node(ast_node* expr);
 ast_node* new_comma_expr_node(ast_node* expr);
 ast_node* new_unop_node(char* op, ast_node* operand);
 ast_node* new_call_node(char* name, ast_node* args);
+ast_node* new_call_node_dot(char* name,char* scnd_name,ast_node* args);
 ast_node* new_call_arg_node(ast_node* expr);
 ast_node* new_indicator_node(char* name);
 ast_node* new_strategy_node(char* name);

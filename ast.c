@@ -99,11 +99,27 @@ ast_node* new_unop_node(char* op, ast_node* operand) {
   return node;
 }
 
+ast_node* reverse_list(ast_node* node) {
+ast_node* prev = NULL;
+    ast_node* current = node;
+    ast_node* next = NULL;
+    
+    while (current != NULL) {
+	next = current->call_arg.next;
+	current->call_arg.next = prev;
+	prev = current;
+	current = next;
+    }
+    
+    return prev;
+}
+
+
 ast_node* new_call_node(char* name, ast_node* args) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_CALL;
   node->call_node.name = strdup(name);
-  node->call_node.args = args;
+  node->call_node.args = reverse_list(args);
 
   size_t count = 0;
   ast_node* a = args;
@@ -115,11 +131,24 @@ ast_node* new_call_node(char* name, ast_node* args) {
   node->call_node.arg_count = count;
   return node;
 }
+ast_node* new_call_node_dot(char* name,char* scnd_name,ast_node* args){
+int len_frst = strlen(name);
+int len_scnd = strlen(scnd_name);
+
+char* with_dot = malloc(len_frst + 2 + len_scnd);
+strcpy(with_dot,name);
+
+with_dot[len_frst] = '.';
+
+strcpy(with_dot + len_frst+1,scnd_name);
+
+
+return new_call_node(with_dot,args);
+}
 
 ast_node* new_call_arg_node(ast_node* expr) {
 ast_node* node = calloc(1,sizeof(ast_node));
 node->type = AST_CALL_ARG;
-node->call_arg.next = expr;
 node->call_arg.val = expr;
 
 return node;

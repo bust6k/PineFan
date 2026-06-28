@@ -315,7 +315,6 @@ return;
 }
 
 }
-
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
   if (!node) return;
 
@@ -423,11 +422,11 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
     case AST_CALL: {
       output << node->call_node.name << "(";
-      for (int i = 0; i < node->call_node.arg_count; i++) {
+      for (int i = 0;i<node->call_node.arg_count; i++) {
         generate_code(node->call_node.args, output, 0);
-        if (i + 1 < node->call_node.arg_count) output << ", ";
+        //if (i + 1 < node->call_node.arg_count) output << ", ";
       }
-      output << ")";
+      output << ")\n";
       break;
     }
 
@@ -517,6 +516,18 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       }
       break;
     }
+  
+    case AST_CALL_ARG: {
+    generate_code(node->call_arg.val,output);
+    
+      if(node->call_arg.next != NULL) {
+      output << ", ";
+	      generate_code(node->call_arg.next, output);
+    }
+    
+     break;
+    }
+
     default: {
       output << indent_str << "# TODO: unknown node type " << node->type
              << "\n";

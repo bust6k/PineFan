@@ -1,29 +1,24 @@
-const foo = "rma"
+const foo = ta.sma(5,15,10,10,4,5,10,40,40)
+math.foo(1,2)
+
 const xss = 5
 
 y = "foo"
 
 foo = 5
-if (xss != 5)
+if (foo >= xss)
    indicator("the error of xss occured!")
 
 
 switch f
-    =>    indicator("no")
+    =>    indicator("only default case")
 
 foo = f
 switch foo
-   fooa => indicator("soo")
-   "RMA" => strategy("ll")
-   "MA" => indicator("it's a fooo")
-   => indicator("cant process")
-
-switch foo
-   foo => indicator("sorry")
-   "xss" => strategy("real")
-   => indicator("gonna out!")
+     10 => indicator("10")
+     11 => strategy("11")
+     12 => indicator("12")
+     => indicator_print(foo)
 
 
-
-
-foo = 1
+y = 1

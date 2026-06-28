@@ -3,14 +3,45 @@
 
 # - source: test/base_test.pine
 
-# TODO: unknown node type 22
-# TODO: unknown node type 22
+# a constant variable!
+FOO = ta.sma(5, 15, 10, 10, 4, 5, 10, 40, 40)
+
+math.foo(1, 2)
+# a constant variable!
+XSS = 5
 y = "foo"
-foo = 5
-if ( xss != 5 ):
-# strategy
+FOO = 5
+if ( FOO >= XSS ):
+# indicator
 print("the error of xss occured!")
-foo = f
-# TODO: unknown node type 19
-# TODO: unknown node type 19
-foo = 1
+
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if construction
+# where if - it's a default-like condition that executes as always
+
+if True:
+# indicator
+print("only default case")
+
+FOO = f
+
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
+
+if FOO == 10:
+# indicator
+print("10")
+
+elif FOO == 12:
+# indicator
+print("12")
+
+elif FOO == 11:
+# strategy
+print("11")
+
+else :
+indicator_print(FOO)
+y = 1
