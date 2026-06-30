@@ -31,7 +31,7 @@
 
 #include "file.hpp"
 
-// #define _IS_MAIN
+//#define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {
@@ -364,7 +364,13 @@ void preprocess(const std::string& input, std::string& output) {
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = 0;
 
-    if (left_part.has_value()) is_func = left_part->find("()");
+    if (left_part.has_value()){
+	   
+	   is_func = left_part->find("("); 
+	   is_func = left_part->find(")");
+
+    }
+
     if (!left_part.has_value() && find_arrow_pos(info.content, 0).has_value())
       is_func = 10;
 
