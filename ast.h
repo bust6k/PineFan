@@ -20,21 +20,21 @@ typedef struct ast_node {
       struct ast_node *cond, *body;
     } while_node;
     struct {
-    char* ident;
-    struct ast_node* args;    
-    struct ast_node* body;
-    int arg_count;
+      char* ident;
+      struct ast_node* args;
+      struct ast_node* body;
+      int arg_count;
     } func_node;
     struct {
-    char* type;
-    char* ident;
-    struct ast_node* next;
+      char* type;
+      char* ident;
+      struct ast_node* next;
     } func_arg;
     struct {
-    char* cont_name;
-    struct ast_node* func_type;
-    char* ident;
-    struct ast_node* next;
+      char* cont_name;
+      struct ast_node* func_type;
+      char* ident;
+      struct ast_node* next;
     } func_containter_arg;
     struct {
       struct ast_node* value;
@@ -64,18 +64,18 @@ typedef struct ast_node {
       struct ast_node *left, *right;
     } binop;
     struct {
-    struct ast_node* expr;
+      struct ast_node* expr;
     } paren_expr;
     struct {
-     struct ast_node* expr;
-     } comma_expr;
+      struct ast_node* expr;
+    } comma_expr;
     struct {
       char* op;
       struct ast_node* operand;
     } unop;
     struct {
-    struct ast_node* val;
-    struct ast_node* next;
+      struct ast_node* val;
+      struct ast_node* next;
     } call_arg;
     struct {
       char* name;
@@ -92,7 +92,7 @@ typedef struct ast_node {
     struct ast_node* switch_blk_node;
   } case_stmt;
   struct {
-  struct ast_node* switch_blk_node;
+    struct ast_node* switch_blk_node;
   } default_stmt;
 } ast_node;
 
@@ -142,13 +142,14 @@ ast_node* new_paren_expr_node(ast_node* expr);
 ast_node* new_comma_expr_node(ast_node* expr);
 ast_node* new_unop_node(char* op, ast_node* operand);
 ast_node* new_call_node(char* name, ast_node* args);
-ast_node* new_call_node_dot(char* name,char* scnd_name,ast_node* args);
+ast_node* new_call_node_dot(char* name, char* scnd_name, ast_node* args);
 ast_node* new_call_arg_node(ast_node* expr);
-ast_node* new_func_node(char* ident,ast_node* args,ast_node* body);
-ast_node* new_func_type_node(char* type,char* name);
-ast_node* new_func_type_dot_node(char* prt_before,char* prt_after,char* name);
-ast_node* new_array_func_type_node(char* arr,ast_node* arr_type,char* name);
-ast_node* new_array_func_type_dot_node(char* p_b,char* p_a,ast_node* arr_type,char* name);
+ast_node* new_func_node(char* ident, ast_node* args, ast_node* body);
+ast_node* new_func_type_node(char* type, char* name);
+ast_node* new_func_type_dot_node(char* prt_before, char* prt_after, char* name);
+ast_node* new_array_func_type_node(char* arr, ast_node* arr_type, char* name);
+ast_node* new_array_func_type_dot_node(char* p_b, char* p_a, ast_node* arr_type,
+                                       char* name);
 ast_node* new_indicator_node(char* name);
 ast_node* new_strategy_node(char* name);
 ast_node* new_break_node(void);

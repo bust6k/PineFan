@@ -31,7 +31,7 @@
 
 #include "file.hpp"
 
-//#define _IS_MAIN
+// #define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {
@@ -226,17 +226,16 @@ std::string remove_arrow(std::string line) {
 }
 
 std::string remove_parens(std::string line) {
-size_t pos = line.find("(");
-if(pos != std::string::npos) {
-line.at(pos) = '#';
-pos = line.find(")");
-if(pos != std::string::npos) {
-line.at(pos) = '#';
-}
+  size_t pos = line.find("(");
+  if (pos != std::string::npos) {
+    line.at(pos) = '#';
+    pos = line.find(")");
+    if (pos != std::string::npos) {
+      line.at(pos) = '#';
+    }
+  }
 
-}
-
-return line;
+  return line;
 }
 
 // Find keyword in line at specific position (considering boundaries)
@@ -359,16 +358,14 @@ void preprocess(const std::string& input, std::string& output) {
         break;
     }
 
-
-    //TODO: there's must be check if in this line have no something but if in other one is has arrow so then you should grab that line
+    // TODO: there's must be check if in this line have no something but if in
+    // other one is has arrow so then you should grab that line
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = 0;
 
-    if (left_part.has_value()){
-	   
-	   is_func = left_part->find("("); 
-	   is_func = left_part->find(")");
-
+    if (left_part.has_value()) {
+      is_func = left_part->find("(");
+      is_func = left_part->find(")");
     }
 
     if (!left_part.has_value() && find_arrow_pos(info.content, 0).has_value())
@@ -409,10 +406,8 @@ void preprocess(const std::string& input, std::string& output) {
         info.keyword = "";
       }
     }
-    
-    
+
     infos.push_back(info);
-    
   }
 
   // Second pass: generate output with brace insertion

@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//TODO:maybe add processing of '(' and ')' in 'expr' in  parser to make a sense of it
+// TODO:maybe add processing of '(' and ')' in 'expr' in  parser to make a sense
+// of it
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -9,8 +10,8 @@
 #include <stack>
 #include <string>
 #include <string_view>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 extern "C" {
 #include "ast.h"
@@ -21,12 +22,11 @@ extern "C" {
 #include "file.hpp"
 #include "ppp.hpp"
 
-
 constexpr std::string_view pinefan_version = "v1.0.0\n";
 
 int line = 1;
 int col = 0;
-std::unordered_map<std::string,int> const_table;
+std::unordered_map<std::string, int> const_table;
 
 std::vector<struct ast_node*> program_cpp_root;
 Vector* program_root;
@@ -50,120 +50,118 @@ char* fast_toupper(char* str) {
     }
   }
 
- return str;
+  return str;
 }
 
 char* fast_toupper_alloc(char* str) {
-char* cpy = strdup(str);
-for(int i=0;cpy[i];i++){
-if(cpy[i]>='a'&&cpy[i]<='Z') cpy[i] -= 32; 
-}
-return cpy;
-
+  char* cpy = strdup(str);
+  for (int i = 0; cpy[i]; i++) {
+    if (cpy[i] >= 'a' && cpy[i] <= 'Z') cpy[i] -= 32;
+  }
+  return cpy;
 }
 
 char* fast_tolower(char* str) {
-char* cpy = strdup(str);
-for(int i=0;cpy[i];i++) {
-if(cpy[i] >= 'A' && cpy[i] <= 'Z') {
-cpy[i] += 32;
+  char* cpy = strdup(str);
+  for (int i = 0; cpy[i]; i++) {
+    if (cpy[i] >= 'A' && cpy[i] <= 'Z') {
+      cpy[i] += 32;
+    }
+  }
+  return cpy;
 }
 
-}
-return cpy;
-}
-
-char*  is_in_const_table(char* name) {
-if(const_table.find(name) != const_table.end()) {
-return fast_toupper(name);
-}
-return name;
+char* is_in_const_table(char* name) {
+  if (const_table.find(name) != const_table.end()) {
+    return fast_toupper(name);
+  }
+  return name;
 }
 void transform_constants(ast_node* node) {
-    if (!node) return;
+  if (!node) return;
 
-    switch (node->type) {
-        case AST_VAR:
-	
-            if (const_table.count(node->var.name)) {
-                fast_toupper(node->var.name);
-            }
-            break;
+  switch (node->type) {
+    case AST_VAR:
 
-        case AST_ASSIGN:
-            if (const_table.count(node->assign.name)) {
-                fast_toupper(node->assign.name);
-            }
-            transform_constants(node->assign.value);
-            break;
+      if (const_table.count(node->var.name)) {
+        fast_toupper(node->var.name);
+      }
+      break;
 
-        case AST_BINOP:
-            transform_constants(node->binop.left);
-            transform_constants(node->binop.right);
-            break;
+    case AST_ASSIGN:
+      if (const_table.count(node->assign.name)) {
+        fast_toupper(node->assign.name);
+      }
+      transform_constants(node->assign.value);
+      break;
 
-        case AST_UNOP:
-            transform_constants(node->unop.operand);
-            break;
+    case AST_BINOP:
+      transform_constants(node->binop.left);
+      transform_constants(node->binop.right);
+      break;
 
-        case AST_CALL:
-            for (int i = 0; i < node->call_node.arg_count; i++) {
-                transform_constants(node->call_node.args);
-            }
-            break;
+    case AST_UNOP:
+      transform_constants(node->unop.operand);
+      break;
 
-        case AST_IF:
-            transform_constants(node->if_node.cond);
-            transform_constants(node->if_node.then);
-            transform_constants(node->if_node.else_);
-            break;
+    case AST_CALL:
+      for (int i = 0; i < node->call_node.arg_count; i++) {
+        transform_constants(node->call_node.args);
+      }
+      break;
 
-        case AST_FOR:
-            transform_constants(node->for_node.start);
-            transform_constants(node->for_node.end);
-            transform_constants(node->for_node.step);
-            transform_constants(node->for_node.body);
-            break;
+    case AST_IF:
+      transform_constants(node->if_node.cond);
+      transform_constants(node->if_node.then);
+      transform_constants(node->if_node.else_);
+      break;
 
-        case AST_WHILE:
-            transform_constants(node->while_node.cond);
-            transform_constants(node->while_node.body);
-            break;
+    case AST_FOR:
+      transform_constants(node->for_node.start);
+      transform_constants(node->for_node.end);
+      transform_constants(node->for_node.step);
+      transform_constants(node->for_node.body);
+      break;
 
-        case AST_RETURN:
-            transform_constants(node->return_node.value);
-            break;
+    case AST_WHILE:
+      transform_constants(node->while_node.cond);
+      transform_constants(node->while_node.body);
+      break;
 
-        case AST_SWITCH:
-            transform_constants(node->switch_node.expr);
-            {
-                ast_node* c = node->switch_node.cases;
-                while (c) {
-                    transform_constants(c->switch_case.value);
-                    transform_constants(c->switch_case.body);
-                    c = c->switch_case.next;
-                }
-            }
-            transform_constants(node->switch_node.default_body);
-            break;
+    case AST_RETURN:
+      transform_constants(node->return_node.value);
+      break;
 
-        case AST_SWITCH_BLOCK:
-            transform_constants(node->switch_block_node.prev);
-            transform_constants(node->switch_block_node.th);
-            break;
+    case AST_SWITCH:
+      transform_constants(node->switch_node.expr);
+      {
+        ast_node* c = node->switch_node.cases;
+        while (c) {
+          transform_constants(c->switch_case.value);
+          transform_constants(c->switch_case.body);
+          c = c->switch_case.next;
+        }
+      }
+      transform_constants(node->switch_node.default_body);
+      break;
 
-        case AST_CASE:
-            transform_constants(node->case_stmt.expr);
-            transform_constants(node->case_stmt.switch_blk_node);
-            break;
+    case AST_SWITCH_BLOCK:
+      transform_constants(node->switch_block_node.prev);
+      transform_constants(node->switch_block_node.th);
+      break;
 
-        case AST_DEFAULT:
-            transform_constants(node->default_stmt.switch_blk_node);
-            break;
+    case AST_CASE:
+      transform_constants(node->case_stmt.expr);
+      transform_constants(node->case_stmt.switch_blk_node);
+      break;
 
-        default:
-            break;
-    }
+    case AST_DEFAULT:
+      transform_constants(node->default_stmt.switch_blk_node);
+      break;
+
+    default:
+      break;
+  }
 }
 
 extern int yylex(void);
@@ -283,37 +281,45 @@ void yy_delete_buffer(int);
 void up_const_names_recursive(ast_node* node, char* name) {
   char* normal_cpy = strdup(name);
 
-  for(auto node : program_cpp_root) {
-  if(!node) continue;
-  transform_constants(node); 
-  if(strcmp(node->assign.name,normal_cpy) == 0 && node->type != AST_STRING) {
-  
-  node->assign.name = fast_toupper(node->assign.name);
-  char* f = fast_tolower(node->assign.name);
-  const_table[f] = 42;
-  }
+  for (auto node : program_cpp_root) {
+    if (!node) continue;
+    transform_constants(node);
+    if (strcmp(node->assign.name, normal_cpy) == 0 &&
+        node->type != AST_STRING) {
+      node->assign.name = fast_toupper(node->assign.name);
+      char* f = fast_tolower(node->assign.name);
+      const_table[f] = 42;
+    }
   }
   free(normal_cpy);
 }
 
-void gen_switch_speak(bool is_case,std::ofstream& output,std::string indent_str) {
-if(is_case) {
-      output << "\n# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan\n";
-      output << "# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement\n";
-      output << "# elif is all the other conditions\n"; 
-      output << "# and else - it's an optional last condition like default in switch-statement\n\n";
+void gen_switch_speak(bool is_case, std::ofstream& output,
+                      std::string indent_str) {
+  if (is_case) {
+    output << "\n# in source code version that was switch-statement. Since "
+              "Python doesn't it(but only since Python "
+              "3.10),PineFan\n";
+    output << "# translates it to if/elif/else construction. Where "
+              "if-statement is the first condition like in "
+              "switch-statement\n";
+    output << "# elif is all the other conditions\n";
+    output << "# and else - it's an optional last condition like default in "
+              "switch-statement\n\n";
 
-      output << indent_str << "if ";
-     return; 
-} else {
-output << "\n# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan\n";
-output << "# translates it to if construction\n";
-output << "# where if - it's a default-like condition that executes as always\n\n";
+    output << indent_str << "if ";
+    return;
+  } else {
+    output << "\n# in source code version that was switch-statement. Since "
+              "Python doesn't it(but only since Python "
+              "3.10),PineFan\n";
+    output << "# translates it to if construction\n";
+    output << "# where if - it's a default-like condition that executes as "
+              "always\n\n";
 
-output << indent_str << "if ";
-return;
-}
-
+    output << indent_str << "if ";
+    return;
+  }
 }
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
   if (!node) return;
@@ -335,58 +341,58 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       break;
     }
 
-    case AST_SWITCH: { 
+    case AST_SWITCH: {
       struct ast_node* first_case = node->switch_node.cases;
       transform_constants(node->switch_node.expr);
       struct ast_node* const_first_case = node->switch_node.expr;
       bool is_only_def = false;
 
-      if(first_case == NULL) {
-      gen_switch_speak(false,output,indent_str);
-      output << "True:\n";
-        generate_code(node->switch_node.default_body->default_stmt.switch_blk_node,
-                        output);
-	output << "\n";
+      if (first_case == NULL) {
+        gen_switch_speak(false, output, indent_str);
+        output << "True:\n";
+        generate_code(
+            node->switch_node.default_body->default_stmt.switch_blk_node,
+            output);
+        output << "\n";
 
-     is_only_def = true;   
+        is_only_def = true;
       }
 
-      
-      else if(first_case != NULL) {
-	gen_switch_speak(true,output,indent_str);
-	while (first_case->switch_case.next != NULL) {
-        first_case = first_case->switch_case.next;
-      }
-      
-     generate_code(const_first_case,output,0); 
-      output << " == ";
-      generate_code(first_case->case_stmt.expr, output, 0);
+      else if (first_case != NULL) {
+        gen_switch_speak(true, output, indent_str);
+        while (first_case->switch_case.next != NULL) {
+          first_case = first_case->switch_case.next;
+        }
 
-      output << ":\n";
-      generate_code(first_case->case_stmt.switch_blk_node, output);
-
-      first_case = node->switch_node.cases;
-      
-      if(first_case != NULL) {
-      while (first_case->switch_case.next != NULL) {
-        output << indent_str << "\nelif ";
         generate_code(const_first_case, output, 0);
         output << " == ";
         generate_code(first_case->case_stmt.expr, output, 0);
+
         output << ":\n";
         generate_code(first_case->case_stmt.switch_blk_node, output);
-        first_case = first_case->switch_case.next;
+
+        first_case = node->switch_node.cases;
+
+        if (first_case != NULL) {
+          while (first_case->switch_case.next != NULL) {
+            output << indent_str << "\nelif ";
+            generate_code(const_first_case, output, 0);
+            output << " == ";
+            generate_code(first_case->case_stmt.expr, output, 0);
+            output << ":\n";
+            generate_code(first_case->case_stmt.switch_blk_node, output);
+            first_case = first_case->switch_case.next;
+          }
+        }
       }
-      }
-      }
-      
+
       if (node->switch_node.default_body != NULL && !is_only_def) {
         output << "\nelse ";
         output << ":\n";
-        
-	
-        generate_code(node->switch_node.default_body->default_stmt.switch_blk_node,
-                        output);
+
+        generate_code(
+            node->switch_node.default_body->default_stmt.switch_blk_node,
+            output);
       }
       break;
     }
@@ -397,13 +403,13 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       generate_code(node->binop.right, output, 0);
       break;
     }
-    
-   case AST_PAREN_OP: {
-   output << "( ";
-   generate_code(node->paren_expr.expr,output,0);
-   output << " )";
-   break;
-   }
+
+    case AST_PAREN_OP: {
+      output << "( ";
+      generate_code(node->paren_expr.expr, output, 0);
+      output << " )";
+      break;
+    }
 
     case AST_NUMBER: {
       output << node->number.value;
@@ -422,22 +428,22 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
     case AST_CALL: {
       output << node->call_node.name << "(";
-      for (int i = 0;i<node->call_node.arg_count; i++) {
+      for (int i = 0; i < node->call_node.arg_count; i++) {
         generate_code(node->call_node.args, output, 0);
-        //if (i + 1 < node->call_node.arg_count) output << ", ";
+        // if (i + 1 < node->call_node.arg_count) output << ", ";
       }
       output << ")\n";
       break;
     }
-    
+
     case AST_FUNC: {
-    output << "def ";
-    output << node->func_node.ident << "(";
-    for(int i=0;i<node->func_node.arg_count;i++){
-    generate_code(node->func_node.args,output,0);
-    }
-    output << ") :\n";
-    break;
+      output << "def ";
+      output << node->func_node.ident << "(";
+      for (int i = 0; i < node->func_node.arg_count; i++) {
+        generate_code(node->func_node.args, output, 0);
+      }
+      output << ") :\n";
+      break;
     }
     case AST_UNOP: {
       output << node->unop.op;
@@ -521,30 +527,30 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       generate_code(node->switch_block_node.th, output);
       if (node->switch_block_node.prev != NULL) {
         node->switch_block_node.th = node->switch_block_node.prev;
-        //generate_code(node->switch_block_node.th, output);
+        // generate_code(node->switch_block_node.th, output);
       }
       break;
     }
-  
+
     case AST_CALL_ARG: {
-    generate_code(node->call_arg.val,output);
-    
-      if(node->call_arg.next != NULL) {
-      output << ", ";
-      generate_code(node->call_arg.next, output);
-    }
-    
-     break;
+      generate_code(node->call_arg.val, output);
+
+      if (node->call_arg.next != NULL) {
+        output << ", ";
+        generate_code(node->call_arg.next, output);
+      }
+
+      break;
     }
 
     case AST_FUNC_ARG: {
-    output << node->func_arg.ident;
-    if(node->func_arg.type != NULL) output << ": " << node->func_arg.type;
-    if(node->func_arg.next != NULL) {
-    output << ", ";
-    generate_code(node->func_arg.next,output);
-    }
-    break;
+      output << node->func_arg.ident;
+      if (node->func_arg.type != NULL) output << ": " << node->func_arg.type;
+      if (node->func_arg.next != NULL) {
+        output << ", ";
+        generate_code(node->func_arg.next, output);
+      }
+      break;
     }
     default: {
       output << indent_str << "# TODO: unknown node type " << node->type
