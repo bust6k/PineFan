@@ -1,4 +1,4 @@
-foo(a,b,c,d,f,g,g,g,g,g,g) =>
+foo(int a,b,c,d,f,g,g,g,g,g,g) =>
    y = 5
 
 
