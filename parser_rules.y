@@ -1,4 +1,3 @@
-%expect 1
 %define parse.error verbose
 
 %code requires {
@@ -91,7 +90,7 @@ extern void yyerror(const char *s);
 %token <ival> number
 %token <sval> identifier string
 
-%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt func_stmt arg_list func_type call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt func_stmt opt_arg_list arg_list func_type call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 %nonassoc if_statement
@@ -197,16 +196,23 @@ while_stmt:
     ;
 
 func_stmt:
-   identifier func_paren arg_list func_paren block %prec PREC_FUNC
+   identifier func_paren opt_arg_list func_paren block %prec PREC_FUNC
    { $$ = new_func_node($1,$3,$5); }
    ; 
 
+opt_arg_list:
+    arg_list
+    { $$ = $1; }
+    | /* empty */
+    { $$ = NULL; }
+    ;
+
 arg_list:
-    arg_list func_type
-    { $2->func_arg.next = $1; $$ = $2;}
-   | /* empty */
-   { $$ = NULL; } 
-   ;
+    arg_list comma func_type
+    { $3->func_arg.next = $1; $$ = $3; }
+    | func_type
+    { $$ = $1; }
+    ;
 
 func_type:
    identifier identifier %prec PREC_TYPE_NAME

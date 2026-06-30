@@ -36,124 +36,129 @@
    private implementation details that can be changed or removed.  */
 
 #ifndef YY_YY_PARSER_RULES_TAB_H_INCLUDED
-#define YY_YY_PARSER_RULES_TAB_H_INCLUDED
+# define YY_YY_PARSER_RULES_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-#define YYDEBUG 0
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 4 "parser_rules.y"
+#line 3 "parser_rules.y"
 
 #include <stdio.h>
-
 #include "ast.h"
 
 #line 54 "parser_rules.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
-#define YYTOKENTYPE
-enum yytokentype {
-  YYEMPTY = -2,
-  YYEOF = 0,                             /* "end of file"  */
-  YYerror = 256,                         /* error  */
-  YYUNDEF = 257,                         /* "invalid token"  */
-  indicator_function = 258,              /* indicator_function  */
-  strategy_function = 259,               /* strategy_function  */
-  if_statement = 260,                    /* if_statement  */
-  else_statement = 261,                  /* else_statement  */
-  for_statement = 262,                   /* for_statement  */
-  step = 263,                            /* step  */
-  to = 264,                              /* to  */
-  return_statement = 265,                /* return_statement  */
-  while_statement = 266,                 /* while_statement  */
-  break_statement = 267,                 /* break_statement  */
-  continue_statement = 268,              /* continue_statement  */
-  switch_statement = 269,                /* switch_statement  */
-  case_statement = 270,                  /* case_statement  */
-  default_statement = 271,               /* default_statement  */
-  var = 272,                             /* var  */
-  const_statement = 273,                 /* const_statement  */
-  simple = 274,                          /* simple  */
-  logical_and = 275,                     /* logical_and  */
-  logical_or = 276,                      /* logical_or  */
-  logical_not = 277,                     /* logical_not  */
-  dont_equal = 278,                      /* dont_equal  */
-  bitwise_and = 279,                     /* bitwise_and  */
-  bitwise_or = 280,                      /* bitwise_or  */
-  bitwise_xor = 281,                     /* bitwise_xor  */
-  bitwise_not = 282,                     /* bitwise_not  */
-  bitwise_shift_to_left = 283,           /* bitwise_shift_to_left  */
-  bitwise_shift_to_right = 284,          /* bitwise_shift_to_right  */
-  semicolon = 285,                       /* semicolon  */
-  import_statement = 286,                /* import_statement  */
-  as = 287,                              /* as  */
-  input_func = 288,                      /* input_func  */
-  int_type = 289,                        /* int_type  */
-  bool_type = 290,                       /* bool_type  */
-  float_type = 291,                      /* float_type  */
-  color_type = 292,                      /* color_type  */
-  string_as_type = 293,                  /* string_as_type  */
-  left_paren = 294,                      /* left_paren  */
-  right_paren = 295,                     /* right_paren  */
-  func_paren = 296,                      /* func_paren  */
-  left_quad_brace = 297,                 /* left_quad_brace  */
-  right_quad_brace = 298,                /* right_quad_brace  */
-  left_brace = 299,                      /* left_brace  */
-  right_brace = 300,                     /* right_brace  */
-  assign = 301,                          /* assign  */
-  re_assign = 302,                       /* re_assign  */
-  equals = 303,                          /* equals  */
-  greater_than = 304,                    /* greater_than  */
-  lesser_than = 305,                     /* lesser_than  */
-  plus = 306,                            /* plus  */
-  minus = 307,                           /* minus  */
-  multiply = 308,                        /* multiply  */
-  divide = 309,                          /* divide  */
-  divide_with_remind = 310,              /* divide_with_remind  */
-  greater_than_or_equals = 311,          /* greater_than_or_equals  */
-  lesser_than_or_equals = 312,           /* lesser_than_or_equals  */
-  bitwise_and_with_equals = 313,         /* bitwise_and_with_equals  */
-  bitwise_or_with_equals = 314,          /* bitwise_or_with_equals  */
-  bitwise_xor_with_equals = 315,         /* bitwise_xor_with_equals  */
-  bitwise_not_with_equals = 316,         /* bitwise_not_with_equals  */
-  bitwise_shift_right_with_equals = 317, /* bitwise_shift_right_with_equals  */
-  bitwise_shift_left_with_equals = 318,  /* bitwise_shift_left_with_equals  */
-  comma = 319,                           /* comma  */
-  dot = 320,                             /* dot  */
-  colon = 321,                           /* colon  */
-  number = 322,                          /* number  */
-  identifier = 323,                      /* identifier  */
-  string = 324,                          /* string  */
-  PREC_SINGLE_NAME = 325,                /* PREC_SINGLE_NAME  */
-  PREC_TYPE_NAME = 326,                  /* PREC_TYPE_NAME  */
-  PREC_FUNC = 327,                       /* PREC_FUNC  */
-  PREC_CALL = 328                        /* PREC_CALL  */
-};
-typedef enum yytokentype yytoken_kind_t;
+# define YYTOKENTYPE
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    indicator_function = 258,      /* indicator_function  */
+    strategy_function = 259,       /* strategy_function  */
+    if_statement = 260,            /* if_statement  */
+    else_statement = 261,          /* else_statement  */
+    for_statement = 262,           /* for_statement  */
+    step = 263,                    /* step  */
+    to = 264,                      /* to  */
+    return_statement = 265,        /* return_statement  */
+    while_statement = 266,         /* while_statement  */
+    break_statement = 267,         /* break_statement  */
+    continue_statement = 268,      /* continue_statement  */
+    switch_statement = 269,        /* switch_statement  */
+    case_statement = 270,          /* case_statement  */
+    default_statement = 271,       /* default_statement  */
+    var = 272,                     /* var  */
+    const_statement = 273,         /* const_statement  */
+    simple = 274,                  /* simple  */
+    logical_and = 275,             /* logical_and  */
+    logical_or = 276,              /* logical_or  */
+    logical_not = 277,             /* logical_not  */
+    dont_equal = 278,              /* dont_equal  */
+    bitwise_and = 279,             /* bitwise_and  */
+    bitwise_or = 280,              /* bitwise_or  */
+    bitwise_xor = 281,             /* bitwise_xor  */
+    bitwise_not = 282,             /* bitwise_not  */
+    bitwise_shift_to_left = 283,   /* bitwise_shift_to_left  */
+    bitwise_shift_to_right = 284,  /* bitwise_shift_to_right  */
+    semicolon = 285,               /* semicolon  */
+    import_statement = 286,        /* import_statement  */
+    as = 287,                      /* as  */
+    input_func = 288,              /* input_func  */
+    int_type = 289,                /* int_type  */
+    bool_type = 290,               /* bool_type  */
+    float_type = 291,              /* float_type  */
+    color_type = 292,              /* color_type  */
+    string_as_type = 293,          /* string_as_type  */
+    left_paren = 294,              /* left_paren  */
+    right_paren = 295,             /* right_paren  */
+    func_paren = 296,              /* func_paren  */
+    left_quad_brace = 297,         /* left_quad_brace  */
+    right_quad_brace = 298,        /* right_quad_brace  */
+    left_brace = 299,              /* left_brace  */
+    right_brace = 300,             /* right_brace  */
+    assign = 301,                  /* assign  */
+    re_assign = 302,               /* re_assign  */
+    equals = 303,                  /* equals  */
+    greater_than = 304,            /* greater_than  */
+    lesser_than = 305,             /* lesser_than  */
+    plus = 306,                    /* plus  */
+    minus = 307,                   /* minus  */
+    multiply = 308,                /* multiply  */
+    divide = 309,                  /* divide  */
+    divide_with_remind = 310,      /* divide_with_remind  */
+    greater_than_or_equals = 311,  /* greater_than_or_equals  */
+    lesser_than_or_equals = 312,   /* lesser_than_or_equals  */
+    bitwise_and_with_equals = 313, /* bitwise_and_with_equals  */
+    bitwise_or_with_equals = 314,  /* bitwise_or_with_equals  */
+    bitwise_xor_with_equals = 315, /* bitwise_xor_with_equals  */
+    bitwise_not_with_equals = 316, /* bitwise_not_with_equals  */
+    bitwise_shift_right_with_equals = 317, /* bitwise_shift_right_with_equals  */
+    bitwise_shift_left_with_equals = 318, /* bitwise_shift_left_with_equals  */
+    comma = 319,                   /* comma  */
+    dot = 320,                     /* dot  */
+    colon = 321,                   /* colon  */
+    number = 322,                  /* number  */
+    identifier = 323,              /* identifier  */
+    string = 324,                  /* string  */
+    PREC_SINGLE_NAME = 325,        /* PREC_SINGLE_NAME  */
+    PREC_TYPE_NAME = 326,          /* PREC_TYPE_NAME  */
+    PREC_FUNC = 327,               /* PREC_FUNC  */
+    PREC_CALL = 328                /* PREC_CALL  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
-#if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
-union YYSTYPE {
-#line 20 "parser_rules.y"
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+union YYSTYPE
+{
+#line 19 "parser_rules.y"
 
-  int ival;
-  char* sval;
-  struct ast_node* node;
+    int ival;
+    char *sval;
+    struct ast_node *node;
 
 #line 150 "parser_rules.tab.h"
+
 };
 typedef union YYSTYPE YYSTYPE;
-#define YYSTYPE_IS_TRIVIAL 1
-#define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
 #endif
+
 
 extern YYSTYPE yylval;
 
-int yyparse(void);
+
+int yyparse (void);
+
 
 #endif /* !YY_YY_PARSER_RULES_TAB_H_INCLUDED  */
