@@ -1,3 +1,4 @@
+%expect 1
 %define parse.error verbose
 
 %code requires {
@@ -95,6 +96,13 @@ extern void yyerror(const char *s);
 
 %nonassoc if_statement
 %nonassoc else_statement
+
+
+%token PREC_SINGLE_NAME 
+%token PREC_TYPE_NAME
+
+%nonassoc PREC_SINGLE_NAME
+%nonassoc PREC_TYPE_NAME
 
 %token PREC_FUNC PREC_CALL
 %nonassoc PREC_CALL
@@ -201,10 +209,10 @@ arg_list:
    ;
 
 func_type:
-  identifier
+   identifier identifier %prec PREC_TYPE_NAME
+  { $$ = new_func_type_node($1,$2);} 
+  | identifier  %prec PREC_SINGLE_NAME
   { $$ = new_func_type_node(NULL,$1); }
-  | identifier identifier
-  { $$ = new_func_type_node($1,$2);}
   | identifier dot identifier identifier
   { $$ = new_func_type_dot_node($1,$3,$4);}
   | identifier  lesser_than func_type greater_than identifier
@@ -277,16 +285,14 @@ call_arg_stmt:
    ;
 
 call_list:
-   call_list call_stmt
-   { $2->call_arg.next = $1; $$ = $2; }
+   call_list comma call_stmt
+   { $3->call_arg.next = $1; $$ = $3; }
    |
    { $$ = NULL; }
    ;
 
 call_stmt:
-  expr comma
-  { $$ = new_call_arg_node($1); }
-  | expr
+  expr 
   { $$ = new_call_arg_node($1); }
 
 var_stmt:

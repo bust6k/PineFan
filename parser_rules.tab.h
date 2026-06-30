@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "parser_rules.y"
+#line 4 "parser_rules.y"
 
 #include <stdio.h>
 #include "ast.h"
@@ -128,8 +128,10 @@ extern int yydebug;
     number = 322,                  /* number  */
     identifier = 323,              /* identifier  */
     string = 324,                  /* string  */
-    PREC_FUNC = 325,               /* PREC_FUNC  */
-    PREC_CALL = 326                /* PREC_CALL  */
+    PREC_SINGLE_NAME = 325,        /* PREC_SINGLE_NAME  */
+    PREC_TYPE_NAME = 326,          /* PREC_TYPE_NAME  */
+    PREC_FUNC = 327,               /* PREC_FUNC  */
+    PREC_CALL = 328                /* PREC_CALL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -138,13 +140,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "parser_rules.y"
+#line 20 "parser_rules.y"
 
     int ival;
     char *sval;
     struct ast_node *node;
 
-#line 148 "parser_rules.tab.h"
+#line 150 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
