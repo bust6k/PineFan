@@ -20,6 +20,23 @@ typedef struct ast_node {
       struct ast_node *cond, *body;
     } while_node;
     struct {
+    char* ident;
+    struct ast_node* args;    
+    struct ast_node* body;
+    int arg_count;
+    } func_node;
+    struct {
+    char* type;
+    char* ident;
+    struct ast_node* next;
+    } func_arg;
+    struct {
+    char* cont_name;
+    struct ast_node* func_type;
+    char* ident;
+    struct ast_node* next;
+    } func_containter_arg;
+    struct {
       struct ast_node* value;
     } return_node;
     struct {
@@ -92,8 +109,11 @@ typedef enum ast_node_kind {
   AST_PAREN_OP,
   AST_COMMA_OP,
   AST_UNOP,
+  AST_FUNC,
   AST_CALL,
   AST_CALL_ARG,
+  AST_FUNC_ARG,
+  AST_ARR_FUNC_ARG,
   AST_BREAK,
   AST_CONTINUE,
   AST_SWITCH,
@@ -124,6 +144,11 @@ ast_node* new_unop_node(char* op, ast_node* operand);
 ast_node* new_call_node(char* name, ast_node* args);
 ast_node* new_call_node_dot(char* name,char* scnd_name,ast_node* args);
 ast_node* new_call_arg_node(ast_node* expr);
+ast_node* new_func_node(char* ident,ast_node* args,ast_node* body);
+ast_node* new_func_type_node(char* type,char* name);
+ast_node* new_func_type_dot_node(char* prt_before,char* prt_after,char* name);
+ast_node* new_array_func_type_node(char* arr,ast_node* arr_type,char* name);
+ast_node* new_array_func_type_dot_node(char* p_b,char* p_a,ast_node* arr_type,char* name);
 ast_node* new_indicator_node(char* name);
 ast_node* new_strategy_node(char* name);
 ast_node* new_break_node(void);

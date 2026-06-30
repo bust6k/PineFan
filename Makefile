@@ -7,6 +7,7 @@ CC = gcc
 
 override CXXFLAGS += -std=c++20 -Wno-write-strings
 override CFLAGS += -Wno-write-strings
+override BFLAGS += -d -o
 
 TARGET = g
 
@@ -44,7 +45,7 @@ $(LEX_SRC): lex_rules.l
 
 # Generate parser from Bison specification
 $(BISON_SRC) $(BISON_HEADER): parser_rules.y
-	bison -Wcounterexamples  -d -o $(BISON_SRC) $<
+	bison  $(BFLAGS)  $(BISON_SRC) $<
 
 # Explicit dependency for generate.o
 generate.o: $(BISON_HEADER)

@@ -1,24 +1,4 @@
-const foo = ta.sma(5,15,10,10,4,5,10,40,40)
-math.foo(1,2)
-
-const xss = 5
-
-y = "foo"
-
-foo = 5
-if (foo >= xss)
-   indicator("the error of xss occured!")
+foo() =>
+   y = 5
 
 
-switch f
-    =>    indicator("only default case")
-
-foo = f
-switch foo
-     10 => indicator("10")
-     11 => strategy("11")
-     12 => indicator("12")
-     => indicator_print(foo)
-
-
-y = 1

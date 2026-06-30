@@ -40,6 +40,92 @@ ast_node* new_while_node(ast_node* cond, ast_node* body) {
   return node;
 }
 
+ast_node* reverse_fun_list(ast_node* node) {
+ast_node* prev = NULL;
+ast_node* current = node;
+ast_node* next = NULL;
+ 
+while (current != NULL) {
+next = current->func_arg.next;
+current->func_arg.next = prev;
+prev = current;
+current = next;
+}
+ 
+return prev;
+
+}
+
+ast_node* new_func_node(char* ident,ast_node* args,ast_node* body) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_FUNC;
+node->func_node.ident = ident;
+node->func_node.args = reverse_fun_list(args);
+node->func_node.body = body;
+
+
+size_t count = 0;
+ast_node* a = args;
+while(a) {
+count++;
+a = a->func_arg.next;
+}
+
+node->func_node.arg_count = count;
+
+return node;
+}
+
+
+ast_node* new_func_type_node(char* type,char* name) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_FUNC_ARG;
+node->func_arg.type = type;
+node->func_arg.ident = name;
+
+return node;
+}
+
+ast_node* new_func_type_dot_node(char* prt_before,char* prt_after,char* name) {
+int len_frst = strlen(prt_before);
+int len_scnd = strlen(prt_after);
+
+char* with_dot = malloc(len_frst + 2 + len_scnd);
+strcpy(with_dot,prt_before);
+
+with_dot[len_frst] = '.';
+
+strcpy(with_dot + len_frst+1,prt_after);
+
+return new_func_type_node(with_dot,name);
+}
+
+ast_node* new_array_func_type_node(char* arr,ast_node* arr_type,char* name) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_ARR_FUNC_ARG;
+node->func_containter_arg.cont_name = arr;
+node->func_containter_arg.func_type = arr_type;
+node->func_containter_arg.ident = name;
+
+return node;
+}
+
+ast_node* new_array_func_type_dot_node(char* p_b,char* p_a,ast_node* arr_type,char* name) {
+ast_node* node = calloc(1,sizeof(ast_node));
+
+int len_frst = strlen(p_b);
+int len_scnd = strlen(p_a);
+
+char* with_dot = malloc(len_frst + 2 + len_scnd);
+strcpy(with_dot,p_b);
+
+with_dot[len_frst] = '.';
+
+strcpy(with_dot + len_frst+1,p_a);
+
+return new_array_func_type_node(with_dot,arr_type,name);
+}
+
 ast_node* new_return_node(ast_node* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_RETURN;
@@ -101,19 +187,18 @@ ast_node* new_unop_node(char* op, ast_node* operand) {
 
 ast_node* reverse_list(ast_node* node) {
 ast_node* prev = NULL;
-    ast_node* current = node;
-    ast_node* next = NULL;
+ast_node* current = node;
+ast_node* next = NULL;
     
-    while (current != NULL) {
-	next = current->call_arg.next;
-	current->call_arg.next = prev;
-	prev = current;
-	current = next;
-    }
-    
-    return prev;
+while (current != NULL) {
+next = current->call_arg.next;
+current->call_arg.next = prev;
+prev = current;
+current = next;
 }
-
+ 
+return prev;
+}
 
 ast_node* new_call_node(char* name, ast_node* args) {
   ast_node* node = calloc(1, sizeof(ast_node));

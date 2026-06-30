@@ -60,6 +60,7 @@ extern void yyerror(const char *s);
 %token string_as_type
 %token left_paren
 %token right_paren
+%token func_paren
 %token left_quad_brace
 %token right_quad_brace
 %token left_brace
@@ -89,11 +90,15 @@ extern void yyerror(const char *s);
 %token <ival> number
 %token <sval> identifier string
 
-%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt func_stmt call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt func_stmt arg_list func_type call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 %nonassoc if_statement
 %nonassoc else_statement
+
+%token PREC_FUNC PREC_CALL
+%nonassoc PREC_CALL
+%nonassoc PREC_FUNC
 
 %right assign re_assign
 %right bitwise_and_with_equals bitwise_or_with_equals bitwise_xor_with_equals bitwise_not_with_equals
@@ -147,9 +152,7 @@ statement:
  
 block:
     left_brace statement right_brace
-     { $$ = $2; }    
-    | statement
-    { $$ = $1; }
+     { $$ = $2; }
     ;
 
 
@@ -186,24 +189,26 @@ while_stmt:
     ;
 
 func_stmt:
-   identifier left_paren arg_list right_paren block
+   identifier func_paren arg_list func_paren block %prec PREC_FUNC
    { $$ = new_func_node($1,$3,$5); }
    ; 
 
 arg_list:
-   func_type
-   { $$ = $1;}
-   | arg_list func_type
-    { $$ = $2;} 
+    arg_list func_type
+    { $2->func_arg.next = $1; $$ = $2;}
+   | /* empty */
+   { $$ = NULL; } 
    ;
 
 func_type:
-  identifier identifier
+  identifier
+  { $$ = new_func_type_node(NULL,$1); }
+  | identifier identifier
   { $$ = new_func_type_node($1,$2);}
   | identifier dot identifier identifier
   { $$ = new_func_type_dot_node($1,$3,$4);}
   | identifier  lesser_than func_type greater_than identifier
-  | { $$ = new_array_func_type_node($1,$3,$5);} 
+   { $$ = new_array_func_type_node($1,$3,$5);} 
   | identifier dot identifier lesser_than func_type greater_than identifier
    { $$ = new_array_func_type_dot_node($1,$3,$5,$7);}
   ; 
@@ -265,9 +270,9 @@ switch_block_stmts:
    ;
 
 call_arg_stmt:
-   identifier left_paren call_list right_paren
+   identifier left_paren call_list right_paren %prec PREC_CALL
    { $$ = new_call_node($1,$3); }
-   | identifier dot identifier left_paren call_list right_paren
+   | identifier dot identifier left_paren call_list right_paren %prec PREC_CALL
    { $$ = new_call_node_dot($1,$3,$5);}
    ;
 

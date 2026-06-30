@@ -429,7 +429,16 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       output << ")\n";
       break;
     }
-
+    
+    case AST_FUNC: {
+    output << "def ";
+    output << node->func_node.ident << "(";
+    for(int i=0;i<node->func_node.arg_count;i++){
+    generate_code(node->func_node.args,output,0);
+    }
+    output << ") :\n";
+    break;
+    }
     case AST_UNOP: {
       output << node->unop.op;
       generate_code(node->unop.operand, output, 0);
@@ -522,12 +531,21 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     
       if(node->call_arg.next != NULL) {
       output << ", ";
-	      generate_code(node->call_arg.next, output);
+      generate_code(node->call_arg.next, output);
     }
     
      break;
     }
 
+    case AST_FUNC_ARG: {
+    output << node->func_arg.ident;
+    if(node->func_arg.type != NULL) output << ": " << node->func_arg.type;
+    if(node->func_arg.next != NULL) {
+    output << ", ";
+    generate_code(node->func_arg.next,output);
+    }
+    break;
+    }
     default: {
       output << indent_str << "# TODO: unknown node type " << node->type
              << "\n";

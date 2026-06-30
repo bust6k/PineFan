@@ -225,6 +225,20 @@ std::string remove_arrow(std::string line) {
   return trim_right(line);
 }
 
+std::string remove_parens(std::string line) {
+size_t pos = line.find("(");
+if(pos != std::string::npos) {
+line.at(pos) = '#';
+pos = line.find(")");
+if(pos != std::string::npos) {
+line.at(pos) = '#';
+}
+
+}
+
+return line;
+}
+
 // Find keyword in line at specific position (considering boundaries)
 std::optional<std::string> find_keyword_at(const std::string& line,
                                            size_t start_pos) {
@@ -377,6 +391,7 @@ void preprocess(const std::string& input, std::string& output) {
         is_func != 10) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
+      info.content = remove_parens(info.content);
       info.keyword = "";
     } else {
       auto kw = find_keyword_at(info.content, 0);
