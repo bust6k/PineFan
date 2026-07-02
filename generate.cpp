@@ -82,13 +82,14 @@ void transform_constants(ast_node* node) {
 
   switch (node->type) {
     case AST_VAR:
-
+    case AST_SIMPLE:
       if (const_table.count(node->var.name)) {
         fast_toupper(node->var.name);
       }
       break;
 
     case AST_ASSIGN:
+    case AST_CONST:
       if (const_table.count(node->assign.name)) {
         fast_toupper(node->assign.name);
       }
@@ -105,9 +106,46 @@ void transform_constants(ast_node* node) {
       break;
 
     case AST_CALL:
-      for (int i = 0; i < node->call_node.arg_count; i++) {
-        transform_constants(node->call_node.args);
+      // Fix: properly iterate through the linked list of args
+      {
+        ast_node* arg = node->call_node.args;
+        while (arg) {
+          transform_constants(arg->call_arg.val);
+          arg = arg->call_arg.next;
+        }
       }
+      break;
+
+    case AST_CALL_ARG:
+      transform_constants(node->call_arg.val);
+      transform_constants(node->call_arg.next);
+      break;
+
+    case AST_FUNC:
+      {
+        // Transform function arguments
+        ast_node* arg = node->func_node.args;
+        while (arg) {
+          if (arg->type == AST_FUNC_ARG) {
+            transform_constants(arg);
+            arg = arg->func_arg.next;
+          } else if (arg->type == AST_ARR_FUNC_ARG) {
+            transform_constants(arg);
+            arg = arg->func_containter_arg.next;
+          }
+        }
+        // Transform function body
+        transform_constants(node->func_node.body);
+      }
+      break;
+
+    case AST_FUNC_ARG:
+      transform_constants(node->func_arg.next);
+      break;
+
+    case AST_ARR_FUNC_ARG:
+      transform_constants(node->func_containter_arg.func_type);
+      transform_constants(node->func_containter_arg.next);
       break;
 
     case AST_IF:
@@ -130,6 +168,14 @@ void transform_constants(ast_node* node) {
 
     case AST_RETURN:
       transform_constants(node->return_node.value);
+      break;
+
+    case AST_PAREN_OP:
+      transform_constants(node->paren_expr.expr);
+      break;
+
+    case AST_COMMA_OP:
+      transform_constants(node->comma_expr.expr);
       break;
 
     case AST_SWITCH:
@@ -155,8 +201,31 @@ void transform_constants(ast_node* node) {
       transform_constants(node->case_stmt.switch_blk_node);
       break;
 
+    case AST_CASE_RANGE:
+      // Handle when implemented
+      break;
+
     case AST_DEFAULT:
       transform_constants(node->default_stmt.switch_blk_node);
+      break;
+
+    case AST_STMT:
+      transform_constants(node->block_node.stmt);
+      transform_constants(node->block_node.next);
+      break;
+
+    case AST_STMTS:
+      transform_constants(node->stmt_node.stmt);
+      break;
+
+    case AST_NUMBER:
+    case AST_STRING:
+    case AST_INDICATOR:
+    case AST_STRATEGY:
+    case AST_IMPORT:
+    case AST_BREAK:
+    case AST_CONTINUE:
+      // Nothing to transform
       break;
 
     default:
@@ -444,7 +513,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       for (int i = 0; i < node->func_node.arg_count; i++) {
         generate_code(node->func_node.args, output, 0);
       }
-      output << ") :\n";
+      output << "):\n";
       generate_code(node->func_node.body,output,indent);
       break;
     }

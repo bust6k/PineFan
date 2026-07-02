@@ -6,7 +6,9 @@
 from typing import List as array 
 from typing import Dict as map 
 
-def foo() :
+# a constant variable!
+FOOA = 5
+def foo():
 y = 5
 foo = "foo"
 if foo > 5:
@@ -15,4 +17,26 @@ if foo > 5:
     while y == 5:
         v = 5 + 1
         v = 5
+        FOOA = 4
 return f
+
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
+
+if FOOA == t:
+# indicator
+print("failed")
+
+elif FOOA == r:
+# strategy
+print("NOO")
+
+else :
+# indicator
+print("so")
+if FOOA == 3:
+    if FOOA == 4:
+# indicator
+print("WELL!")

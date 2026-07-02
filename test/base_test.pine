@@ -1,3 +1,5 @@
+const fooa = 5
+
 foo() =>
    y = 5
    foo = "foo"
@@ -7,4 +9,16 @@ foo() =>
       while y == 5
          v = 5 + 1
          v := 5
+         fooa = 4
    return f
+
+
+switch fooa
+   t => indicator("failed")
+   r => strategy("NOO")
+   => indicator("so")
+
+
+if fooa == 3
+   if fooa == 4
+      indicator("WELL!")

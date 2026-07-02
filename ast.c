@@ -7,7 +7,7 @@
 ast_node* new_assign_node(char* name, ast_node* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_ASSIGN;
-  node->assign.name = strdup(name);
+  node->assign.name = name;
   node->assign.value = value;
   return node;
 }
@@ -25,7 +25,7 @@ ast_node* new_for_node(char* var, ast_node* start, ast_node* end,
                        ast_node* step, ast_node* body) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_FOR;
-  node->for_node.var = var ? strdup(var) : NULL;
+  node->for_node.var = var;
   node->for_node.start = start;
   node->for_node.end = end;
   node->for_node.step = step;
@@ -120,7 +120,7 @@ ast_node* new_array_func_type_node(char* arr, ast_node* arr_type, char* name) {
   node->type = AST_ARR_FUNC_ARG;
   node->func_containter_arg.cont_name = arr;
   node->func_containter_arg.func_type = arr_type;
-  node->func_containter_arg.ident = strdup(name);
+  node->func_containter_arg.ident = name;
 
   return node;
 }
@@ -179,7 +179,7 @@ ast_node* new_return_node(ast_node* value) {
 ast_node* new_var_node(char* name) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_VAR;
-  node->var.name = strdup(name);
+  node->var.name = name;
   return node;
 }
 
@@ -193,7 +193,7 @@ ast_node* new_number_node(int value) {
 ast_node* new_string_node(char* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_STRING;
-  node->string.value = strdup(value);
+  node->string.value = value;
   return node;
 }
 
@@ -223,7 +223,7 @@ ast_node* new_comma_expr_node(ast_node* expr) {
 ast_node* new_unop_node(char* op, ast_node* operand) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_UNOP;
-  node->unop.op = strdup(op);
+  node->unop.op = op;
   node->unop.operand = operand;
   return node;
 }
@@ -246,7 +246,7 @@ ast_node* reverse_list(ast_node* node) {
 ast_node* new_call_node(char* name, ast_node* args) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_CALL;
-  node->call_node.name = strdup(name);
+  node->call_node.name = name;
   node->call_node.args = reverse_list(args);
 
   size_t count = 0;
@@ -359,7 +359,7 @@ ast_node* new_default_node(ast_node* switch_blk_node) {
 ast_node* new_const_node(char* name, ast_node* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_CONST;
-  node->assign.name = strdup(name);
+  node->assign.name = name;
   node->assign.value = value;
   return node;
 }
@@ -367,14 +367,14 @@ ast_node* new_const_node(char* name, ast_node* value) {
 ast_node* new_simple_node(char* name) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_SIMPLE;
-  node->var.name = strdup(name);
+  node->var.name = name;
   return node;
 }
 
 ast_node* new_import_node(char* name) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_IMPORT;
-  node->string.value = strdup(name);
+  node->string.value = name;
   return node;
 }
 
@@ -441,6 +441,25 @@ void ast_free(ast_node* node) {
       ast_free(node->while_node.body);
       break;
 
+    case AST_FUNC:
+      free(node->func_node.ident);
+      ast_free(node->func_node.args);
+      ast_free(node->func_node.body);
+      break;
+
+    case AST_FUNC_ARG:
+      free(node->func_arg.type);
+      free(node->func_arg.ident);
+      ast_free(node->func_arg.next);
+      break;
+
+    case AST_ARR_FUNC_ARG:
+      free(node->func_containter_arg.cont_name);
+      ast_free(node->func_containter_arg.func_type);
+      free(node->func_containter_arg.ident);
+      ast_free(node->func_containter_arg.next);
+      break;
+
     case AST_RETURN:
       ast_free(node->return_node.value);
       break;
@@ -467,6 +486,14 @@ void ast_free(ast_node* node) {
       ast_free(node->binop.right);
       break;
 
+    case AST_PAREN_OP:
+      ast_free(node->paren_expr.expr);
+      break;
+
+    case AST_COMMA_OP:
+      ast_free(node->comma_expr.expr);
+      break;
+
     case AST_UNOP:
       free(node->unop.op);
       ast_free(node->unop.operand);
@@ -474,14 +501,12 @@ void ast_free(ast_node* node) {
 
     case AST_CALL:
       free(node->call_node.name);
-      /*
-      if (node->call_no.args) {
-        for (int i = 0; i < node->call.arg_count; i++) {
-          ast_free(node->call.args[i]);
-        }
-        free(node->call.args);
-      }
-      */
+      ast_free(node->call_node.args);
+      break;
+
+    case AST_CALL_ARG:
+      ast_free(node->call_arg.val);
+      ast_free(node->call_arg.next);
       break;
 
     case AST_BREAK:
@@ -490,10 +515,36 @@ void ast_free(ast_node* node) {
       break;
 
     case AST_SWITCH:
+      ast_free(node->switch_node.expr);
+      ast_free(node->switch_node.cases);
+      ast_free(node->switch_node.default_body);
+      break;
+
+    case AST_SWITCH_BLOCK:
+      ast_free(node->switch_block_node.prev);
+      ast_free(node->switch_block_node.th);
+      break;
+
     case AST_CASE:
+      ast_free(node->case_stmt.expr);
+      ast_free(node->case_stmt.switch_blk_node);
+      break;
+
     case AST_CASE_RANGE:
+      // TODO: implement when properly filled
+      break;
+
     case AST_DEFAULT:
-      // TODO: implement when these nodes are properly filled
+      ast_free(node->default_stmt.switch_blk_node);
+      break;
+
+    case AST_STMT:
+      ast_free(node->block_node.stmt);
+      ast_free(node->block_node.next);
+      break;
+
+    case AST_STMTS:
+      ast_free(node->stmt_node.stmt);
       break;
 
     default:
