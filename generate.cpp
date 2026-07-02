@@ -219,6 +219,8 @@ void prologue(std::ofstream& output, const std::filesystem::path& source_name) {
             "OF NECESSARY\n"
          << std::format("# - PineFan's version: {}\n", pinefan_version.data())
          << std::format("# - source: {}\n\n", source_name.string());
+output << "from typing import List as array \n";
+output << "from typing import Dict as map \n\n";
 }
 
 void indicator(std::string_view str, std::ofstream& output) {
@@ -544,14 +546,45 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_FUNC_ARG: {
+      if(node->func_arg.ident != NULL) {
       output << node->func_arg.ident;
       if (node->func_arg.type != NULL) output << ": " << node->func_arg.type;
       if (node->func_arg.next != NULL) {
         output << ", ";
         generate_code(node->func_arg.next, output);
       }
+     } else if(node->func_arg.ident == NULL) {
+     output <<  node->func_arg.type;
+     }
+
+
+      if(node->func_containter_arg.next != NULL) {
+       output << ", ";
+       generate_code(node->func_arg.next,output);
+      }
+
       break;
     }
+    
+    case AST_ARR_FUNC_ARG: {
+   if(node->func_containter_arg.ident != NULL) { 
+   output << node->func_containter_arg.ident;
+   
+   output << ": ";
+   output << node->func_containter_arg.cont_name;
+   output << "[";
+   generate_code(node->func_containter_arg.func_type,output);
+   output << "]";
+   } 
+
+   if(node->func_containter_arg.next != NULL) {
+   output << ", ";
+   generate_code(node->func_containter_arg.next,output);
+   }
+
+   break;
+   }
+
     default: {
       output << indent_str << "# TODO: unknown node type " << node->type
              << "\n";
@@ -559,9 +592,17 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
   }
 }
+
+std::string ff(int type) {
+if(type ==   AST_ARR_FUNC_ARG) {
+return "AST_ARR_FUNC_ARG";
+}
+return "";
+}
+
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
-  // yydebug = 1;
+  //yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
@@ -578,8 +619,7 @@ int main(int argc, char* argv[]) {
                               Pinefan::File::output_exstension.data());
 
     program_root = make_vector();
-    int r = yyparse();
-
+    int r = yyparse(); 
     if (r) exit(1);
 
     convert_program_root();

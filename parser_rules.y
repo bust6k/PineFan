@@ -53,11 +53,11 @@ extern void yyerror(const char *s);
 %token import_statement
 %token as
 %token input_func
-%token int_type
-%token bool_type
-%token float_type
-%token color_type
-%token string_as_type
+%token <ival> int_type
+%token <ival> bool_type
+%token <ival> float_type
+%token <ival> color_type
+%token <ival> string_as_type
 %token left_paren
 %token right_paren
 %token func_paren
@@ -89,8 +89,9 @@ extern void yyerror(const char *s);
 
 %token <ival> number
 %token <sval> identifier string
+%type <sval> pine_type 
 
-%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt func_stmt opt_arg_list arg_list func_type call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 %nonassoc if_statement
@@ -209,23 +210,46 @@ opt_arg_list:
 
 arg_list:
     arg_list comma func_type
-    { $3->func_arg.next = $1; $$ = $3; }
+    { if($3->type == AST_FUNC_ARG) {
+
+    $3->func_arg.next = $1; $$ = $3; 
+    }
+    else if($3->type == AST_ARR_FUNC_ARG) {
+    $3->func_containter_arg.next = $1; $$ = $3;
+    }
+    }
     | func_type
     { $$ = $1; }
     ;
 
 func_type:
-   identifier identifier %prec PREC_TYPE_NAME
+   pine_type identifier %prec PREC_TYPE_NAME
   { $$ = new_func_type_node($1,$2);} 
   | identifier  %prec PREC_SINGLE_NAME
   { $$ = new_func_type_node(NULL,$1); }
   | identifier dot identifier identifier
   { $$ = new_func_type_dot_node($1,$3,$4);}
+  | identifier dot identifier
+  { $$ = new_func_type_dot_node($1,$3,NULL);}
   | identifier  lesser_than func_type greater_than identifier
    { $$ = new_array_func_type_node($1,$3,$5);} 
   | identifier dot identifier lesser_than func_type greater_than identifier
    { $$ = new_array_func_type_dot_node($1,$3,$5,$7);}
   ; 
+
+pine_type:
+  int_type
+  { $$ = new_type_name(int_type);}
+  | bool_type
+  { $$ = new_type_name(bool_type);}
+  | string_as_type
+  { $$ = new_type_name(string_as_type);}
+  | float_type
+  { $$ = new_type_name(float_type);}
+  | color_type
+  { $$ = new_type_name(color_type);}
+
+
 return_stmt_expr:
      return_statement  expr
     { $$ = new_return_node($2); }

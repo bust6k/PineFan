@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include<stdio.h>
 
 ast_node* new_assign_node(char* name, ast_node* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
@@ -46,10 +47,22 @@ ast_node* reverse_fun_list(ast_node* node) {
   ast_node* next = NULL;
 
   while (current != NULL) {
+    if(current->type == AST_FUNC_ARG) {
     next = current->func_arg.next;
     current->func_arg.next = prev;
     prev = current;
     current = next;
+    } else if(current->type == AST_ARR_FUNC_ARG) { 
+    next = current->func_containter_arg.next;
+    current->func_containter_arg.next = prev;
+    prev = current;
+    current = next;
+    } else {
+    next = NULL;
+    current = NULL;
+    prev = NULL;
+    }
+
   }
 
   return prev;
@@ -66,7 +79,11 @@ ast_node* new_func_node(char* ident, ast_node* args, ast_node* body) {
   ast_node* a = args;
   while (a) {
     count++;
+    if(a->type == AST_FUNC_ARG) {
     a = a->func_arg.next;
+    } else if(a->type == AST_ARR_FUNC_ARG) {
+    a = a->func_containter_arg.next;
+    }
   }
 
   node->func_node.arg_count = count;
@@ -103,7 +120,7 @@ ast_node* new_array_func_type_node(char* arr, ast_node* arr_type, char* name) {
   node->type = AST_ARR_FUNC_ARG;
   node->func_containter_arg.cont_name = arr;
   node->func_containter_arg.func_type = arr_type;
-  node->func_containter_arg.ident = name;
+  node->func_containter_arg.ident = strdup(name);
 
   return node;
 }
@@ -124,6 +141,33 @@ ast_node* new_array_func_type_dot_node(char* p_b, char* p_a, ast_node* arr_type,
 
   return new_array_func_type_node(with_dot, arr_type, name);
 }
+
+#include "parser_rules.tab.h"
+
+char* new_type_name(int token) {
+printf("token = %d, int_type = %d, bool_type = %d\n", token, int_type, bool_type);
+char* type = malloc(8);
+
+if(token == int_type) {
+strcpy(type,"int");
+return type;
+} else if(token == bool_type) {
+strcpy(type,"bool");
+return type;
+} else if(token == float_type) {
+strcpy(type,"float");
+return type;
+} else if(token == string_as_type) {
+strcpy(type,"str");
+return type;
+}
+
+
+free(type);
+
+return NULL;
+}
+
 
 ast_node* new_return_node(ast_node* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
