@@ -6,4 +6,13 @@
 from typing import List as array 
 from typing import Dict as map 
 
-def foo(foo: int, fnot: float, ff: array[fo], ff: array.ta[ta.fff], no: array.ta[ta.ff], ff: array.ta[ta.sss], dd: array[fa.ff], is: bool) :
+def foo() :
+y = 5
+foo = "foo"
+if foo > 5:
+    foo = 4
+    foo = 1
+    while y == 5:
+        v = 5 + 1
+        v = 5
+return f

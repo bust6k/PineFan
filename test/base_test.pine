@@ -1,2 +1,10 @@
-foo(int foo,float fnot,array<fo> ff,array.ta<ta.fff> ff,array.ta<ta.ff> no,array.ta<ta.sss> ff,array<fa.ff> dd,bool is) =>
+foo() =>
    y = 5
+   foo = "foo"
+   if foo > 5
+      foo = 4
+      foo = 1
+      while y == 5
+         v = 5 + 1
+         v := 5
+   return f

@@ -379,7 +379,37 @@ ast_node* new_import_node(char* name) {
 }
 
 ast_node* new_assign_re_node(char* name, ast_node* value) {
-  return new_assign_node(name, value);  // пока одинаково
+  return new_assign_node(name, value);  // similar as temporarly
+}
+
+ast_node* reverse_stmt_list(ast_node* node) {
+  ast_node* prev = NULL;
+  ast_node* current = node;
+  ast_node* next = NULL;
+
+  while (current != NULL) {
+    next = current->block_node.next;
+    current->block_node.next = prev;
+    prev = current;
+    current = next;
+  }
+
+  return prev;
+}
+ast_node* new_block_node(ast_node* stmt) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_STMT;
+node->block_node.stmt = stmt;
+
+return node;
+}
+
+ast_node* new_stmt_node(ast_node* stmts) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_STMTS;
+node->stmt_node.stmt =  reverse_stmt_list(stmts);
+
+return node;
 }
 
 void ast_free(ast_node* node) {

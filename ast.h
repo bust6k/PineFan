@@ -94,6 +94,13 @@ typedef struct ast_node {
   struct {
     struct ast_node* switch_blk_node;
   } default_stmt;
+  struct {
+  struct ast_node* next;
+  struct ast_node* stmt;
+  } block_node;
+  struct {
+  struct ast_node* stmt;
+  } stmt_node;
 } ast_node;
 
 typedef enum ast_node_kind {
@@ -126,6 +133,8 @@ typedef enum ast_node_kind {
   AST_IMPORT,
   AST_INDICATOR,
   AST_STRATEGY,
+  AST_STMT,
+  AST_STMTS
 } ast_node_kind;
 
 ast_node* new_assign_node(char* name, ast_node* value);
@@ -164,5 +173,8 @@ ast_node* new_const_node(char* name, ast_node* value);
 ast_node* new_simple_node(char* name);
 ast_node* new_import_node(char* name);
 ast_node* new_assign_re_node(char* name, ast_node* value);
+
+ast_node* new_block_node(ast_node* stmt);
+ast_node* new_stmt_node(ast_node* stmts);
 
 void ast_free(ast_node* node);
