@@ -8,9 +8,10 @@ from typing import Dict as map
 
 # a constant variable!
 FOO = 5
-def foo(foo: array[int], gl: array[str], gg: array.ta[int.ta], fo: array[color], ffi: array.ta[color], fofofof: array.foo[color.fiiiii]):
+def foo(foo: array[int], gl: array[str], gg: array.ta[int.ta], fo: array[color], ffi: array.ta[color], fofofof: array.foo[color.fiiiii], foo):
 y = 5
 FOO = "foo"
+
 if FOO > 5:
     FOO = 4
     FOO = 1
@@ -19,11 +20,13 @@ if FOO > 5:
         v = 5
         fooa = 4
 return f
+foo(FOO)
 
 # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
 # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
 # elif is all the other conditions
 # and else - it's an optional last condition like default in switch-statement
+
 
 if fooa == t:
 # indicator
@@ -34,9 +37,9 @@ elif fooa == r:
 print("NOO")
 
 else :
-# indicator
-print("so")
+5
 if fooa == 3:
-    if fooa == 4:
+    
+if fooa == 4:
 # indicator
 print("WELL!")

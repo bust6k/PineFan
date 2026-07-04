@@ -358,7 +358,7 @@ void up_const_names_recursive(ast_node* node, char* name) {
     if (!node) continue;
     transform_constants(node);
     if (strcmp(node->assign.name, normal_cpy) == 0 &&
-        node->type != AST_STRING && node->type != AST_FUNC) {
+        node->type != AST_STRING && node->type != AST_FUNC && node->type != AST_CALL) {
       node->assign.name = fast_toupper(node->assign.name);
       char* f = fast_tolower(node->assign.name);
       const_table[f] = 42;
@@ -380,7 +380,7 @@ void gen_switch_speak(bool is_case, std::ofstream& output,
     output << "# and else - it's an optional last condition like default in "
               "switch-statement\n\n";
 
-    output << indent_str << "if ";
+    output << indent_str << "\nif ";
     return;
   } else {
     output << "\n# in source code version that was switch-statement. Since "
@@ -390,7 +390,7 @@ void gen_switch_speak(bool is_case, std::ofstream& output,
     output << "# where if - it's a default-like condition that executes as "
               "always\n\n";
 
-    output << indent_str << "if ";
+    output << indent_str << "\nif ";
     return;
   }
 }
@@ -403,12 +403,12 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
   switch (node->type) {
     case AST_IF: {
       transform_constants(node->if_node.cond);
-      output << indent_str << "if ";
+      output << indent_str << "\nif ";
       generate_code(node->if_node.cond, output, 0);
       output << ":\n";
       generate_code(node->if_node.then, output, indent + 4);
       if (node->if_node.else_) {
-        output << indent_str << "else:\n";
+        output << indent_str << "\nelse:\n";
         generate_code(node->if_node.else_, output, indent + 4);
       }
       break;

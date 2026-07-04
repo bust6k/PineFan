@@ -22,6 +22,9 @@ extern void yyerror(const char *s);
     struct ast_node *node;
 }
 
+%token LOWEST_PREC
+%right LOWEST_PREC
+
 %token indicator_function
 %token strategy_function
 %token if_statement
@@ -91,8 +94,9 @@ extern void yyerror(const char *s);
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr block stmt_list stmt_block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block stmt_list stmt_block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
+
 
 %nonassoc if_statement
 %nonassoc else_statement
@@ -128,7 +132,6 @@ extern void yyerror(const char *s);
 %nonassoc logical_not bitwise_not
 %nonassoc  left_quad_brace right_quad_brace dot
 %nonassoc left_paren left_brace
-
 %%
 
 program:
@@ -156,6 +159,7 @@ statement:
     | import_stmt
     | assignment_stmt
     | assignment_re_stmt
+    | expr %prec LOWEST_PREC
     ;
  
 block:
@@ -311,11 +315,15 @@ default_case:
     }
     ;
 
-switch_block_stmts:
+switch_block_stmt:
    statement
-   { $$ = $1;}
-   | switch_block_stmts statement
-   { $$ = new_switch_block_node($1,$2);}
+   { $$ = $1; }
+
+switch_block_stmts:
+   switch_block_stmt
+   { $$ = new_block_node($1); }
+   | switch_block_stmts switch_block_stmt
+   { $$ = new_switch_block_node($1, new_block_node($2)); }
    ;
 
 call_arg_stmt:
@@ -326,10 +334,12 @@ call_arg_stmt:
    ;
 
 call_list:
-   call_list comma call_stmt
+   call_stmt
+   { $$ = $1; }
+   | call_list comma call_stmt
    { $3->call_arg.next = $1; $$ = $3; }
-   |
-   { $$ = NULL; }
+   | /*empty*/
+   { $$ = NULL;}
    ;
 
 call_stmt:
