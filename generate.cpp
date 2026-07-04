@@ -124,7 +124,8 @@ void transform_constants(ast_node* node) {
     case AST_FUNC:
       {
         // Transform function arguments
-        ast_node* arg = node->func_node.args;
+        /*
+	ast_node* arg = node->func_node.args;
         while (arg) {
           if (arg->type == AST_FUNC_ARG) {
             transform_constants(arg);
@@ -134,6 +135,7 @@ void transform_constants(ast_node* node) {
             arg = arg->func_containter_arg.next;
           }
         }
+	*/
         // Transform function body
         transform_constants(node->func_node.body);
       }
@@ -356,7 +358,7 @@ void up_const_names_recursive(ast_node* node, char* name) {
     if (!node) continue;
     transform_constants(node);
     if (strcmp(node->assign.name, normal_cpy) == 0 &&
-        node->type != AST_STRING) {
+        node->type != AST_STRING && node->type != AST_FUNC) {
       node->assign.name = fast_toupper(node->assign.name);
       char* f = fast_tolower(node->assign.name);
       const_table[f] = 42;

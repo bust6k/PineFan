@@ -1,4 +1,4 @@
-const fooa = 5
+const foo = 5
 
 foo() =>
    y = 5

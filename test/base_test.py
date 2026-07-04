@@ -7,17 +7,17 @@ from typing import List as array
 from typing import Dict as map 
 
 # a constant variable!
-FOOA = 5
+FOO = 5
 def foo():
 y = 5
-foo = "foo"
-if foo > 5:
-    foo = 4
-    foo = 1
+FOO = "foo"
+if FOO > 5:
+    FOO = 4
+    FOO = 1
     while y == 5:
         v = 5 + 1
         v = 5
-        FOOA = 4
+        fooa = 4
 return f
 
 # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
@@ -25,18 +25,18 @@ return f
 # elif is all the other conditions
 # and else - it's an optional last condition like default in switch-statement
 
-if FOOA == t:
+if fooa == t:
 # indicator
 print("failed")
 
-elif FOOA == r:
+elif fooa == r:
 # strategy
 print("NOO")
 
 else :
 # indicator
 print("so")
-if FOOA == 3:
-    if FOOA == 4:
+if fooa == 3:
+    if fooa == 4:
 # indicator
 print("WELL!")
