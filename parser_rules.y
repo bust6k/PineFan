@@ -234,15 +234,15 @@ arg_list:
 func_type:
    pine_type identifier %prec PREC_TYPE_NAME
   { $$ = new_func_type_node($1,$2);} 
-  | identifier  %prec PREC_SINGLE_NAME
-  { $$ = new_func_type_node(NULL,$1); }
-  | identifier dot identifier identifier
+  | pine_type %prec PREC_SINGLE_NAME
+  { $$ = new_func_type_node(NULL,$1); }  
+  | pine_type dot pine_type identifier
   { $$ = new_func_type_dot_node($1,$3,$4);}
-  | identifier dot identifier
+  | pine_type dot pine_type
   { $$ = new_func_type_dot_node($1,$3,NULL);}
-  | identifier  lesser_than func_type greater_than identifier
+  | pine_type  lesser_than func_type greater_than identifier
    { $$ = new_array_func_type_node($1,$3,$5);} 
-  | identifier dot identifier lesser_than func_type greater_than identifier
+  | pine_type dot pine_type lesser_than func_type greater_than identifier
    { $$ = new_array_func_type_dot_node($1,$3,$5,$7);}
   ; 
 
@@ -257,6 +257,8 @@ pine_type:
   { $$ = new_type_name(float_type);}
   | color_type
   { $$ = new_type_name(color_type);}
+  | identifier
+  { $$ = $1;}
 
 
 return_stmt_expr:

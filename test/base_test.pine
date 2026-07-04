@@ -1,6 +1,6 @@
 const foo = 5
 
-foo() =>
+foo(array<int> foo,array<string> gl,array.ta<int.ta> gg,array<color> fo,array.ta<color> ffi,array.foo<color.fiiiii> fofofof) =>
    y = 5
    foo = "foo"
    if foo > 5

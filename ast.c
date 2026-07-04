@@ -160,6 +160,9 @@ return type;
 } else if(token == string_as_type) {
 strcpy(type,"str");
 return type;
+} else if(token == color_type) {
+strcpy(type,"color");
+return type;
 }
 
 

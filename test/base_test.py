@@ -8,7 +8,7 @@ from typing import Dict as map
 
 # a constant variable!
 FOO = 5
-def foo():
+def foo(foo: array[int], gl: array[str], gg: array.ta[int.ta], fo: array[color], ffi: array.ta[color], fofofof: array.foo[color.fiiiii]):
 y = 5
 FOO = "foo"
 if FOO > 5:
