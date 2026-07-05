@@ -1,3 +1,6 @@
+else if f
+   ff
+
 const foo = 5
 
 foo(array<int> foo,array<string> gl,array.ta<int.ta> gg,array<color> fo,array.ta<color> ffi,array.foo<color.fiiiii> fofofof, foo) =>
@@ -20,5 +23,8 @@ switch fooa
    =>  5
 
 if fooa == 3
-   if fooa == 4
-      indicator("WELL!")
+    y = 5
+else if foo == 4
+    indicator("WELL!")
+    y = 5 + 5
+    indicator("")

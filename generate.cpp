@@ -408,7 +408,15 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       output << ":\n";
       generate_code(node->if_node.then, output, indent + 4);
       if (node->if_node.else_) {
-        output << indent_str << "\nelse:\n";
+        if(node->if_node.else_->if_node.is_elif) {
+        output << indent_str << "\nelif ";
+	generate_code(node->if_node.else_->if_node.cond,output,0);
+        output << ":\n";
+	generate_code(node->if_node.else_->if_node.then,output,indent + 4);
+	break;
+	}
+
+	output << indent_str << "\nelse:\n";
         generate_code(node->if_node.else_, output, indent + 4);
       }
       break;

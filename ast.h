@@ -11,6 +11,7 @@ typedef struct ast_node {
     } assign;
     struct {
       struct ast_node *cond, *then, *else_;
+      int is_elif;
     } if_node;
     struct {
       char* var;

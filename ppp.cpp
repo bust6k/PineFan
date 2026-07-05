@@ -31,7 +31,7 @@
 
 #include "file.hpp"
 
-// #define _IS_MAIN
+ #define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {
@@ -60,6 +60,8 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_S;
       else if (c == 't')
         state = KW_T;
+      else if ( c == 'e')
+	state = KW_E;
       else
         return std::nullopt;
       break;
@@ -91,6 +93,42 @@ std::optional<std::string> KeywordDFA::feed(char c) {
       else
         return std::nullopt;
       break;
+
+    case KW_E:
+      if (c == 'l')
+	 state = KW_EL;
+      else
+	 return std::nullopt;
+     break;
+
+    case KW_EL:
+      if( c == 's')
+	state = KW_ELS;
+      else
+	 return std::nullopt;
+     break;
+
+    case KW_ELS:
+      if ( c == 'e')
+	 state = KW_ELSE;
+      else
+	 return std::nullopt;
+      break;
+
+    case KW_ELSE: {
+      if( c == 'i'){
+	state = KW_ELSE_I;}
+      else{
+        return std::nullopt;
+      }
+      break;
+		  }
+
+    case KW_ELSE_I:
+      if( c == 'f')
+	state = KW_ACCEPT_ELSE_IF;
+      else 
+	 return std::nullopt;
 
     case KW_FO:
       if (c == 'r')
@@ -169,6 +207,8 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       break;
 
+
+  
     default:
       return std::nullopt;
   }
@@ -179,6 +219,7 @@ std::optional<std::string> KeywordDFA::feed(char c) {
   if (state == KW_ACCEPT_WHILE) return "while";
   if (state == KW_ACCEPT_SWITCH) return "switch";
   if (state == KW_ACCEPT_TYPE) return "type";
+  if(state == KW_ACCEPT_ELSE_IF) return "else if";
 
   return std::nullopt;
 }

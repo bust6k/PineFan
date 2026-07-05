@@ -189,10 +189,16 @@ strategy_stmt:
     ;
 
 if_stmt:
-    if_statement left_paren expr right_paren block %prec if_statement 
+    if_statement  left_paren expr right_paren block %prec if_statement 
     { $$ = new_if_node($3,$5,NULL); }
-    | if_statement left_paren expr right_paren block else_statement block %prec else_statement
+    | if_statement  left_paren expr right_paren block else_statement block %prec else_statement
     { $$ = new_if_node($3,$5,$7); }
+    | if_statement left_paren expr right_paren block else_statement if_statement expr block %prec else_statement
+    {
+    ast_node* elif = new_if_node($8, $9, NULL); 
+    elif->if_node.is_elif = 1;
+    $$ = new_if_node($3, $5, elif); 
+    }
     ;
 
 for_stmt:

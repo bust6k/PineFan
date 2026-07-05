@@ -25,11 +25,17 @@ enum KeywordState {
   KW_SWI,
   KW_SWIT,
   KW_SWITC,
+  KW_E,
+  KW_EL,
+  KW_ELS,
+  KW_ELSE,
+  KW_ELSE_I,
   KW_ACCEPT_IF,
   KW_ACCEPT_FOR,
   KW_ACCEPT_WHILE,
   KW_ACCEPT_TYPE,
   KW_ACCEPT_SWITCH,
+  KW_ACCEPT_ELSE_IF,
 };
 
 // DFA for keyword detection

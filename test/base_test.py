@@ -39,7 +39,11 @@ print("NOO")
 else :
 5
 if fooa == 3:
-    
-if fooa == 4:
+    y = 5
+
+elif FOO == 4:
 # indicator
 print("WELL!")
+    y = 5 + 5
+# indicator
+print("")
