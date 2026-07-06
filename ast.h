@@ -87,7 +87,7 @@ typedef struct ast_node {
       struct ast_node* prev;
       struct ast_node* th;
     } switch_block_node;
-  };
+  
   struct {
     struct ast_node* expr;
     struct ast_node* switch_blk_node;
@@ -102,6 +102,7 @@ typedef struct ast_node {
   struct {
   struct ast_node* stmt;
   } stmt_node;
+  };
 } ast_node;
 
 typedef enum ast_node_kind {

@@ -127,8 +127,6 @@ ast_node* new_array_func_type_node(char* arr, ast_node* arr_type, char* name) {
 
 ast_node* new_array_func_type_dot_node(char* p_b, char* p_a, ast_node* arr_type,
                                        char* name) {
-  ast_node* node = calloc(1, sizeof(ast_node));
-
   int len_frst = strlen(p_b);
   int len_scnd = strlen(p_a);
 
