@@ -1,13 +1,17 @@
+# Общие флаги для всех файлов
 CompileFlags:
   Add: [-I.]
-  Remove: [-std=c++20]
 
+---
+# Флаги только для C++ файлов
 If:
   PathMatch: .*\.(cpp|cxx|cc|hpp|hxx|hh)
-  CompileFlags:
-    Add: [-std=c++20]
+CompileFlags:
+  Add: [-std=c++20]
 
+---
+# Флаги только для C файлов
 If:
   PathMatch: .*\.(c|h)
-  CompileFlags:
-    Add: [-std=c99]
+CompileFlags:
+  Add: [-std=c99]

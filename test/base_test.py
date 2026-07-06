@@ -7,25 +7,88 @@ from typing import List as array
 from typing import Dict as map 
 
 # a constant variable!
-FOO = 5
-if fooa == 3:
-    else:
-        y = 5
-    elif FOO == 4:
-        else:
-# indicator
-print("WELL!")
-        else:
-            y = 5 + 5
-        else:
-# indicator
-print("")
-        elif FOO == 5:
+MAX_COUNT = 100
+# a constant variable!
+THRESHOLD = 50
+def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: str):
+    # indicator
+    print ("Function started")
+    elif flag == true:
+        # strategy
+        print ("Flag is active")
+        elif arr > THRESHOLD:
+            # indicator
+            print ("Array first element above threshold")
+            for i in range(0, arr + 1):
+                elif i % 2 == 0:
+                    # indicator
+                    print ("Even iteration")
+                    elif i > 25:
+                        break
+                    elif i % 3 == 0:
+                        # indicator
+                        print ("Divisible by 3")
+                        continue
+                        # strategy
+                        print ("Odd iteration")
+                        elif i == 45:
+                            # indicator
+                            print ("Halfway point!")
+            # indicator
+            print ("Array first element below threshold")
+            # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+            # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+            # elif is all the other conditions
+            # and else - it's an optional last condition like default in switch-statement
+
+            if arr == 10:
+                # strategy
+                print ("Exactly 10")
+            elif arr == 75:
+                # strategy
+                print ("Three quarters")
+            elif arr == 50:
+                # indicator
+                print ("Half way")
+            elif arr == 25:
+                # indicator
+                print ("Quarter way")
             else:
-# indicator
-print("")
-            elif FOO == "foo":
-                else:
-                    y = 10
-                else:
-                    y = 15
+                # indicator
+                print ("Default value")
+        elif flag == false:
+            # indicator
+            print ("Flag is false")
+            while arr < THRESHOLD:
+                arr = arr + 5
+                elif arr > 40:
+                    # strategy
+                    print ("Approaching threshold")
+                    elif arr == 45:
+                        break
+            # strategy
+            print ("Flag state unknown")
+            return -1
+    result = ( arr0 * 2 + ( THRESHOLD - 10 ) )
+    nested_call(complex_func, arr0 + arr, !flag)
+    # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+    # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+    # elif is all the other conditions
+    # and else - it's an optional last condition like default in switch-statement
+
+    if result == 0:
+        # indicator
+        print ("Zero result")
+    elif result == 75:
+        # strategy
+        print ("Seventy five")
+    elif result == 50:
+        # indicator
+        print ("Fifty")
+    elif result == 25:
+        # indicator
+        print ("Twenty five")
+    else:
+        # indicator
+        print ("Default")
+    return result + 1

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// TODO:maybe add processing of '(' and ')' in 'expr' in  parser to make a sense
-// of it
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -294,11 +292,13 @@ output << "from typing import List as array \n";
 output << "from typing import Dict as map \n\n";
 }
 
-void indicator(std::string_view str, std::ofstream& output) {
-  output << std::format("# indicator\nprint(\"{}\")\n", str);
+void indicator(std::string_view str, std::ofstream& output,std::string indent_str) {
+  output << indent_str << "# indicator\n";
+  output << indent_str << std::format("print (\"{}\")\n",str);
 }
-void strategy(std::string_view str, std::ofstream& output) {
-  output << std::format("# strategy\nprint(\"{}\")\n", str);
+void strategy(std::string_view str, std::ofstream& output,std::string indent_str) {
+  output << indent_str << "# strategy\n";
+  output << indent_str << std::format("print (\"{}\")\n",str);
 }
 
 void common_var(std::string_view name, ast_node* value, std::ofstream& output) {
@@ -316,33 +316,6 @@ void common_var(std::string_view name, ast_node* value, std::ofstream& output) {
     default:
       // throw "unknown var";
       break;
-  }
-}
-
-void if_stmt(struct ast_node* cond, struct ast_node* then,
-             std::ofstream& output) {
-  std::stack<int> indent_stack;
-
-  int start_lev = 2;
-
-  indent_stack.push(start_lev);  // the start level of indentation
-
-  output << std::format("{} ", "if");
-
-  while (cond) {
-    // TODO: make generation of condition based on ast kind
-    cond++;
-  }
-
-  output << std::format("{}\n", ':');
-
-  while (then) {
-    then++;
-
-    if (then->type == AST_IF || then->type == AST_WHILE ||
-        then->type == AST_FOR)
-      indent_stack.push(++start_lev);
-    // TODO: make generation based on invokation of other generation functions
   }
 }
 
@@ -370,27 +343,27 @@ void up_const_names_recursive(ast_node* node, char* name) {
 void gen_switch_speak(bool is_case, std::ofstream& output,
                       std::string indent_str) {
   if (is_case) {
-    output << "\n# in source code version that was switch-statement. Since "
+    output << indent_str << "# in source code version that was switch-statement. Since "
               "Python doesn't it(but only since Python "
               "3.10),PineFan\n";
-    output << "# translates it to if/elif/else construction. Where "
+    output << indent_str << "# translates it to if/elif/else construction. Where "
               "if-statement is the first condition like in "
               "switch-statement\n";
-    output << "# elif is all the other conditions\n";
-    output << "# and else - it's an optional last condition like default in "
+    output << indent_str << "# elif is all the other conditions\n";
+    output << indent_str << "# and else - it's an optional last condition like default in "
               "switch-statement\n\n";
 
-    output << indent_str << "\nif ";
+    output << indent_str << "if ";
     return;
   } else {
-    output << "\n# in source code version that was switch-statement. Since "
+    output << indent_str << "# in source code version that was switch-statement. Since "
               "Python doesn't it(but only since Python "
               "3.10),PineFan\n";
-    output << "# translates it to if construction\n";
-    output << "# where if - it's a default-like condition that executes as "
+    output << indent_str << "# translates it to if construction\n";
+    output << indent_str << "# where if - it's a default-like condition that executes as "
               "always\n\n";
 
-    output << indent_str << "\nif ";
+    output << indent_str << "if ";
     return;
   }
 }
@@ -431,7 +404,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         output << "True:\n";
         generate_code(
             node->switch_node.default_body->default_stmt.switch_blk_node,
-            output);
+            output,indent + 4);
         output << "\n";
 
         is_only_def = true;
@@ -448,30 +421,30 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         generate_code(first_case->case_stmt.expr, output, 0);
 
         output << ":\n";
-        generate_code(first_case->case_stmt.switch_blk_node, output);
+        generate_code(first_case->case_stmt.switch_blk_node, output,indent + 4);
 
         first_case = node->switch_node.cases;
 
         if (first_case != NULL) {
           while (first_case->switch_case.next != NULL) {
-            output << indent_str << "\nelif ";
+            output << indent_str << "elif ";
             generate_code(const_first_case, output, 0);
             output << " == ";
             generate_code(first_case->case_stmt.expr, output, 0);
             output << ":\n";
-            generate_code(first_case->case_stmt.switch_blk_node, output);
+            generate_code(first_case->case_stmt.switch_blk_node, output,indent + 4);
             first_case = first_case->switch_case.next;
           }
         }
       }
 
       if (node->switch_node.default_body != NULL && !is_only_def) {
-        output << "\nelse ";
+        output << indent_str << "else";
         output << ":\n";
 
         generate_code(
             node->switch_node.default_body->default_stmt.switch_blk_node,
-            output);
+            output,indent + 4);
       }
       break;
     }
@@ -506,7 +479,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_CALL: {
-      output << node->call_node.name << "(";
+      output << indent_str << node->call_node.name << "(";
       for (int i = 0; i < node->call_node.arg_count; i++) {
         generate_code(node->call_node.args, output, 0);
         // if (i + 1 < node->call_node.arg_count) output << ", ";
@@ -522,7 +495,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         generate_code(node->func_node.args, output, 0);
       }
       output << "):\n";
-      generate_code(node->func_node.body,output,indent);
+      generate_code(node->func_node.body,output,indent + 4);
       break;
     }
     case AST_UNOP: {
@@ -594,12 +567,12 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_INDICATOR: {
-      indicator(node->string.value, output);
+      indicator(node->string.value, output,indent_str);
       break;
     }
 
     case AST_STRATEGY: {
-      strategy(node->string.value, output);
+      strategy(node->string.value, output,indent_str);
       break;
     }
 
@@ -668,15 +641,11 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         // Это else if — генерируем без лишней обёртки
         node->block_node.stmt->if_node.is_elif = 1;
         generate_code(node->block_node.stmt, output, indent);
-    } else if (node->type != AST_IF) {
-        output << indent_str << "else:\n";
-        generate_code(node->block_node.stmt, output, indent + 4);
-    }
-  
-     else {
+    } else {
         // Обычный блок
         generate_code(node->block_node.stmt, output, indent);
     }
+
    if(node->block_node.next != NULL) {
    generate_code(node->block_node.next,output,indent);
 

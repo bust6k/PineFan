@@ -1,14 +1,55 @@
-const foo = 5
+const MAX_COUNT = 100
+const THRESHOLD = 50
 
-if fooa == 3
-    y = 5
-else if foo == 4
-    indicator("WELL!")
-    y = 5 + 5
-    indicator("")
-else if foo == 5
-    indicator("")
-else if foo == "foo"
-    y = 10
-else
-    y = 15
+complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string name) =>
+   indicator("Function started")
+   
+   if flag == true
+      strategy("Flag is active")
+      if arr > THRESHOLD
+         indicator("Array first element above threshold")
+         for i = 0 to arr
+            if i % 2 == 0
+               indicator("Even iteration")
+               if i > 25
+                  break
+            else if i % 3 == 0
+               indicator("Divisible by 3")
+               continue
+            else
+               strategy("Odd iteration")
+               if i == 45
+                  indicator("Halfway point!")
+      else
+         indicator("Array first element below threshold")
+         switch arr
+            10 => strategy("Exactly 10")
+            25 => indicator("Quarter way")
+            50 => indicator("Half way")
+            75 => strategy("Three quarters")
+            => indicator("Default value")
+   else if flag == false
+      indicator("Flag is false")
+      while arr < THRESHOLD
+         arr = arr + 5
+         if arr > 40
+            strategy("Approaching threshold")
+            if arr == 45
+               break
+   else
+      strategy("Flag state unknown")
+      return -1
+
+   result = (arr0 * 2 + (THRESHOLD - 10))
+   
+   nested_call(complex_func, arr0 + arr, !flag)
+   
+   switch result
+      0 => indicator("Zero result")
+      25 => indicator("Twenty five")
+      50 => indicator("Fifty")
+      75 => strategy("Seventy five")
+      => indicator("Default")
+
+   return result + 1
+
