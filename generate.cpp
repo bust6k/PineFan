@@ -577,7 +577,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_SWITCH_BLOCK: {
-      generate_code(node->switch_block_node.th, output);
+      generate_code(node->switch_block_node.th, output,indent);
       if (node->switch_block_node.prev != NULL) {
         node->switch_block_node.th = node->switch_block_node.prev;
         // generate_code(node->switch_block_node.th, output);
