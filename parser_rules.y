@@ -94,7 +94,7 @@ extern void yyerror(const char *s);
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr block stmt_list stmt_block indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -178,6 +178,14 @@ stmt_block:
   statement
   { $$ = new_block_node($1);}
 
+if_body:
+    block
+    { $$ = $1; }
+    
+    | statement
+    { $$ = new_block_node($1); }
+    ;
+
 indicator_stmt:
     indicator_function left_paren string right_paren
     { $$ = new_indicator_node($3); }
@@ -189,16 +197,11 @@ strategy_stmt:
     ;
 
 if_stmt:
-    if_statement  left_paren expr right_paren block %prec if_statement 
+    if_statement  left_paren expr right_paren if_body %prec if_statement 
     { $$ = new_if_node($3,$5,NULL); }
-    | if_statement  left_paren expr right_paren block else_statement block %prec else_statement
+    | if_statement  left_paren expr right_paren if_body else_statement if_body %prec else_statement
     { $$ = new_if_node($3,$5,$7); }
-    | if_statement left_paren expr right_paren block else_statement if_statement expr block %prec else_statement
-    {
-    ast_node* elif = new_if_node($8, $9, NULL); 
-    elif->if_node.is_elif = 1;
-    $$ = new_if_node($3, $5, elif); 
-    }
+    
     ;
 
 for_stmt:

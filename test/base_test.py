@@ -41,9 +41,25 @@ else :
 if fooa == 3:
     y = 5
 
-elif ( FOO == 4 ):
+else:
+    
+if FOO == 4:
 # indicator
 print("WELL!")
-    y = 5 + 5
+        y = 5 + 5
 # indicator
 print("")
+    
+else:
+        
+if FOO == 5:
+# indicator
+print("")
+        
+else:
+            
+if FOO == "foo":
+                y = 10
+            
+else:
+                y = 15
