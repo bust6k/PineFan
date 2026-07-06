@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
 
+#compiled binary files
 g
 pinefan
 ppp
