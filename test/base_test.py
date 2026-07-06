@@ -41,7 +41,7 @@ else :
 if fooa == 3:
     y = 5
 
-elif FOO == 4:
+elif ( FOO == 4 ):
 # indicator
 print("WELL!")
     y = 5 + 5
