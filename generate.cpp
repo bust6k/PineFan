@@ -679,7 +679,7 @@ return "";
 
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
-  yydebug = 1;
+  //yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
@@ -709,7 +709,12 @@ int main(int argc, char* argv[]) {
       generate_code(val, output_file);
     }
   }
+  
+  for(int f = 0; f<program_cpp_root.size();f++) {
+  fprintf(stderr, "freeing root %d: type=%d, addr=%p\n", f, program_cpp_root.at(f)->type, program_cpp_root.at(f)); 
+  if(f > 0) program_cpp_root.at(f-1) = NULL;
+  ast_free(program_cpp_root.at(f));
+  }
 
-  ast_free(program_cpp_root.at(0));
   Pinefan::Ppp::clean_prp_files();
 }

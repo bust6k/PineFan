@@ -4,6 +4,7 @@
 
 typedef struct ast_node {
   int type;
+  int visited;
   union {
     struct {
       char* name;

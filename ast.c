@@ -415,11 +415,15 @@ return node;
 
 void ast_free(ast_node* node) {
   if (!node) return;
-
+  if(!node->visited) {
+  fprintf(stderr, "CYCLE DETECTED! type=%d, addr=%p\n", node->type, node);
+  return;
+  }
+  node->visited = 1;
   switch (node->type) {
     case AST_ASSIGN:
     case AST_CONST:
-      free(node->assign.name);
+      if(node->assign.name) free(node->assign.name);
       ast_free(node->assign.value);
       break;
 
@@ -430,7 +434,7 @@ void ast_free(ast_node* node) {
       break;
 
     case AST_FOR:
-      free(node->for_node.var);
+      if(node->for_node.var) free(node->for_node.var);
       ast_free(node->for_node.start);
       ast_free(node->for_node.end);
       ast_free(node->for_node.step);
@@ -443,21 +447,21 @@ void ast_free(ast_node* node) {
       break;
 
     case AST_FUNC:
-      free(node->func_node.ident);
+      if(node->func_node.ident) free(node->func_node.ident);
       ast_free(node->func_node.args);
       ast_free(node->func_node.body);
       break;
 
     case AST_FUNC_ARG:
-      free(node->func_arg.type);
-      free(node->func_arg.ident);
+      if(node->func_arg.type) free(node->func_arg.type);
+      if(node->func_arg.ident) free(node->func_arg.ident);
       ast_free(node->func_arg.next);
       break;
 
     case AST_ARR_FUNC_ARG:
-      free(node->func_containter_arg.cont_name);
+      if(node->func_containter_arg.cont_name)  free(node->func_containter_arg.cont_name);
       ast_free(node->func_containter_arg.func_type);
-      free(node->func_containter_arg.ident);
+      if(node->func_containter_arg.ident) free(node->func_containter_arg.ident);
       ast_free(node->func_containter_arg.next);
       break;
 
@@ -467,7 +471,7 @@ void ast_free(ast_node* node) {
 
     case AST_VAR:
     case AST_SIMPLE:
-      free(node->var.name);
+      if(node->var.name) free(node->var.name);
       break;
 
     case AST_NUMBER:
@@ -478,11 +482,11 @@ void ast_free(ast_node* node) {
     case AST_INDICATOR:
     case AST_STRATEGY:
     case AST_IMPORT:
-      free(node->string.value);
+      if(node->string.value) free(node->string.value);
       break;
 
     case AST_BINOP:
-      free(node->binop.op);
+      if(node->binop.op) free(node->binop.op);
       ast_free(node->binop.left);
       ast_free(node->binop.right);
       break;
@@ -496,12 +500,12 @@ void ast_free(ast_node* node) {
       break;
 
     case AST_UNOP:
-      free(node->unop.op);
+      if(node->unop.op) free(node->unop.op);
       ast_free(node->unop.operand);
       break;
 
     case AST_CALL:
-      free(node->call_node.name);
+      if(node->call_node.name) free(node->call_node.name);
       ast_free(node->call_node.args);
       break;
 
@@ -551,6 +555,7 @@ void ast_free(ast_node* node) {
     default:
       // unknown type — free nothing
       break;
+  //break;
   }
 
   free(node);
