@@ -115,20 +115,20 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 	 return std::nullopt;
       break;
 
-    case KW_ELSE: {
-      if( c == 'i'){
-	state = KW_ELSE_I;}
-      else{
+    case KW_ELSE: 
+      if( c == 'i')
+	state = KW_ELSE_I;
+      else
         return std::nullopt;
-      }
       break;
-		  }
+ 
 
     case KW_ELSE_I:
       if( c == 'f')
 	state = KW_ACCEPT_ELSE_IF;
       else 
 	 return std::nullopt;
+      break;
 
     case KW_FO:
       if (c == 'r')
@@ -292,7 +292,7 @@ std::optional<std::string> find_keyword_at(const std::string& line,
   if (i >= line.length() || !is_alpha(line[i])) return std::nullopt;
 
   // Feed characters to DFA until we either match or fail
-  while (i < line.length() && is_alpha(line[i])) {
+  while (i < line.length()) {
     auto result = dfa.feed(line[i]);
     if (result.has_value()) {
       // Check boundary after keyword
