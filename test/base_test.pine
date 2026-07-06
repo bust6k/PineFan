@@ -1,24 +1,5 @@
 const foo = 5
 
-foo(array<int> foo,array<string> gl,array.ta<int.ta> gg,array<color> fo,array.ta<color> ffi,array.foo<color.fiiiii> fofofof, foo) =>
-   y = 5
-   foo = "foo"
-   if foo > 5
-      foo = 4
-      foo = 1
-      while y == 5
-         v = 5 + 1
-         v := 5
-         fooa = 4
-   return f
-
-foo(foo)
-
-switch fooa
-   t => indicator("failed")
-   r => strategy("NOO")
-   =>  5
-
 if fooa == 3
     y = 5
 else if foo == 4

@@ -8,58 +8,24 @@ from typing import Dict as map
 
 # a constant variable!
 FOO = 5
-def foo(foo: array[int], gl: array[str], gg: array.ta[int.ta], fo: array[color], ffi: array.ta[color], fofofof: array.foo[color.fiiiii], foo):
-y = 5
-FOO = "foo"
-
-if FOO > 5:
-    FOO = 4
-    FOO = 1
-    while y == 5:
-        v = 5 + 1
-        v = 5
-        fooa = 4
-return f
-foo(FOO)
-
-# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
-# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
-# elif is all the other conditions
-# and else - it's an optional last condition like default in switch-statement
-
-
-if fooa == t:
-# indicator
-print("failed")
-
-elif fooa == r:
-# strategy
-print("NOO")
-
-else :
-5
 if fooa == 3:
-    y = 5
-
-else:
-    
-if FOO == 4:
+    else:
+        y = 5
+    elif FOO == 4:
+        else:
 # indicator
 print("WELL!")
-        y = 5 + 5
+        else:
+            y = 5 + 5
+        else:
 # indicator
 print("")
-    
-else:
-        
-if FOO == 5:
+        elif FOO == 5:
+            else:
 # indicator
 print("")
-        
-else:
-            
-if FOO == "foo":
-                y = 10
-            
-else:
-                y = 15
+            elif FOO == "foo":
+                else:
+                    y = 10
+                else:
+                    y = 15

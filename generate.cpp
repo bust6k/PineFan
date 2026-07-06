@@ -402,25 +402,23 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
   switch (node->type) {
     case AST_IF: {
+      if(node->if_node.cond != NULL && node->if_node.then != NULL) {
       transform_constants(node->if_node.cond);
-      output << indent_str << "\nif ";
+          if (node->if_node.is_elif) {
+        output << indent_str << "elif ";
+    } else {
+        output << indent_str << "if ";
+    }
       generate_code(node->if_node.cond, output, 0);
       output << ":\n";
       generate_code(node->if_node.then, output, indent + 4);
-      if (node->if_node.else_) {
-        if(node->if_node.else_->if_node.is_elif) {
-        output << indent_str << "\nelif ";
-	generate_code(node->if_node.else_->if_node.cond,output,0);
-        output << ":\n";
-	generate_code(node->if_node.else_->if_node.then,output,indent + 4);
-	break;
-	}
+      }
 
-	output << indent_str << "\nelse:\n";
-        generate_code(node->if_node.else_, output, indent + 4);
+      if (node->if_node.else_) {
+	generate_code(node->if_node.else_, output, indent + 4);
       }
       break;
-    }
+     } 
 
     case AST_SWITCH: {
       struct ast_node* first_case = node->switch_node.cases;
@@ -666,7 +664,19 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
    }
 
    case AST_STMT: {
-   generate_code(node->block_node.stmt,output,indent);
+   if (node->block_node.stmt != NULL && node->block_node.stmt->type == AST_IF) {
+        // Это else if — генерируем без лишней обёртки
+        node->block_node.stmt->if_node.is_elif = 1;
+        generate_code(node->block_node.stmt, output, indent);
+    } else if (node->type != AST_IF) {
+        output << indent_str << "else:\n";
+        generate_code(node->block_node.stmt, output, indent + 4);
+    }
+  
+     else {
+        // Обычный блок
+        generate_code(node->block_node.stmt, output, indent);
+    }
    if(node->block_node.next != NULL) {
    generate_code(node->block_node.next,output,indent);
 
@@ -700,7 +710,7 @@ return "";
 
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
-  //yydebug = 1;
+  yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
