@@ -88,21 +88,21 @@ typedef struct ast_node {
       struct ast_node* prev;
       struct ast_node* th;
     } switch_block_node;
-  
-  struct {
-    struct ast_node* expr;
-    struct ast_node* switch_blk_node;
-  } case_stmt;
-  struct {
-    struct ast_node* switch_blk_node;
-  } default_stmt;
-  struct {
-  struct ast_node* next;
-  struct ast_node* stmt;
-  } block_node;
-  struct {
-  struct ast_node* stmt;
-  } stmt_node;
+
+    struct {
+      struct ast_node* expr;
+      struct ast_node* switch_blk_node;
+    } case_stmt;
+    struct {
+      struct ast_node* switch_blk_node;
+    } default_stmt;
+    struct {
+      struct ast_node* next;
+      struct ast_node* stmt;
+    } block_node;
+    struct {
+      struct ast_node* stmt;
+    } stmt_node;
   };
 } ast_node;
 
@@ -160,7 +160,8 @@ ast_node* new_func_node(char* ident, ast_node* args, ast_node* body);
 ast_node* new_func_type_node(char* type, char* name);
 ast_node* new_func_type_dot_node(char* prt_before, char* prt_after, char* name);
 ast_node* new_array_func_type_node(char* arr, ast_node* arr_type, char* name);
-ast_node* new_array_func_type_dot_node(char* p_b, char* p_a, ast_node* arr_type,char* name);
+ast_node* new_array_func_type_dot_node(char* p_b, char* p_a, ast_node* arr_type,
+                                       char* name);
 char* new_type_name(int token);
 ast_node* new_indicator_node(char* name);
 ast_node* new_strategy_node(char* name);

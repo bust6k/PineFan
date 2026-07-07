@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -119,25 +120,23 @@ void transform_constants(ast_node* node) {
       transform_constants(node->call_arg.next);
       break;
 
-    case AST_FUNC:
-      {
-        // Transform function arguments
-        /*
-	ast_node* arg = node->func_node.args;
-        while (arg) {
-          if (arg->type == AST_FUNC_ARG) {
-            transform_constants(arg);
-            arg = arg->func_arg.next;
-          } else if (arg->type == AST_ARR_FUNC_ARG) {
-            transform_constants(arg);
-            arg = arg->func_containter_arg.next;
-          }
+    case AST_FUNC: {
+      // Transform function arguments
+      /*
+      ast_node* arg = node->func_node.args;
+      while (arg) {
+        if (arg->type == AST_FUNC_ARG) {
+          transform_constants(arg);
+          arg = arg->func_arg.next;
+        } else if (arg->type == AST_ARR_FUNC_ARG) {
+          transform_constants(arg);
+          arg = arg->func_containter_arg.next;
         }
-	*/
-        // Transform function body
-        transform_constants(node->func_node.body);
       }
-      break;
+      */
+      // Transform function body
+      transform_constants(node->func_node.body);
+    } break;
 
     case AST_FUNC_ARG:
       transform_constants(node->func_arg.next);
@@ -288,17 +287,19 @@ void prologue(std::ofstream& output, const std::filesystem::path& source_name) {
             "OF NECESSARY\n"
          << std::format("# - PineFan's version: {}\n", pinefan_version.data())
          << std::format("# - source: {}\n\n", source_name.string());
-output << "from typing import List as array \n";
-output << "from typing import Dict as map \n\n";
+  output << "from typing import List as array \n";
+  output << "from typing import Dict as map \n\n";
 }
 
-void indicator(std::string_view str, std::ofstream& output,std::string indent_str) {
+void indicator(std::string_view str, std::ofstream& output,
+               std::string indent_str) {
   output << indent_str << "# indicator\n";
-  output << indent_str << std::format("print (\"{}\")\n",str);
+  output << indent_str << std::format("print (\"{}\")\n", str);
 }
-void strategy(std::string_view str, std::ofstream& output,std::string indent_str) {
+void strategy(std::string_view str, std::ofstream& output,
+              std::string indent_str) {
   output << indent_str << "# strategy\n";
-  output << indent_str << std::format("print (\"{}\")\n",str);
+  output << indent_str << std::format("print (\"{}\")\n", str);
 }
 
 void common_var(std::string_view name, ast_node* value, std::ofstream& output) {
@@ -331,10 +332,12 @@ void up_const_names_recursive(ast_node* node, char* name) {
     if (!node) continue;
     transform_constants(node);
     if (strcmp(node->assign.name, normal_cpy) == 0 &&
-        node->type != AST_STRING && node->type != AST_FUNC && node->type != AST_CALL) {
+        node->type != AST_STRING && node->type != AST_FUNC &&
+        node->type != AST_CALL) {
       node->assign.name = fast_toupper(node->assign.name);
       char* f = fast_tolower(node->assign.name);
       const_table[f] = 42;
+      free(f);
     }
   }
   free(normal_cpy);
@@ -343,24 +346,29 @@ void up_const_names_recursive(ast_node* node, char* name) {
 void gen_switch_speak(bool is_case, std::ofstream& output,
                       std::string indent_str) {
   if (is_case) {
-    output << indent_str << "# in source code version that was switch-statement. Since "
+    output << indent_str
+           << "# in source code version that was switch-statement. Since "
               "Python doesn't it(but only since Python "
               "3.10),PineFan\n";
-    output << indent_str << "# translates it to if/elif/else construction. Where "
+    output << indent_str
+           << "# translates it to if/elif/else construction. Where "
               "if-statement is the first condition like in "
               "switch-statement\n";
     output << indent_str << "# elif is all the other conditions\n";
-    output << indent_str << "# and else - it's an optional last condition like default in "
+    output << indent_str
+           << "# and else - it's an optional last condition like default in "
               "switch-statement\n\n";
 
     output << indent_str << "if ";
     return;
   } else {
-    output << indent_str << "# in source code version that was switch-statement. Since "
+    output << indent_str
+           << "# in source code version that was switch-statement. Since "
               "Python doesn't it(but only since Python "
               "3.10),PineFan\n";
     output << indent_str << "# translates it to if construction\n";
-    output << indent_str << "# where if - it's a default-like condition that executes as "
+    output << indent_str
+           << "# where if - it's a default-like condition that executes as "
               "always\n\n";
 
     output << indent_str << "if ";
@@ -375,23 +383,23 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
   switch (node->type) {
     case AST_IF: {
-      if(node->if_node.cond != NULL && node->if_node.then != NULL) {
-      transform_constants(node->if_node.cond);
-          if (node->if_node.is_elif) {
-        output << indent_str << "elif ";
-    } else {
-        output << indent_str << "if ";
-    }
-      generate_code(node->if_node.cond, output, 0);
-      output << ":\n";
-      generate_code(node->if_node.then, output, indent + 4);
+      if (node->if_node.cond != NULL && node->if_node.then != NULL) {
+        transform_constants(node->if_node.cond);
+        if (node->if_node.is_elif) {
+          output << indent_str << "elif ";
+        } else {
+          output << indent_str << "if ";
+        }
+        generate_code(node->if_node.cond, output, 0);
+        output << ":\n";
+        generate_code(node->if_node.then, output, indent + 4);
       }
 
       if (node->if_node.else_) {
-	generate_code(node->if_node.else_, output, indent + 4);
+        generate_code(node->if_node.else_, output, indent + 4);
       }
       break;
-     } 
+    }
 
     case AST_SWITCH: {
       struct ast_node* first_case = node->switch_node.cases;
@@ -404,7 +412,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         output << "True:\n";
         generate_code(
             node->switch_node.default_body->default_stmt.switch_blk_node,
-            output,indent + 4);
+            output, indent + 4);
         output << "\n";
 
         is_only_def = true;
@@ -421,7 +429,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         generate_code(first_case->case_stmt.expr, output, 0);
 
         output << ":\n";
-        generate_code(first_case->case_stmt.switch_blk_node, output,indent + 4);
+        generate_code(first_case->case_stmt.switch_blk_node, output,
+                      indent + 4);
 
         first_case = node->switch_node.cases;
 
@@ -432,7 +441,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
             output << " == ";
             generate_code(first_case->case_stmt.expr, output, 0);
             output << ":\n";
-            generate_code(first_case->case_stmt.switch_blk_node, output,indent + 4);
+            generate_code(first_case->case_stmt.switch_blk_node, output,
+                          indent + 4);
             first_case = first_case->switch_case.next;
           }
         }
@@ -444,7 +454,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
         generate_code(
             node->switch_node.default_body->default_stmt.switch_blk_node,
-            output,indent + 4);
+            output, indent + 4);
       }
       break;
     }
@@ -495,7 +505,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         generate_code(node->func_node.args, output, 0);
       }
       output << "):\n";
-      generate_code(node->func_node.body,output,indent + 4);
+      generate_code(node->func_node.body, output, indent + 4);
       break;
     }
     case AST_UNOP: {
@@ -567,17 +577,17 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_INDICATOR: {
-      indicator(node->string.value, output,indent_str);
+      indicator(node->string.value, output, indent_str);
       break;
     }
 
     case AST_STRATEGY: {
-      strategy(node->string.value, output,indent_str);
+      strategy(node->string.value, output, indent_str);
       break;
     }
 
     case AST_SWITCH_BLOCK: {
-      generate_code(node->switch_block_node.th, output,indent);
+      generate_code(node->switch_block_node.th, output, indent);
       if (node->switch_block_node.prev != NULL) {
         node->switch_block_node.th = node->switch_block_node.prev;
         // generate_code(node->switch_block_node.th, output);
@@ -597,72 +607,71 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_FUNC_ARG: {
-      if(node->func_arg.ident != NULL) {
-      output << node->func_arg.ident;
-      if (node->func_arg.type != NULL) output << ": " << node->func_arg.type;
-      if (node->func_arg.next != NULL) {
+      if (node->func_arg.ident != NULL) {
+        output << node->func_arg.ident;
+        if (node->func_arg.type != NULL) output << ": " << node->func_arg.type;
+        if (node->func_arg.next != NULL) {
+          output << ", ";
+          generate_code(node->func_arg.next, output);
+        }
+      } else if (node->func_arg.ident == NULL) {
+        output << node->func_arg.type;
+      }
+
+      if (node->func_containter_arg.next != NULL) {
         output << ", ";
         generate_code(node->func_arg.next, output);
-      }
-     } else if(node->func_arg.ident == NULL) {
-     output <<  node->func_arg.type;
-     }
-
-
-      if(node->func_containter_arg.next != NULL) {
-       output << ", ";
-       generate_code(node->func_arg.next,output);
       }
 
       break;
     }
-    
+
     case AST_ARR_FUNC_ARG: {
-   if(node->func_containter_arg.ident != NULL) { 
-   output << node->func_containter_arg.ident;
-   
-   output << ": ";
-   output << node->func_containter_arg.cont_name;
-   output << "[";
-   generate_code(node->func_containter_arg.func_type,output);
-   output << "]";
-   } 
+      if (node->func_containter_arg.ident != NULL) {
+        output << node->func_containter_arg.ident;
 
-   if(node->func_containter_arg.next != NULL) {
-   output << ", ";
-   generate_code(node->func_containter_arg.next,output);
-   }
+        output << ": ";
+        output << node->func_containter_arg.cont_name;
+        output << "[";
+        generate_code(node->func_containter_arg.func_type, output);
+        output << "]";
+      }
 
-   break;
-   }
+      if (node->func_containter_arg.next != NULL) {
+        output << ", ";
+        generate_code(node->func_containter_arg.next, output);
+      }
 
-   case AST_STMT: {
-   if (node->block_node.stmt != NULL && node->block_node.stmt->type == AST_IF) {
+      break;
+    }
+
+    case AST_STMT: {
+      if (node->block_node.stmt != NULL &&
+          node->block_node.stmt->type == AST_IF) {
         // Это else if — генерируем без лишней обёртки
         node->block_node.stmt->if_node.is_elif = 1;
         generate_code(node->block_node.stmt, output, indent);
-    } else {
+      } else {
         // Обычный блок
         generate_code(node->block_node.stmt, output, indent);
+      }
+
+      if (node->block_node.next != NULL) {
+        generate_code(node->block_node.next, output, indent);
+      }
+
+      break;
+    }
+    case AST_STMTS: {
+      generate_code(node->stmt_node.stmt, output, indent);
+      /*if(node->stmt_node.stmt->block_node.next != NULL) {
+      generate_code(node->stmt_node.stmt->block_node.next,output,indent);
+      }
+      */
+      break;
     }
 
-   if(node->block_node.next != NULL) {
-   generate_code(node->block_node.next,output,indent);
-
-   }
-
-   break;
-   }
-  case AST_STMTS: {
-  generate_code(node->stmt_node.stmt,output,indent);
-  /*if(node->stmt_node.stmt->block_node.next != NULL) {
-  generate_code(node->stmt_node.stmt->block_node.next,output,indent);
-  }
-  */
-  break;
-  }
-
-    default: { 
+    default: {
       output << indent_str << "# TODO: unknown node type " << node->type
              << "\n";
       break;
@@ -671,15 +680,15 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 }
 
 std::string ff(int type) {
-if(type ==   AST_ARR_FUNC_ARG) {
-return "AST_ARR_FUNC_ARG";
-}
-return "";
+  if (type == AST_ARR_FUNC_ARG) {
+    return "AST_ARR_FUNC_ARG";
+  }
+  return "";
 }
 
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
-  //yydebug = 1;
+  // yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
@@ -696,7 +705,7 @@ int main(int argc, char* argv[]) {
                               Pinefan::File::output_exstension.data());
 
     program_root = make_vector();
-    int r = yyparse(); 
+    int r = yyparse();
     if (r) exit(1);
 
     convert_program_root();
@@ -709,11 +718,9 @@ int main(int argc, char* argv[]) {
       generate_code(val, output_file);
     }
   }
-  
-  for(int f = 0; f<program_cpp_root.size();f++) {
-  fprintf(stderr, "freeing root %d: type=%d, addr=%p\n", f, program_cpp_root.at(f)->type, program_cpp_root.at(f)); 
-  if(f > 0) program_cpp_root.at(f-1) = NULL;
-  ast_free(program_cpp_root.at(f));
+
+  for (int f = 0; f < program_cpp_root.size(); f++) {
+    ast_free(program_cpp_root.at(f));
   }
 
   Pinefan::Ppp::clean_prp_files();
