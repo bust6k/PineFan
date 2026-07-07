@@ -4,7 +4,6 @@
 
 typedef struct ast_node {
   int type;
-  int visited;
   union {
     struct {
       char* name;
@@ -99,6 +98,7 @@ typedef struct ast_node {
     struct {
       struct ast_node* next;
       struct ast_node* stmt;
+      int is_else;
     } block_node;
     struct {
       struct ast_node* stmt;

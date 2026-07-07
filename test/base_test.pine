@@ -11,12 +11,12 @@ complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string nam
          for i = 0 to arr
             if i % 2 == 0
                indicator("Even iteration")
-               if i > 25
+            else if i > 25
                   break
             else if i % 3 == 0
                indicator("Divisible by 3")
                continue
-            else
+            else if i == 1
                strategy("Odd iteration")
                if i == 45
                   indicator("Halfway point!")

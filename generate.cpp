@@ -396,7 +396,11 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       }
 
       if (node->if_node.else_) {
-        generate_code(node->if_node.else_, output, indent + 4);
+        if(node->if_node.else_->block_node.stmt != NULL && node->if_node.else_->block_node.stmt->type == AST_IF) {
+	node->if_node.else_->block_node.is_else = 1;	
+	}
+        
+	generate_code(node->if_node.else_, output, indent + 4);
       }
       break;
     }
@@ -647,12 +651,13 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
     case AST_STMT: {
       if (node->block_node.stmt != NULL &&
-          node->block_node.stmt->type == AST_IF) {
-        // Это else if — генерируем без лишней обёртки
+          node->block_node.stmt->type == AST_IF &&
+          node->block_node.is_else == 1) {
+        // it's else if — generating directly
         node->block_node.stmt->if_node.is_elif = 1;
         generate_code(node->block_node.stmt, output, indent);
       } else {
-        // Обычный блок
+        // common block
         generate_code(node->block_node.stmt, output, indent);
       }
 
@@ -677,13 +682,6 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       break;
     }
   }
-}
-
-std::string ff(int type) {
-  if (type == AST_ARR_FUNC_ARG) {
-    return "AST_ARR_FUNC_ARG";
-  }
-  return "";
 }
 
 int main(int argc, char* argv[]) {

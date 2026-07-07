@@ -13,27 +13,28 @@ THRESHOLD = 50
 def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: str):
     # indicator
     print ("Function started")
-    elif flag == true:
+    if flag == true:
         # strategy
         print ("Flag is active")
-        elif arr > THRESHOLD:
+        if arr > THRESHOLD:
             # indicator
             print ("Array first element above threshold")
             for i in range(0, arr + 1):
-                elif i % 2 == 0:
+                if i % 2 == 0:
                     # indicator
                     print ("Even iteration")
                     elif i > 25:
                         break
-                    elif i % 3 == 0:
-                        # indicator
-                        print ("Divisible by 3")
-                        continue
-                        # strategy
-                        print ("Odd iteration")
-                        elif i == 45:
+                        elif i % 3 == 0:
                             # indicator
-                            print ("Halfway point!")
+                            print ("Divisible by 3")
+                            continue
+                            elif i == 1:
+                                # strategy
+                                print ("Odd iteration")
+                                if i == 45:
+                                    # indicator
+                                    print ("Halfway point!")
             # indicator
             print ("Array first element below threshold")
             # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
@@ -61,10 +62,10 @@ def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: 
             print ("Flag is false")
             while arr < THRESHOLD:
                 arr = arr + 5
-                elif arr > 40:
+                if arr > 40:
                     # strategy
                     print ("Approaching threshold")
-                    elif arr == 45:
+                    if arr == 45:
                         break
             # strategy
             print ("Flag state unknown")

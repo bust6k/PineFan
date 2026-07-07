@@ -181,8 +181,6 @@ stmt_block:
 if_body:
     block
     { $$ = $1; }
-    | if_stmt
-    { $$ = $1;}   
     | statement
     { $$ = new_block_node($1); }
     ;
