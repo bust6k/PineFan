@@ -10,10 +10,13 @@ from typing import Dict as map
 MAX_COUNT = 100
 # a constant variable!
 THRESHOLD = 50
+# a constant variable!
+FOL = 30
 def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: str):
     # indicator
     print ("Function started")
-arr[MAX_COUNT + 5 - THRESHOLD]
+    foo = ( [MAX_COUNT + 5 - THRESHOLD]FOL55 + 5 + 5 )
+    foo = ( ( ( ( 5 + 5 ) ) ) )
     if flag == true:
         # strategy
         print ("Flag is active")

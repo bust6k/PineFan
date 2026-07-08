@@ -10,6 +10,10 @@ typedef struct ast_node {
       struct ast_node* value;
     } assign;
     struct {
+      struct ast_node* name;
+      struct ast_node* value;
+    } ast_assign;
+    struct {
       struct ast_node *cond, *then, *else_;
       int is_elif;
     } if_node;
@@ -68,7 +72,11 @@ typedef struct ast_node {
       struct ast_node* expr;
     } paren_expr;
     struct {
-    struct ast_node* expr;
+      struct ast_node* expr;
+      struct ast_node* value;
+    } index;
+    struct {
+      struct ast_node* expr;
     } quad_expr;
     struct {
       struct ast_node* expr;
@@ -111,6 +119,7 @@ typedef struct ast_node {
 
 typedef enum ast_node_kind {
   AST_ASSIGN = 1,
+  AST_EXPR_ASSIGN,
   AST_IF,
   AST_FOR,
   AST_WHILE,
@@ -121,6 +130,7 @@ typedef enum ast_node_kind {
   AST_BINOP,
   AST_PAREN_OP,
   AST_QUAD_BRACE_OP,
+  AST_INDEX,
   AST_COMMA_OP,
   AST_UNOP,
   AST_FUNC,
@@ -145,6 +155,7 @@ typedef enum ast_node_kind {
 } ast_node_kind;
 
 ast_node* new_assign_node(char* name, ast_node* value);
+ast_node* new_expr_assign_node(ast_node* name, ast_node* value);
 ast_node* new_if_node(ast_node* cond, ast_node* then, ast_node* else_);
 ast_node* new_for_node(char* var, ast_node* start, ast_node* end,
                        ast_node* step, ast_node* body);
@@ -156,6 +167,7 @@ ast_node* new_string_node(char* value);
 ast_node* new_binop_node(char* op, ast_node* left, ast_node* right);
 ast_node* new_paren_expr_node(ast_node* expr);
 ast_node* new_quad_brace_expr_node(ast_node* expr);
+ast_node* new_index_node(ast_node* expr, ast_node* value);
 ast_node* new_comma_expr_node(ast_node* expr);
 ast_node* new_unop_node(char* op, ast_node* operand);
 ast_node* new_call_node(char* name, ast_node* args);
@@ -182,7 +194,7 @@ ast_node* new_const_node(char* name, ast_node* value);
 ast_node* new_simple_node(char* name);
 ast_node* new_import_node(char* name);
 ast_node* new_assign_re_node(char* name, ast_node* value);
-
+ast_node* new_assign_expr_re_node(ast_node* name, ast_node* value);
 ast_node* new_block_node(ast_node* stmt);
 ast_node* new_stmt_node(ast_node* stmts);
 

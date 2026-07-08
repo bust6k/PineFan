@@ -95,6 +95,11 @@ void transform_constants(ast_node* node) {
       transform_constants(node->assign.value);
       break;
 
+    case AST_EXPR_ASSIGN:
+      transform_constants(node->ast_assign.name);
+      transform_constants(node->ast_assign.value);
+      break;
+
     case AST_BINOP:
       transform_constants(node->binop.left);
       transform_constants(node->binop.right);
@@ -172,10 +177,15 @@ void transform_constants(ast_node* node) {
     case AST_PAREN_OP:
       transform_constants(node->paren_expr.expr);
       break;
-    
+
     case AST_QUAD_BRACE_OP:
-    transform_constants(node->quad_expr.expr);
-    break;
+      transform_constants(node->quad_expr.expr);
+      break;
+
+    case AST_INDEX:
+      transform_constants(node->index.expr);
+      transform_constants(node->index.value);
+      break;
 
     case AST_COMMA_OP:
       transform_constants(node->comma_expr.expr);
@@ -494,12 +504,18 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       output << " )";
       break;
     }
-    
+
     case AST_QUAD_BRACE_OP: {
-    output << "[";
-    generate_code(node->quad_expr.expr,output,indent);
-    output << "]\n";
-    break;
+      output << "[";
+      generate_code(node->quad_expr.expr, output, indent);
+      output << "]";
+      break;
+    }
+
+    case AST_INDEX: {
+      generate_code(node->index.expr, output, indent);
+      generate_code(node->index.value, output, indent);
+      break;
     }
     case AST_NUMBER: {
       output << node->number.value;
@@ -552,6 +568,14 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     case AST_ASSIGN: {
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
+      output << "\n";
+      break;
+    }
+
+    case AST_EXPR_ASSIGN: {
+      generate_code(node->ast_assign.name, output, indent);
+      output << " = ";
+      generate_code(node->ast_assign.value, output, 0);
       output << "\n";
       break;
     }

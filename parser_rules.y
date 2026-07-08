@@ -389,6 +389,8 @@ assignment_stmt:
     { $$ = new_assign_node($1, $3); }
     | identifier assign call_arg_stmt
     { $$ = new_assign_node($1,$3); }
+    | expr assign expr
+    { $$ = new_expr_assign_node($1,$3); }
     ;
 
 assignment_re_stmt:
@@ -396,6 +398,8 @@ assignment_re_stmt:
     { $$ = new_assign_re_node($1, $3); }
     | identifier re_assign call_arg_stmt
     { $$ = new_assign_re_node($1,$3) ; }
+    | expr re_assign expr
+    { $$ = new_assign_expr_re_node($1,$3); }
     ;
 
 
@@ -452,6 +456,8 @@ expr:
     { $$ = new_unop_node("+", $2); }
     | left_paren expr right_paren
     { $$ = new_paren_expr_node($2); }
+    | expr left_quad_brace expr right_quad_brace
+    { $$ = new_index_node($1,$3); }
     | left_quad_brace expr right_quad_brace
     { $$ = new_quad_brace_expr_node($2); }
     ;

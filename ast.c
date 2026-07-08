@@ -12,6 +12,22 @@ ast_node* new_assign_node(char* name, ast_node* value) {
   return node;
 }
 
+ast_node* new_expr_assign_node(ast_node* name, ast_node* value) {
+  ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_EXPR_ASSIGN;
+  node->ast_assign.name = name;
+  node->ast_assign.value = value;
+  return node;
+}
+
+ast_node* new_index_node(ast_node* expr, ast_node* value) {
+  ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_INDEX;
+  node->index.expr = expr;
+  node->index.value = value;
+  return node;
+}
+
 ast_node* new_if_node(ast_node* cond, ast_node* then, ast_node* else_) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_IF;
@@ -219,10 +235,10 @@ ast_node* new_paren_expr_node(ast_node* expr) {
 }
 
 ast_node* new_quad_brace_expr_node(ast_node* expr) {
-ast_node* node = calloc(1,sizeof(ast_node));
-node->type = AST_QUAD_BRACE_OP;
-node->quad_expr.expr = expr;
-return node;
+  ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_QUAD_BRACE_OP;
+  node->quad_expr.expr = expr;
+  return node;
 }
 
 ast_node* new_comma_expr_node(ast_node* expr) {
@@ -392,6 +408,10 @@ ast_node* new_import_node(char* name) {
 
 ast_node* new_assign_re_node(char* name, ast_node* value) {
   return new_assign_node(name, value);  // similar as temporarly
+}
+
+ast_node* new_assign_expr_re_node(ast_node* name, ast_node* value) {
+  return new_expr_assign_node(name, value);
 }
 
 ast_node* reverse_stmt_list(ast_node* node) {
