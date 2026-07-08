@@ -381,26 +381,40 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
   std::string indent_str(indent, ' ');
   std::string indent_next(indent + 4, ' ');
 
+  int idt = indent;
+
   switch (node->type) {
     case AST_IF: {
       if (node->if_node.cond != NULL && node->if_node.then != NULL) {
         transform_constants(node->if_node.cond);
+
+        std::string indent_prev = indent_str;
+        if (indent >= 4) {
+          idt = idt;
+          indent_prev = std::string(idt, ' ');
+        }
+
         if (node->if_node.is_elif) {
-          output << indent_str << "elif ";
+          output << indent_prev << "elif ";
         } else {
           output << indent_str << "if ";
         }
         generate_code(node->if_node.cond, output, 0);
         output << ":\n";
-        generate_code(node->if_node.then, output, indent + 4);
+        if (node->if_node.is_elif) {
+          generate_code(node->if_node.then, output, indent + 4);
+        } else {
+          generate_code(node->if_node.then, output, indent + 4);
+        }
       }
 
       if (node->if_node.else_) {
-        if(node->if_node.else_->block_node.stmt != NULL && node->if_node.else_->block_node.stmt->type == AST_IF) {
-	node->if_node.else_->block_node.is_else = 1;	
-	}
-        
-	generate_code(node->if_node.else_, output, indent + 4);
+        if (node->if_node.else_->block_node.stmt != NULL &&
+            node->if_node.else_->block_node.stmt->type == AST_IF) {
+          node->if_node.else_->block_node.is_else = 1;
+        }
+
+        generate_code(node->if_node.else_, output, idt);
       }
       break;
     }
@@ -704,7 +718,18 @@ int main(int argc, char* argv[]) {
 
     program_root = make_vector();
     int r = yyparse();
-    if (r) exit(1);
+
+    if (r) {
+      convert_program_root();
+      vec_free(program_root);
+
+      for (int f = 0; f < program_cpp_root.size(); f++) {
+        ast_free(program_cpp_root.at(f));
+      }
+
+      Pinefan::Ppp::clean_prp_files();
+      exit(1);
+    }
 
     convert_program_root();
     vec_free(program_root);
