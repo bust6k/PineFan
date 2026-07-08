@@ -218,6 +218,13 @@ ast_node* new_paren_expr_node(ast_node* expr) {
   return node;
 }
 
+ast_node* new_quad_brace_expr_node(ast_node* expr) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_QUAD_BRACE_OP;
+node->quad_expr.expr = expr;
+return node;
+}
+
 ast_node* new_comma_expr_node(ast_node* expr) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_COMMA_OP;

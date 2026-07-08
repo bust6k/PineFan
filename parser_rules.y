@@ -452,6 +452,8 @@ expr:
     { $$ = new_unop_node("+", $2); }
     | left_paren expr right_paren
     { $$ = new_paren_expr_node($2); }
+    | left_quad_brace expr right_quad_brace
+    { $$ = new_quad_brace_expr_node($2); }
     ;
 
 %%

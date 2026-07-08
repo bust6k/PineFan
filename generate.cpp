@@ -172,6 +172,10 @@ void transform_constants(ast_node* node) {
     case AST_PAREN_OP:
       transform_constants(node->paren_expr.expr);
       break;
+    
+    case AST_QUAD_BRACE_OP:
+    transform_constants(node->quad_expr.expr);
+    break;
 
     case AST_COMMA_OP:
       transform_constants(node->comma_expr.expr);
@@ -490,7 +494,13 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       output << " )";
       break;
     }
-
+    
+    case AST_QUAD_BRACE_OP: {
+    output << "[";
+    generate_code(node->quad_expr.expr,output,indent);
+    output << "]\n";
+    break;
+    }
     case AST_NUMBER: {
       output << node->number.value;
       break;

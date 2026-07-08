@@ -13,6 +13,7 @@ THRESHOLD = 50
 def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: str):
     # indicator
     print ("Function started")
+arr[MAX_COUNT + 5 - THRESHOLD]
     if flag == true:
         # strategy
         print ("Flag is active")

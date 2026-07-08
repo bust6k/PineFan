@@ -2,10 +2,11 @@ const MAX_COUNT = 100
 const THRESHOLD = 50
 
 
-
 complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string name) =>
    indicator("Function started")
-   
+ 
+
+   arr[MAX_COUNT + 5 - THRESHOLD]
    if flag == true
       strategy("Flag is active")
       if arr > THRESHOLD
