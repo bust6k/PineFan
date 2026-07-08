@@ -514,7 +514,9 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
     case AST_INDEX: {
       generate_code(node->index.expr, output, indent);
+      output << "[";
       generate_code(node->index.value, output, indent);
+      output << "]";
       break;
     }
     case AST_NUMBER: {
