@@ -95,7 +95,7 @@ extern void yyerror(const char *s);
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -109,9 +109,10 @@ extern void yyerror(const char *s);
 %nonassoc PREC_SINGLE_NAME
 %nonassoc PREC_TYPE_NAME
 
-%token PREC_FUNC PREC_CALL
+%token PREC_FUNC PREC_CALL PREC_TERNARY_IDENT
 %nonassoc PREC_CALL
 %nonassoc PREC_FUNC
+%right PREC_TERNARY_IDENT
 
 %right assign re_assign
 %right bitwise_and_with_equals bitwise_or_with_equals bitwise_xor_with_equals bitwise_not_with_equals
@@ -272,8 +273,7 @@ pine_type:
   { $$ = new_type_name(color_type);}
   | identifier
   { $$ = $1;}
-
-
+ 
 return_stmt_expr:
      return_statement  expr
     { $$ = new_return_node($2); }
@@ -335,10 +335,15 @@ switch_block_stmts:
    { $$ = new_switch_block_node($1, new_block_node($2)); }
    ;
 
+dot_expr:
+    identifier dot identifier
+    { $$ = new_var_dot_node($1, $3); }
+    ;
+
 call_arg_stmt:
    identifier left_paren call_list right_paren %prec PREC_CALL
    { $$ = new_call_node($1,$3); }
-   | identifier dot identifier left_paren call_list right_paren %prec PREC_CALL
+   | identifier dot identifier  left_paren call_list right_paren %prec PREC_CALL
    { $$ = new_call_node_dot($1,$3,$5);}
    ;
 
@@ -411,6 +416,8 @@ expr:
     { $$ = new_var_node($1); }
     | string
     { $$ = new_string_node($1); }
+    | dot_expr
+    { $$ = $1;}
     | expr plus expr
     { $$ = new_binop_node("+", $1, $3); }
     | expr minus expr
@@ -461,7 +468,7 @@ expr:
     { $$ = new_index_node($1,$3); }
     | left_quad_brace expr right_quad_brace
     { $$ = new_quad_brace_expr_node($2); }
-    | expr question_sign expr colon expr
+    | expr question_sign expr colon expr %prec PREC_TERNARY_IDENT
     { $$ = new_ternary_node($1,$3,$5); }
     ;
 

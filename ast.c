@@ -213,6 +213,23 @@ ast_node* new_var_node(char* name) {
   return node;
 }
 
+ast_node* new_var_dot_node(char* name,char* scnd_name) {
+  int len_frst = strlen(name);
+  int len_scnd = strlen(scnd_name);
+
+  char* with_dot = malloc(len_frst + 2 + len_scnd);
+  strcpy(with_dot, name);
+
+  with_dot[len_frst] = '.';
+
+  strcpy(with_dot + len_frst + 1, scnd_name);
+ 
+  if(name) free(name);
+  if(scnd_name) free(scnd_name);
+
+  return new_var_node(with_dot);
+}
+
 ast_node* new_number_node(int value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_NUMBER;
@@ -306,6 +323,9 @@ ast_node* new_call_node_dot(char* name, char* scnd_name, ast_node* args) {
   with_dot[len_frst] = '.';
 
   strcpy(with_dot + len_frst + 1, scnd_name);
+  
+  if(name) free(name);
+  if(scnd_name) free(scnd_name);
 
   return new_call_node(with_dot, args);
 }

@@ -4,7 +4,7 @@ const fol = 30
 
 complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string name) => 
    indicator("Function started")
-   isintraday ? red : isdaily ? green : ismonthly ? blue : na
+   timeframe.isintraday ? color.red : timeframe.isdaily ? colorr.green : timeframe.ismonthly ? colorr.blue : na
    foo =   [MAX_COUNT][5]
    foo := ((((5 + 5))))
    

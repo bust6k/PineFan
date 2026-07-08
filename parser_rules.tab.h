@@ -133,7 +133,8 @@ extern int yydebug;
     PREC_SINGLE_NAME = 327,        /* PREC_SINGLE_NAME  */
     PREC_TYPE_NAME = 328,          /* PREC_TYPE_NAME  */
     PREC_FUNC = 329,               /* PREC_FUNC  */
-    PREC_CALL = 330                /* PREC_CALL  */
+    PREC_CALL = 330,               /* PREC_CALL  */
+    PREC_TERNARY_IDENT = 331       /* PREC_TERNARY_IDENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -148,7 +149,7 @@ union YYSTYPE
     char *sval;
     struct ast_node *node;
 
-#line 152 "parser_rules.tab.h"
+#line 153 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

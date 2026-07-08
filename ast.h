@@ -203,5 +203,5 @@ ast_node* new_assign_re_node(char* name, ast_node* value);
 ast_node* new_assign_expr_re_node(ast_node* name, ast_node* value);
 ast_node* new_block_node(ast_node* stmt);
 ast_node* new_stmt_node(ast_node* stmts);
-
+ast_node* new_var_dot_node(char* name,char* scnd_name);
 void ast_free(ast_node* node);

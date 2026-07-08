@@ -251,7 +251,7 @@ void yyerror(const char* s) {
   const std::string_view& message(s);
 
   auto* file = Pinefan::File::preprocessed_files.back();
-  if (line > 1) line--;
+
   std::cerr << std::format(
       "\e[91m[ERROR]\e[0m: {} \e[92mline\e[0m {} \e[94mcolumn\e[0m {}: {}\n",
       file->get_name(), line, col, message);
@@ -726,7 +726,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
-  // yydebug = 1;
+  //yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
