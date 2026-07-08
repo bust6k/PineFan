@@ -19,6 +19,9 @@ typedef struct ast_node {
       int is_elif;
     } if_node;
     struct {
+    struct ast_node *cond,*then,*else_;
+    } ternary_node;
+    struct {
       char* var;
       struct ast_node *start, *end, *step, *body;
     } for_node;
@@ -124,6 +127,7 @@ typedef enum ast_node_kind {
   AST_IF,
   AST_FOR,
   AST_WHILE,
+  AST_TERNARY,
   AST_RETURN,
   AST_VAR,
   AST_NUMBER,
@@ -160,6 +164,7 @@ ast_node* new_expr_assign_node(ast_node* name, ast_node* value);
 ast_node* new_if_node(ast_node* cond, ast_node* then, ast_node* else_);
 ast_node* new_for_node(char* var, ast_node* start, ast_node* end,
                        ast_node* step, ast_node* body);
+ast_node* new_ternary_node(ast_node* cond,ast_node* then,ast_node* else_);
 ast_node* new_while_node(ast_node* cond, ast_node* body);
 ast_node* new_return_node(ast_node* value);
 ast_node* new_var_node(char* name);

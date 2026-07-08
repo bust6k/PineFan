@@ -37,6 +37,15 @@ ast_node* new_if_node(ast_node* cond, ast_node* then, ast_node* else_) {
   return node;
 }
 
+ast_node* new_ternary_node(ast_node* cond,ast_node* then,ast_node* else_) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_TERNARY;
+node->ternary_node.cond = cond;
+node->ternary_node.then = then;
+node->ternary_node.else_ = else_;
+return node;
+}
+
 ast_node* new_for_node(char* var, ast_node* start, ast_node* end,
                        ast_node* step, ast_node* body) {
   ast_node* node = calloc(1, sizeof(ast_node));

@@ -46,6 +46,7 @@ extern void yyerror(const char *s);
 %token logical_or
 %token logical_not
 %token dont_equal
+%token question_sign
 %token bitwise_and
 %token bitwise_or
 %token bitwise_xor
@@ -460,6 +461,8 @@ expr:
     { $$ = new_index_node($1,$3); }
     | left_quad_brace expr right_quad_brace
     { $$ = new_quad_brace_expr_node($2); }
+    | expr question_sign expr colon expr
+    { $$ = new_ternary_node($1,$3,$5); }
     ;
 
 %%

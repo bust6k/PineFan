@@ -85,6 +85,7 @@ and { col += 3; return logical_and; }
 "|" { col++; return bitwise_or; }
 "^" { col++; return bitwise_xor; }
 "~" { col++; return bitwise_not; }
+"?" { col++; return question_sign; }
 
 [0-9]+\.[0-9]+ { yylval.sval = strdup(yytext);col += yyleng;return number;}
 [0-9]+ {yylval.ival = strtol(yytext, NULL, 10);col += yyleng;return number;}

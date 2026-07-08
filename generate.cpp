@@ -142,6 +142,12 @@ void transform_constants(ast_node* node) {
       transform_constants(node->if_node.then);
       transform_constants(node->if_node.else_);
       break;
+      
+    case AST_TERNARY:
+      transform_constants(node->ternary_node.cond);
+      transform_constants(node->ternary_node.then);
+      transform_constants(node->ternary_node.else_);
+      break;
 
     case AST_FOR:
       transform_constants(node->for_node.start);
@@ -408,6 +414,18 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         generate_code(node->if_node.else_, output, idt);
       }
       break;
+    }
+
+    case AST_TERNARY: {
+    transform_constants(node->ternary_node.cond);  
+    output << indent_str;
+    generate_code(node->ternary_node.then,output,indent); 
+    output << " if ";
+    generate_code(node->ternary_node.cond,output,0);
+    output << " else ";
+    generate_code(node->ternary_node.else_,output,0);
+    output << '\n';
+    break;
     }
 
     case AST_SWITCH: {
