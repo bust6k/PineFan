@@ -30,6 +30,13 @@ std::unordered_map<std::string, int> const_table;
 std::vector<struct ast_node*> program_cpp_root;
 Vector* program_root;
 
+extern int yylex(void);
+extern FILE* yyin;
+int line_count = 0;
+extern int open_in_count;
+
+std::vector<std::string> source_lines;
+
 void convert_program_root() {
   if (!program_root) return;
 
@@ -50,14 +57,6 @@ char* fast_toupper(char* str) {
   }
 
   return str;
-}
-
-char* fast_toupper_alloc(char* str) {
-  char* cpy = strdup(str);
-  for (int i = 0; cpy[i]; i++) {
-    if (cpy[i] >= 'a' && cpy[i] <= 'Z') cpy[i] -= 32;
-  }
-  return cpy;
 }
 
 char* fast_tolower(char* str) {
@@ -126,20 +125,6 @@ void transform_constants(ast_node* node) {
       break;
 
     case AST_FUNC: {
-      // Transform function arguments
-      /*
-      ast_node* arg = node->func_node.args;
-      while (arg) {
-        if (arg->type == AST_FUNC_ARG) {
-          transform_constants(arg);
-          arg = arg->func_arg.next;
-        } else if (arg->type == AST_ARR_FUNC_ARG) {
-          transform_constants(arg);
-          arg = arg->func_containter_arg.next;
-        }
-      }
-      */
-      // Transform function body
       transform_constants(node->func_node.body);
     } break;
 
@@ -245,14 +230,6 @@ void transform_constants(ast_node* node) {
       break;
   }
 }
-
-extern int yylex(void);
-extern FILE* yyin;
-int line_count = 0;
-extern int open_in_count;
-
-std::vector<std::string> source_lines;
-
 void read_source_file(const std::filesystem::path& filename) {
   std::ifstream file(filename);
   if (!file.is_open()) return;
@@ -644,7 +621,6 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       generate_code(node->switch_block_node.th, output, indent);
       if (node->switch_block_node.prev != NULL) {
         node->switch_block_node.th = node->switch_block_node.prev;
-        // generate_code(node->switch_block_node.th, output);
       }
       break;
     }
@@ -719,10 +695,6 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
     case AST_STMTS: {
       generate_code(node->stmt_node.stmt, output, indent);
-      /*if(node->stmt_node.stmt->block_node.next != NULL) {
-      generate_code(node->stmt_node.stmt->block_node.next,output,indent);
-      }
-      */
       break;
     }
 
