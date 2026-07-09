@@ -1,0 +1,5011 @@
+Terminals unused in grammar
+
+    case_statement
+    as
+    input_func
+    bitwise_and_with_equals
+    bitwise_or_with_equals
+    bitwise_xor_with_equals
+    bitwise_not_with_equals
+    bitwise_shift_right_with_equals
+    bitwise_shift_left_with_equals
+
+
+State 26 conflicts: 3 shift/reduce
+State 41 conflicts: 1 shift/reduce
+State 56 conflicts: 3 shift/reduce
+State 62 conflicts: 1 shift/reduce
+State 63 conflicts: 1 shift/reduce
+State 67 conflicts: 1 shift/reduce
+State 68 conflicts: 1 shift/reduce
+State 119 conflicts: 1 shift/reduce
+State 126 conflicts: 1 shift/reduce
+State 127 conflicts: 1 shift/reduce
+State 128 conflicts: 1 shift/reduce
+State 130 conflicts: 1 shift/reduce
+State 131 conflicts: 1 shift/reduce
+State 132 conflicts: 1 shift/reduce
+State 133 conflicts: 1 shift/reduce
+State 134 conflicts: 1 shift/reduce
+State 138 conflicts: 1 shift/reduce
+State 139 conflicts: 1 shift/reduce
+State 140 conflicts: 1 shift/reduce
+State 141 conflicts: 1 shift/reduce
+State 142 conflicts: 1 shift/reduce
+State 143 conflicts: 1 shift/reduce
+State 144 conflicts: 1 shift/reduce
+State 145 conflicts: 1 shift/reduce
+State 146 conflicts: 1 shift/reduce
+State 147 conflicts: 1 shift/reduce
+State 184 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: statement
+    2        | program statement
+
+    3 statement: indicator_stmt
+    4          | strategy_stmt
+    5          | if_stmt
+    6          | for_stmt
+    7          | while_stmt
+    8          | return_stmt_expr
+    9          | break_stmt
+   10          | continue_stmt
+   11          | switch_stmt
+   12          | var_stmt
+   13          | const_stmt
+   14          | simple_stmt
+   15          | func_stmt
+   16          | call_arg_stmt
+   17          | import_stmt
+   18          | assignment_stmt
+   19          | assignment_re_stmt
+   20          | expr
+
+   21 block: left_brace stmt_list right_brace
+
+   22 stmt_list: stmt_list stmt_block
+   23          | stmt_block
+
+   24 stmt_block: statement
+
+   25 if_body: block
+   26        | statement
+
+   27 indicator_stmt: indicator_function left_paren string right_paren
+
+   28 strategy_stmt: strategy_function left_paren string right_paren
+
+   29 if_stmt: if_statement left_paren expr right_paren if_body
+   30        | if_statement left_paren expr right_paren if_body else_statement if_body
+
+   31 for_stmt: for_statement left_paren identifier assign expr to expr right_paren block
+   32         | for_statement left_paren identifier assign expr to expr step expr right_paren block
+   33         | for_statement left_paren expr right_paren block
+
+   34 while_stmt: while_statement left_paren expr right_paren block
+
+   35 func_stmt: identifier func_paren opt_arg_list func_paren block
+
+   36 opt_arg_list: arg_list
+   37             | ε
+
+   38 arg_list: arg_list comma func_type
+   39         | func_type
+
+   40 func_type: pine_type identifier
+   41          | pine_type
+   42          | pine_type dot pine_type identifier
+   43          | pine_type dot pine_type
+   44          | pine_type lesser_than func_type greater_than identifier
+   45          | pine_type dot pine_type lesser_than func_type greater_than identifier
+
+   46 pine_type: int_type
+   47          | bool_type
+   48          | string_as_type
+   49          | float_type
+   50          | color_type
+   51          | identifier
+
+   52 return_stmt_expr: return_statement expr
+
+   53 break_stmt: break_statement
+
+   54 continue_stmt: continue_statement
+
+   55 switch_stmt: switch_statement left_paren expr right_paren left_brace case_list default_case right_brace
+
+   56 case_list: case_list case_stmt
+   57          | ε
+
+   58 case_stmt: expr left_brace switch_block_stmts right_brace semicolon
+
+   59 default_case: default_statement left_brace switch_block_stmts right_brace semicolon
+   60             | ε
+
+   61 switch_block_stmt: statement
+
+   62 switch_block_stmts: switch_block_stmt
+   63                   | switch_block_stmts switch_block_stmt
+
+   64 dot_expr: pine_type dot identifier
+
+   65 call_arg_stmt: identifier left_paren call_list right_paren
+   66              | dot_expr left_paren call_list right_paren
+
+   67 call_list: call_stmt
+   68          | call_list comma call_stmt
+   69          | ε
+
+   70 call_stmt: expr
+
+   71 var_stmt: var identifier assign expr
+   72         | var identifier
+   73         | var identifier assign call_arg_stmt
+
+   74 const_stmt: const_statement identifier assign expr
+   75           | const_statement identifier assign call_arg_stmt
+
+   76 simple_stmt: simple identifier
+   77            | simple identifier assign expr
+   78            | simple identifier assign call_arg_stmt
+
+   79 import_stmt: import_statement string
+
+   80 assignment_stmt: identifier assign expr
+   81                | identifier assign call_arg_stmt
+   82                | expr assign expr
+
+   83 assignment_re_stmt: identifier re_assign expr
+   84                   | identifier re_assign call_arg_stmt
+   85                   | expr re_assign expr
+
+   86 expr: number
+   87     | identifier
+   88     | string
+   89     | dot_expr
+   90     | expr plus expr
+   91     | expr minus expr
+   92     | expr multiply expr
+   93     | expr divide expr
+   94     | expr divide_with_remind expr
+   95     | expr logical_and expr
+   96     | expr logical_or expr
+   97     | expr equals expr
+   98     | expr dont_equal expr
+   99     | expr greater_than expr
+  100     | expr lesser_than expr
+  101     | expr greater_than_or_equals expr
+  102     | expr lesser_than_or_equals expr
+  103     | expr bitwise_and expr
+  104     | expr bitwise_or expr
+  105     | expr bitwise_xor expr
+  106     | expr bitwise_shift_to_left expr
+  107     | expr bitwise_shift_to_right expr
+  108     | logical_not expr
+  109     | bitwise_not expr
+  110     | minus expr
+  111     | plus expr
+  112     | left_paren expr right_paren
+  113     | expr left_quad_brace expr right_quad_brace
+  114     | left_quad_brace expr right_quad_brace
+  115     | expr question_sign expr colon expr
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    LOWEST_PREC (258)
+    indicator_function (259) 27
+    strategy_function (260) 28
+    if_statement (261) 29 30
+    else_statement (262) 30
+    for_statement (263) 31 32 33
+    step (264) 32
+    to (265) 31 32
+    return_statement (266) 52
+    while_statement (267) 34
+    break_statement (268) 53
+    continue_statement (269) 54
+    switch_statement (270) 55
+    case_statement (271)
+    default_statement (272) 59
+    var (273) 71 72 73
+    const_statement (274) 74 75
+    simple (275) 76 77 78
+    logical_and (276) 95
+    logical_or (277) 96
+    logical_not (278) 108
+    dont_equal (279) 98
+    question_sign (280) 115
+    bitwise_and (281) 103
+    bitwise_or (282) 104
+    bitwise_xor (283) 105
+    bitwise_not (284) 109
+    bitwise_shift_to_left (285) 106
+    bitwise_shift_to_right (286) 107
+    semicolon (287) 58 59
+    import_statement (288) 79
+    as (289)
+    input_func (290)
+    int_type <ival> (291) 46
+    bool_type <ival> (292) 47
+    float_type <ival> (293) 49
+    color_type <ival> (294) 50
+    string_as_type <ival> (295) 48
+    left_paren (296) 27 28 29 30 31 32 33 34 55 65 66 112
+    right_paren (297) 27 28 29 30 31 32 33 34 55 65 66 112
+    func_paren (298) 35
+    left_quad_brace (299) 113 114
+    right_quad_brace (300) 113 114
+    left_brace (301) 21 55 58 59
+    right_brace (302) 21 55 58 59
+    assign (303) 31 32 71 73 74 75 77 78 80 81 82
+    re_assign (304) 83 84 85
+    equals (305) 97
+    greater_than (306) 44 45 99
+    lesser_than (307) 44 45 100
+    plus (308) 90 111
+    minus (309) 91 110
+    multiply (310) 92
+    divide (311) 93
+    divide_with_remind (312) 94
+    greater_than_or_equals (313) 101
+    lesser_than_or_equals (314) 102
+    bitwise_and_with_equals (315)
+    bitwise_or_with_equals (316)
+    bitwise_xor_with_equals (317)
+    bitwise_not_with_equals (318)
+    bitwise_shift_right_with_equals (319)
+    bitwise_shift_left_with_equals (320)
+    comma (321) 38 68
+    dot (322) 42 43 45 64
+    colon (323) 115
+    number <ival> (324) 86
+    identifier <sval> (325) 31 32 35 40 42 44 45 51 64 65 71 72 73 74 75 76 77 78 80 81 83 84 87
+    string <sval> (326) 27 28 79 88
+    PREC_SINGLE_NAME (327)
+    PREC_TYPE_NAME (328)
+    PREC_FUNC (329)
+    PREC_CALL (330)
+    PREC_TERNARY_IDENT (331)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (77)
+        on left: 0
+    program <node> (78)
+        on left: 1 2
+        on right: 0 2
+    statement <node> (79)
+        on left: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+        on right: 1 2 24 26 61
+    block <node> (80)
+        on left: 21
+        on right: 25 31 32 33 34 35
+    stmt_list <node> (81)
+        on left: 22 23
+        on right: 21 22
+    stmt_block <node> (82)
+        on left: 24
+        on right: 22 23
+    if_body <node> (83)
+        on left: 25 26
+        on right: 29 30
+    indicator_stmt <node> (84)
+        on left: 27
+        on right: 3
+    strategy_stmt <node> (85)
+        on left: 28
+        on right: 4
+    if_stmt <node> (86)
+        on left: 29 30
+        on right: 5
+    for_stmt <node> (87)
+        on left: 31 32 33
+        on right: 6
+    while_stmt <node> (88)
+        on left: 34
+        on right: 7
+    func_stmt <node> (89)
+        on left: 35
+        on right: 15
+    opt_arg_list <node> (90)
+        on left: 36 37
+        on right: 35
+    arg_list <node> (91)
+        on left: 38 39
+        on right: 36 38
+    func_type <node> (92)
+        on left: 40 41 42 43 44 45
+        on right: 38 39 44 45
+    pine_type <sval> (93)
+        on left: 46 47 48 49 50 51
+        on right: 40 41 42 43 44 45 64
+    return_stmt_expr <node> (94)
+        on left: 52
+        on right: 8
+    break_stmt <node> (95)
+        on left: 53
+        on right: 9
+    continue_stmt <node> (96)
+        on left: 54
+        on right: 10
+    switch_stmt <node> (97)
+        on left: 55
+        on right: 11
+    case_list <node> (98)
+        on left: 56 57
+        on right: 55 56
+    case_stmt <node> (99)
+        on left: 58
+        on right: 56
+    default_case <node> (100)
+        on left: 59 60
+        on right: 55
+    switch_block_stmt <node> (101)
+        on left: 61
+        on right: 62 63
+    switch_block_stmts <node> (102)
+        on left: 62 63
+        on right: 58 59 63
+    dot_expr <node> (103)
+        on left: 64
+        on right: 66 89
+    call_arg_stmt <node> (104)
+        on left: 65 66
+        on right: 16 73 75 78 81 84
+    call_list <node> (105)
+        on left: 67 68 69
+        on right: 65 66 68
+    call_stmt <node> (106)
+        on left: 70
+        on right: 67 68
+    var_stmt <node> (107)
+        on left: 71 72 73
+        on right: 12
+    const_stmt <node> (108)
+        on left: 74 75
+        on right: 13
+    simple_stmt <node> (109)
+        on left: 76 77 78
+        on right: 14
+    import_stmt <node> (110)
+        on left: 79
+        on right: 17
+    assignment_stmt <node> (111)
+        on left: 80 81 82
+        on right: 18
+    assignment_re_stmt <node> (112)
+        on left: 83 84 85
+        on right: 19
+    expr <node> (113)
+        on left: 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115
+        on right: 20 29 30 31 32 33 34 52 55 58 70 71 74 77 80 82 83 85 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115
+
+
+State 0
+
+    0 $accept: • program $end
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    program             go to state 28
+    statement           go to state 29
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 1
+
+   27 indicator_stmt: indicator_function • left_paren string right_paren
+
+    left_paren  shift, and go to state 50
+
+
+State 2
+
+   28 strategy_stmt: strategy_function • left_paren string right_paren
+
+    left_paren  shift, and go to state 51
+
+
+State 3
+
+   29 if_stmt: if_statement • left_paren expr right_paren if_body
+   30        | if_statement • left_paren expr right_paren if_body else_statement if_body
+
+    left_paren  shift, and go to state 52
+
+
+State 4
+
+   31 for_stmt: for_statement • left_paren identifier assign expr to expr right_paren block
+   32         | for_statement • left_paren identifier assign expr to expr step expr right_paren block
+   33         | for_statement • left_paren expr right_paren block
+
+    left_paren  shift, and go to state 53
+
+
+State 5
+
+   52 return_stmt_expr: return_statement • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 56
+
+
+State 6
+
+   34 while_stmt: while_statement • left_paren expr right_paren block
+
+    left_paren  shift, and go to state 57
+
+
+State 7
+
+   53 break_stmt: break_statement •
+
+    $default  reduce using rule 53 (break_stmt)
+
+
+State 8
+
+   54 continue_stmt: continue_statement •
+
+    $default  reduce using rule 54 (continue_stmt)
+
+
+State 9
+
+   55 switch_stmt: switch_statement • left_paren expr right_paren left_brace case_list default_case right_brace
+
+    left_paren  shift, and go to state 58
+
+
+State 10
+
+   71 var_stmt: var • identifier assign expr
+   72         | var • identifier
+   73         | var • identifier assign call_arg_stmt
+
+    identifier  shift, and go to state 59
+
+
+State 11
+
+   74 const_stmt: const_statement • identifier assign expr
+   75           | const_statement • identifier assign call_arg_stmt
+
+    identifier  shift, and go to state 60
+
+
+State 12
+
+   76 simple_stmt: simple • identifier
+   77            | simple • identifier assign expr
+   78            | simple • identifier assign call_arg_stmt
+
+    identifier  shift, and go to state 61
+
+
+State 13
+
+  108 expr: logical_not • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 62
+
+
+State 14
+
+  109 expr: bitwise_not • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 63
+
+
+State 15
+
+   79 import_stmt: import_statement • string
+
+    string  shift, and go to state 64
+
+
+State 16
+
+   46 pine_type: int_type •
+
+    $default  reduce using rule 46 (pine_type)
+
+
+State 17
+
+   47 pine_type: bool_type •
+
+    $default  reduce using rule 47 (pine_type)
+
+
+State 18
+
+   49 pine_type: float_type •
+
+    $default  reduce using rule 49 (pine_type)
+
+
+State 19
+
+   50 pine_type: color_type •
+
+    $default  reduce using rule 50 (pine_type)
+
+
+State 20
+
+   48 pine_type: string_as_type •
+
+    $default  reduce using rule 48 (pine_type)
+
+
+State 21
+
+  112 expr: left_paren • expr right_paren
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 65
+
+
+State 22
+
+  114 expr: left_quad_brace • expr right_quad_brace
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 66
+
+
+State 23
+
+  111 expr: plus • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 67
+
+
+State 24
+
+  110 expr: minus • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 68
+
+
+State 25
+
+   86 expr: number •
+
+    $default  reduce using rule 86 (expr)
+
+
+State 26
+
+   35 func_stmt: identifier • func_paren opt_arg_list func_paren block
+   51 pine_type: identifier •
+   65 call_arg_stmt: identifier • left_paren call_list right_paren
+   80 assignment_stmt: identifier • assign expr
+   81                | identifier • assign call_arg_stmt
+   83 assignment_re_stmt: identifier • re_assign expr
+   84                   | identifier • re_assign call_arg_stmt
+   87 expr: identifier •
+
+    left_paren  shift, and go to state 69
+    func_paren  shift, and go to state 70
+    assign      shift, and go to state 71
+    re_assign   shift, and go to state 72
+
+    left_paren  [reduce using rule 87 (expr)]
+    assign      [reduce using rule 87 (expr)]
+    re_assign   [reduce using rule 87 (expr)]
+    dot         reduce using rule 51 (pine_type)
+    $default    reduce using rule 87 (expr)
+
+
+State 27
+
+   88 expr: string •
+
+    $default  reduce using rule 88 (expr)
+
+
+State 28
+
+    0 $accept: program • $end
+    2 program: program • statement
+
+    $end                shift, and go to state 73
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 74
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 29
+
+    1 program: statement •
+
+    $default  reduce using rule 1 (program)
+
+
+State 30
+
+    3 statement: indicator_stmt •
+
+    $default  reduce using rule 3 (statement)
+
+
+State 31
+
+    4 statement: strategy_stmt •
+
+    $default  reduce using rule 4 (statement)
+
+
+State 32
+
+    5 statement: if_stmt •
+
+    $default  reduce using rule 5 (statement)
+
+
+State 33
+
+    6 statement: for_stmt •
+
+    $default  reduce using rule 6 (statement)
+
+
+State 34
+
+    7 statement: while_stmt •
+
+    $default  reduce using rule 7 (statement)
+
+
+State 35
+
+   15 statement: func_stmt •
+
+    $default  reduce using rule 15 (statement)
+
+
+State 36
+
+   64 dot_expr: pine_type • dot identifier
+
+    dot  shift, and go to state 75
+
+
+State 37
+
+    8 statement: return_stmt_expr •
+
+    $default  reduce using rule 8 (statement)
+
+
+State 38
+
+    9 statement: break_stmt •
+
+    $default  reduce using rule 9 (statement)
+
+
+State 39
+
+   10 statement: continue_stmt •
+
+    $default  reduce using rule 10 (statement)
+
+
+State 40
+
+   11 statement: switch_stmt •
+
+    $default  reduce using rule 11 (statement)
+
+
+State 41
+
+   66 call_arg_stmt: dot_expr • left_paren call_list right_paren
+   89 expr: dot_expr •
+
+    left_paren  shift, and go to state 76
+
+    left_paren  [reduce using rule 89 (expr)]
+    $default    reduce using rule 89 (expr)
+
+
+State 42
+
+   16 statement: call_arg_stmt •
+
+    $default  reduce using rule 16 (statement)
+
+
+State 43
+
+   12 statement: var_stmt •
+
+    $default  reduce using rule 12 (statement)
+
+
+State 44
+
+   13 statement: const_stmt •
+
+    $default  reduce using rule 13 (statement)
+
+
+State 45
+
+   14 statement: simple_stmt •
+
+    $default  reduce using rule 14 (statement)
+
+
+State 46
+
+   17 statement: import_stmt •
+
+    $default  reduce using rule 17 (statement)
+
+
+State 47
+
+   18 statement: assignment_stmt •
+
+    $default  reduce using rule 18 (statement)
+
+
+State 48
+
+   19 statement: assignment_re_stmt •
+
+    $default  reduce using rule 19 (statement)
+
+
+State 49
+
+   20 statement: expr •
+   82 assignment_stmt: expr • assign expr
+   85 assignment_re_stmt: expr • re_assign expr
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    assign                  shift, and go to state 87
+    re_assign               shift, and go to state 88
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 20 (statement)
+
+
+State 50
+
+   27 indicator_stmt: indicator_function left_paren • string right_paren
+
+    string  shift, and go to state 99
+
+
+State 51
+
+   28 strategy_stmt: strategy_function left_paren • string right_paren
+
+    string  shift, and go to state 100
+
+
+State 52
+
+   29 if_stmt: if_statement left_paren • expr right_paren if_body
+   30        | if_statement left_paren • expr right_paren if_body else_statement if_body
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 101
+
+
+State 53
+
+   31 for_stmt: for_statement left_paren • identifier assign expr to expr right_paren block
+   32         | for_statement left_paren • identifier assign expr to expr step expr right_paren block
+   33         | for_statement left_paren • expr right_paren block
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 102
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 103
+
+
+State 54
+
+   51 pine_type: identifier •
+   87 expr: identifier •
+
+    dot       reduce using rule 51 (pine_type)
+    $default  reduce using rule 87 (expr)
+
+
+State 55
+
+   89 expr: dot_expr •
+
+    $default  reduce using rule 89 (expr)
+
+
+State 56
+
+   52 return_stmt_expr: return_statement expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    left_quad_brace  [reduce using rule 52 (return_stmt_expr)]
+    plus             [reduce using rule 52 (return_stmt_expr)]
+    minus            [reduce using rule 52 (return_stmt_expr)]
+    $default         reduce using rule 52 (return_stmt_expr)
+
+
+State 57
+
+   34 while_stmt: while_statement left_paren • expr right_paren block
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 104
+
+
+State 58
+
+   55 switch_stmt: switch_statement left_paren • expr right_paren left_brace case_list default_case right_brace
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 105
+
+
+State 59
+
+   71 var_stmt: var identifier • assign expr
+   72         | var identifier •
+   73         | var identifier • assign call_arg_stmt
+
+    assign  shift, and go to state 106
+
+    $default  reduce using rule 72 (var_stmt)
+
+
+State 60
+
+   74 const_stmt: const_statement identifier • assign expr
+   75           | const_statement identifier • assign call_arg_stmt
+
+    assign  shift, and go to state 107
+
+
+State 61
+
+   76 simple_stmt: simple identifier •
+   77            | simple identifier • assign expr
+   78            | simple identifier • assign call_arg_stmt
+
+    assign  shift, and go to state 108
+
+    $default  reduce using rule 76 (simple_stmt)
+
+
+State 62
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  108     | logical_not expr •
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign    shift, and go to state 80
+    left_quad_brace  shift, and go to state 86
+
+    question_sign  [reduce using rule 108 (expr)]
+    $default       reduce using rule 108 (expr)
+
+
+State 63
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  109     | bitwise_not expr •
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign    shift, and go to state 80
+    left_quad_brace  shift, and go to state 86
+
+    question_sign  [reduce using rule 109 (expr)]
+    $default       reduce using rule 109 (expr)
+
+
+State 64
+
+   79 import_stmt: import_statement string •
+
+    $default  reduce using rule 79 (import_stmt)
+
+
+State 65
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  112     | left_paren expr • right_paren
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    right_paren             shift, and go to state 109
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 66
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  114     | left_quad_brace expr • right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    right_quad_brace        shift, and go to state 110
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 67
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  111     | plus expr •
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign    shift, and go to state 80
+    left_quad_brace  shift, and go to state 86
+
+    question_sign  [reduce using rule 111 (expr)]
+    $default       reduce using rule 111 (expr)
+
+
+State 68
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  110     | minus expr •
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign    shift, and go to state 80
+    left_quad_brace  shift, and go to state 86
+
+    question_sign  [reduce using rule 110 (expr)]
+    $default       reduce using rule 110 (expr)
+
+
+State 69
+
+   65 call_arg_stmt: identifier left_paren • call_list right_paren
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    $default  reduce using rule 69 (call_list)
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    call_list  go to state 111
+    call_stmt  go to state 112
+    expr       go to state 113
+
+
+State 70
+
+   35 func_stmt: identifier func_paren • opt_arg_list func_paren block
+
+    int_type        shift, and go to state 16
+    bool_type       shift, and go to state 17
+    float_type      shift, and go to state 18
+    color_type      shift, and go to state 19
+    string_as_type  shift, and go to state 20
+    identifier      shift, and go to state 114
+
+    $default  reduce using rule 37 (opt_arg_list)
+
+    opt_arg_list  go to state 115
+    arg_list      go to state 116
+    func_type     go to state 117
+    pine_type     go to state 118
+
+
+State 71
+
+   80 assignment_stmt: identifier assign • expr
+   81                | identifier assign • call_arg_stmt
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 119
+    string           shift, and go to state 27
+
+    pine_type      go to state 36
+    dot_expr       go to state 41
+    call_arg_stmt  go to state 120
+    expr           go to state 121
+
+
+State 72
+
+   83 assignment_re_stmt: identifier re_assign • expr
+   84                   | identifier re_assign • call_arg_stmt
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 119
+    string           shift, and go to state 27
+
+    pine_type      go to state 36
+    dot_expr       go to state 41
+    call_arg_stmt  go to state 122
+    expr           go to state 123
+
+
+State 73
+
+    0 $accept: program $end •
+
+    $default  accept
+
+
+State 74
+
+    2 program: program statement •
+
+    $default  reduce using rule 2 (program)
+
+
+State 75
+
+   64 dot_expr: pine_type dot • identifier
+
+    identifier  shift, and go to state 124
+
+
+State 76
+
+   66 call_arg_stmt: dot_expr left_paren • call_list right_paren
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    $default  reduce using rule 69 (call_list)
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    call_list  go to state 125
+    call_stmt  go to state 112
+    expr       go to state 113
+
+
+State 77
+
+   95 expr: expr logical_and • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 126
+
+
+State 78
+
+   96 expr: expr logical_or • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 127
+
+
+State 79
+
+   98 expr: expr dont_equal • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 128
+
+
+State 80
+
+  115 expr: expr question_sign • expr colon expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 129
+
+
+State 81
+
+  103 expr: expr bitwise_and • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 130
+
+
+State 82
+
+  104 expr: expr bitwise_or • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 131
+
+
+State 83
+
+  105 expr: expr bitwise_xor • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 132
+
+
+State 84
+
+  106 expr: expr bitwise_shift_to_left • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 133
+
+
+State 85
+
+  107 expr: expr bitwise_shift_to_right • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 134
+
+
+State 86
+
+  113 expr: expr left_quad_brace • expr right_quad_brace
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 135
+
+
+State 87
+
+   82 assignment_stmt: expr assign • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 136
+
+
+State 88
+
+   85 assignment_re_stmt: expr re_assign • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 137
+
+
+State 89
+
+   97 expr: expr equals • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 138
+
+
+State 90
+
+   99 expr: expr greater_than • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 139
+
+
+State 91
+
+  100 expr: expr lesser_than • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 140
+
+
+State 92
+
+   90 expr: expr plus • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 141
+
+
+State 93
+
+   91 expr: expr minus • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 142
+
+
+State 94
+
+   92 expr: expr multiply • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 143
+
+
+State 95
+
+   93 expr: expr divide • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 144
+
+
+State 96
+
+   94 expr: expr divide_with_remind • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 145
+
+
+State 97
+
+  101 expr: expr greater_than_or_equals • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 146
+
+
+State 98
+
+  102 expr: expr lesser_than_or_equals • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 147
+
+
+State 99
+
+   27 indicator_stmt: indicator_function left_paren string • right_paren
+
+    right_paren  shift, and go to state 148
+
+
+State 100
+
+   28 strategy_stmt: strategy_function left_paren string • right_paren
+
+    right_paren  shift, and go to state 149
+
+
+State 101
+
+   29 if_stmt: if_statement left_paren expr • right_paren if_body
+   30        | if_statement left_paren expr • right_paren if_body else_statement if_body
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    right_paren             shift, and go to state 150
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 102
+
+   31 for_stmt: for_statement left_paren identifier • assign expr to expr right_paren block
+   32         | for_statement left_paren identifier • assign expr to expr step expr right_paren block
+   51 pine_type: identifier •
+   87 expr: identifier •
+
+    assign  shift, and go to state 151
+
+    dot       reduce using rule 51 (pine_type)
+    $default  reduce using rule 87 (expr)
+
+
+State 103
+
+   33 for_stmt: for_statement left_paren expr • right_paren block
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    right_paren             shift, and go to state 152
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 104
+
+   34 while_stmt: while_statement left_paren expr • right_paren block
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    right_paren             shift, and go to state 153
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 105
+
+   55 switch_stmt: switch_statement left_paren expr • right_paren left_brace case_list default_case right_brace
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    right_paren             shift, and go to state 154
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 106
+
+   71 var_stmt: var identifier assign • expr
+   73         | var identifier assign • call_arg_stmt
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 119
+    string           shift, and go to state 27
+
+    pine_type      go to state 36
+    dot_expr       go to state 41
+    call_arg_stmt  go to state 155
+    expr           go to state 156
+
+
+State 107
+
+   74 const_stmt: const_statement identifier assign • expr
+   75           | const_statement identifier assign • call_arg_stmt
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 119
+    string           shift, and go to state 27
+
+    pine_type      go to state 36
+    dot_expr       go to state 41
+    call_arg_stmt  go to state 157
+    expr           go to state 158
+
+
+State 108
+
+   77 simple_stmt: simple identifier assign • expr
+   78            | simple identifier assign • call_arg_stmt
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 119
+    string           shift, and go to state 27
+
+    pine_type      go to state 36
+    dot_expr       go to state 41
+    call_arg_stmt  go to state 159
+    expr           go to state 160
+
+
+State 109
+
+  112 expr: left_paren expr right_paren •
+
+    $default  reduce using rule 112 (expr)
+
+
+State 110
+
+  114 expr: left_quad_brace expr right_quad_brace •
+
+    $default  reduce using rule 114 (expr)
+
+
+State 111
+
+   65 call_arg_stmt: identifier left_paren call_list • right_paren
+   68 call_list: call_list • comma call_stmt
+
+    right_paren  shift, and go to state 161
+    comma        shift, and go to state 162
+
+
+State 112
+
+   67 call_list: call_stmt •
+
+    $default  reduce using rule 67 (call_list)
+
+
+State 113
+
+   70 call_stmt: expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 70 (call_stmt)
+
+
+State 114
+
+   51 pine_type: identifier •
+
+    $default  reduce using rule 51 (pine_type)
+
+
+State 115
+
+   35 func_stmt: identifier func_paren opt_arg_list • func_paren block
+
+    func_paren  shift, and go to state 163
+
+
+State 116
+
+   36 opt_arg_list: arg_list •
+   38 arg_list: arg_list • comma func_type
+
+    comma  shift, and go to state 164
+
+    $default  reduce using rule 36 (opt_arg_list)
+
+
+State 117
+
+   39 arg_list: func_type •
+
+    $default  reduce using rule 39 (arg_list)
+
+
+State 118
+
+   40 func_type: pine_type • identifier
+   41          | pine_type •
+   42          | pine_type • dot pine_type identifier
+   43          | pine_type • dot pine_type
+   44          | pine_type • lesser_than func_type greater_than identifier
+   45          | pine_type • dot pine_type lesser_than func_type greater_than identifier
+
+    lesser_than  shift, and go to state 165
+    dot          shift, and go to state 166
+    identifier   shift, and go to state 167
+
+    $default  reduce using rule 41 (func_type)
+
+
+State 119
+
+   51 pine_type: identifier •
+   65 call_arg_stmt: identifier • left_paren call_list right_paren
+   87 expr: identifier •
+
+    left_paren  shift, and go to state 69
+
+    left_paren  [reduce using rule 87 (expr)]
+    dot         reduce using rule 51 (pine_type)
+    $default    reduce using rule 87 (expr)
+
+
+State 120
+
+   81 assignment_stmt: identifier assign call_arg_stmt •
+
+    $default  reduce using rule 81 (assignment_stmt)
+
+
+State 121
+
+   80 assignment_stmt: identifier assign expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 80 (assignment_stmt)
+
+
+State 122
+
+   84 assignment_re_stmt: identifier re_assign call_arg_stmt •
+
+    $default  reduce using rule 84 (assignment_re_stmt)
+
+
+State 123
+
+   83 assignment_re_stmt: identifier re_assign expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 83 (assignment_re_stmt)
+
+
+State 124
+
+   64 dot_expr: pine_type dot identifier •
+
+    $default  reduce using rule 64 (dot_expr)
+
+
+State 125
+
+   66 call_arg_stmt: dot_expr left_paren call_list • right_paren
+   68 call_list: call_list • comma call_stmt
+
+    right_paren  shift, and go to state 168
+    comma        shift, and go to state 162
+
+
+State 126
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   95     | expr logical_and expr •
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    question_sign  [reduce using rule 95 (expr)]
+    $default       reduce using rule 95 (expr)
+
+
+State 127
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   96     | expr logical_or expr •
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    question_sign  [reduce using rule 96 (expr)]
+    $default       reduce using rule 96 (expr)
+
+
+State 128
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   98     | expr dont_equal expr •
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 98 (expr)]
+    $default       reduce using rule 98 (expr)
+
+
+State 129
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+  115     | expr question_sign expr • colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+    colon                   shift, and go to state 169
+
+
+State 130
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  103     | expr bitwise_and expr •
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 103 (expr)]
+    $default       reduce using rule 103 (expr)
+
+
+State 131
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  104     | expr bitwise_or expr •
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 104 (expr)]
+    $default       reduce using rule 104 (expr)
+
+
+State 132
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  105     | expr bitwise_xor expr •
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 105 (expr)]
+    $default       reduce using rule 105 (expr)
+
+
+State 133
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  106     | expr bitwise_shift_to_left expr •
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign       shift, and go to state 80
+    left_quad_brace     shift, and go to state 86
+    plus                shift, and go to state 92
+    minus               shift, and go to state 93
+    multiply            shift, and go to state 94
+    divide              shift, and go to state 95
+    divide_with_remind  shift, and go to state 96
+
+    question_sign  [reduce using rule 106 (expr)]
+    $default       reduce using rule 106 (expr)
+
+
+State 134
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  107     | expr bitwise_shift_to_right expr •
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign       shift, and go to state 80
+    left_quad_brace     shift, and go to state 86
+    plus                shift, and go to state 92
+    minus               shift, and go to state 93
+    multiply            shift, and go to state 94
+    divide              shift, and go to state 95
+    divide_with_remind  shift, and go to state 96
+
+    question_sign  [reduce using rule 107 (expr)]
+    $default       reduce using rule 107 (expr)
+
+
+State 135
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  113     | expr left_quad_brace expr • right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    right_quad_brace        shift, and go to state 170
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 136
+
+   82 assignment_stmt: expr assign expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 82 (assignment_stmt)
+
+
+State 137
+
+   85 assignment_re_stmt: expr re_assign expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 85 (assignment_re_stmt)
+
+
+State 138
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   97     | expr equals expr •
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 97 (expr)]
+    $default       reduce using rule 97 (expr)
+
+
+State 139
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+   99     | expr greater_than expr •
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 99 (expr)]
+    $default       reduce using rule 99 (expr)
+
+
+State 140
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  100     | expr lesser_than expr •
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 100 (expr)]
+    $default       reduce using rule 100 (expr)
+
+
+State 141
+
+   90 expr: expr • plus expr
+   90     | expr plus expr •
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign       shift, and go to state 80
+    left_quad_brace     shift, and go to state 86
+    multiply            shift, and go to state 94
+    divide              shift, and go to state 95
+    divide_with_remind  shift, and go to state 96
+
+    question_sign  [reduce using rule 90 (expr)]
+    $default       reduce using rule 90 (expr)
+
+
+State 142
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   91     | expr minus expr •
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign       shift, and go to state 80
+    left_quad_brace     shift, and go to state 86
+    multiply            shift, and go to state 94
+    divide              shift, and go to state 95
+    divide_with_remind  shift, and go to state 96
+
+    question_sign  [reduce using rule 91 (expr)]
+    $default       reduce using rule 91 (expr)
+
+
+State 143
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   92     | expr multiply expr •
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign    shift, and go to state 80
+    left_quad_brace  shift, and go to state 86
+
+    question_sign  [reduce using rule 92 (expr)]
+    $default       reduce using rule 92 (expr)
+
+
+State 144
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   93     | expr divide expr •
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign    shift, and go to state 80
+    left_quad_brace  shift, and go to state 86
+
+    question_sign  [reduce using rule 93 (expr)]
+    $default       reduce using rule 93 (expr)
+
+
+State 145
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   94     | expr divide_with_remind expr •
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign    shift, and go to state 80
+    left_quad_brace  shift, and go to state 86
+
+    question_sign  [reduce using rule 94 (expr)]
+    $default       reduce using rule 94 (expr)
+
+
+State 146
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  101     | expr greater_than_or_equals expr •
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 101 (expr)]
+    $default       reduce using rule 101 (expr)
+
+
+State 147
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  102     | expr lesser_than_or_equals expr •
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+
+    question_sign  [reduce using rule 102 (expr)]
+    $default       reduce using rule 102 (expr)
+
+
+State 148
+
+   27 indicator_stmt: indicator_function left_paren string right_paren •
+
+    $default  reduce using rule 27 (indicator_stmt)
+
+
+State 149
+
+   28 strategy_stmt: strategy_function left_paren string right_paren •
+
+    $default  reduce using rule 28 (strategy_stmt)
+
+
+State 150
+
+   29 if_stmt: if_statement left_paren expr right_paren • if_body
+   30        | if_statement left_paren expr right_paren • if_body else_statement if_body
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    left_brace          shift, and go to state 171
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 172
+    block               go to state 173
+    if_body             go to state 174
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 151
+
+   31 for_stmt: for_statement left_paren identifier assign • expr to expr right_paren block
+   32         | for_statement left_paren identifier assign • expr to expr step expr right_paren block
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 175
+
+
+State 152
+
+   33 for_stmt: for_statement left_paren expr right_paren • block
+
+    left_brace  shift, and go to state 171
+
+    block  go to state 176
+
+
+State 153
+
+   34 while_stmt: while_statement left_paren expr right_paren • block
+
+    left_brace  shift, and go to state 171
+
+    block  go to state 177
+
+
+State 154
+
+   55 switch_stmt: switch_statement left_paren expr right_paren • left_brace case_list default_case right_brace
+
+    left_brace  shift, and go to state 178
+
+
+State 155
+
+   73 var_stmt: var identifier assign call_arg_stmt •
+
+    $default  reduce using rule 73 (var_stmt)
+
+
+State 156
+
+   71 var_stmt: var identifier assign expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 71 (var_stmt)
+
+
+State 157
+
+   75 const_stmt: const_statement identifier assign call_arg_stmt •
+
+    $default  reduce using rule 75 (const_stmt)
+
+
+State 158
+
+   74 const_stmt: const_statement identifier assign expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 74 (const_stmt)
+
+
+State 159
+
+   78 simple_stmt: simple identifier assign call_arg_stmt •
+
+    $default  reduce using rule 78 (simple_stmt)
+
+
+State 160
+
+   77 simple_stmt: simple identifier assign expr •
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    $default  reduce using rule 77 (simple_stmt)
+
+
+State 161
+
+   65 call_arg_stmt: identifier left_paren call_list right_paren •
+
+    $default  reduce using rule 65 (call_arg_stmt)
+
+
+State 162
+
+   68 call_list: call_list comma • call_stmt
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    call_stmt  go to state 179
+    expr       go to state 113
+
+
+State 163
+
+   35 func_stmt: identifier func_paren opt_arg_list func_paren • block
+
+    left_brace  shift, and go to state 171
+
+    block  go to state 180
+
+
+State 164
+
+   38 arg_list: arg_list comma • func_type
+
+    int_type        shift, and go to state 16
+    bool_type       shift, and go to state 17
+    float_type      shift, and go to state 18
+    color_type      shift, and go to state 19
+    string_as_type  shift, and go to state 20
+    identifier      shift, and go to state 114
+
+    func_type  go to state 181
+    pine_type  go to state 118
+
+
+State 165
+
+   44 func_type: pine_type lesser_than • func_type greater_than identifier
+
+    int_type        shift, and go to state 16
+    bool_type       shift, and go to state 17
+    float_type      shift, and go to state 18
+    color_type      shift, and go to state 19
+    string_as_type  shift, and go to state 20
+    identifier      shift, and go to state 114
+
+    func_type  go to state 182
+    pine_type  go to state 118
+
+
+State 166
+
+   42 func_type: pine_type dot • pine_type identifier
+   43          | pine_type dot • pine_type
+   45          | pine_type dot • pine_type lesser_than func_type greater_than identifier
+
+    int_type        shift, and go to state 16
+    bool_type       shift, and go to state 17
+    float_type      shift, and go to state 18
+    color_type      shift, and go to state 19
+    string_as_type  shift, and go to state 20
+    identifier      shift, and go to state 114
+
+    pine_type  go to state 183
+
+
+State 167
+
+   40 func_type: pine_type identifier •
+
+    $default  reduce using rule 40 (func_type)
+
+
+State 168
+
+   66 call_arg_stmt: dot_expr left_paren call_list right_paren •
+
+    $default  reduce using rule 66 (call_arg_stmt)
+
+
+State 169
+
+  115 expr: expr question_sign expr colon • expr
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 184
+
+
+State 170
+
+  113 expr: expr left_quad_brace expr right_quad_brace •
+
+    $default  reduce using rule 113 (expr)
+
+
+State 171
+
+   21 block: left_brace • stmt_list right_brace
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 185
+    stmt_list           go to state 186
+    stmt_block          go to state 187
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 172
+
+   26 if_body: statement •
+
+    $default  reduce using rule 26 (if_body)
+
+
+State 173
+
+   25 if_body: block •
+
+    $default  reduce using rule 25 (if_body)
+
+
+State 174
+
+   29 if_stmt: if_statement left_paren expr right_paren if_body •
+   30        | if_statement left_paren expr right_paren if_body • else_statement if_body
+
+    else_statement  shift, and go to state 188
+
+    $default  reduce using rule 29 (if_stmt)
+
+
+State 175
+
+   31 for_stmt: for_statement left_paren identifier assign expr • to expr right_paren block
+   32         | for_statement left_paren identifier assign expr • to expr step expr right_paren block
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    to                      shift, and go to state 189
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 176
+
+   33 for_stmt: for_statement left_paren expr right_paren block •
+
+    $default  reduce using rule 33 (for_stmt)
+
+
+State 177
+
+   34 while_stmt: while_statement left_paren expr right_paren block •
+
+    $default  reduce using rule 34 (while_stmt)
+
+
+State 178
+
+   55 switch_stmt: switch_statement left_paren expr right_paren left_brace • case_list default_case right_brace
+
+    $default  reduce using rule 57 (case_list)
+
+    case_list  go to state 190
+
+
+State 179
+
+   68 call_list: call_list comma call_stmt •
+
+    $default  reduce using rule 68 (call_list)
+
+
+State 180
+
+   35 func_stmt: identifier func_paren opt_arg_list func_paren block •
+
+    $default  reduce using rule 35 (func_stmt)
+
+
+State 181
+
+   38 arg_list: arg_list comma func_type •
+
+    $default  reduce using rule 38 (arg_list)
+
+
+State 182
+
+   44 func_type: pine_type lesser_than func_type • greater_than identifier
+
+    greater_than  shift, and go to state 191
+
+
+State 183
+
+   42 func_type: pine_type dot pine_type • identifier
+   43          | pine_type dot pine_type •
+   45          | pine_type dot pine_type • lesser_than func_type greater_than identifier
+
+    lesser_than  shift, and go to state 192
+    identifier   shift, and go to state 193
+
+    $default  reduce using rule 43 (func_type)
+
+
+State 184
+
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+  115     | expr question_sign expr colon expr •
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+    question_sign  [reduce using rule 115 (expr)]
+    $default       reduce using rule 115 (expr)
+
+
+State 185
+
+   24 stmt_block: statement •
+
+    $default  reduce using rule 24 (stmt_block)
+
+
+State 186
+
+   21 block: left_brace stmt_list • right_brace
+   22 stmt_list: stmt_list • stmt_block
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    right_brace         shift, and go to state 194
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 185
+    stmt_block          go to state 195
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 187
+
+   23 stmt_list: stmt_block •
+
+    $default  reduce using rule 23 (stmt_list)
+
+
+State 188
+
+   30 if_stmt: if_statement left_paren expr right_paren if_body else_statement • if_body
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    left_brace          shift, and go to state 171
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 172
+    block               go to state 173
+    if_body             go to state 196
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 189
+
+   31 for_stmt: for_statement left_paren identifier assign expr to • expr right_paren block
+   32         | for_statement left_paren identifier assign expr to • expr step expr right_paren block
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 197
+
+
+State 190
+
+   55 switch_stmt: switch_statement left_paren expr right_paren left_brace case_list • default_case right_brace
+   56 case_list: case_list • case_stmt
+
+    default_statement  shift, and go to state 198
+    logical_not        shift, and go to state 13
+    bitwise_not        shift, and go to state 14
+    int_type           shift, and go to state 16
+    bool_type          shift, and go to state 17
+    float_type         shift, and go to state 18
+    color_type         shift, and go to state 19
+    string_as_type     shift, and go to state 20
+    left_paren         shift, and go to state 21
+    left_quad_brace    shift, and go to state 22
+    plus               shift, and go to state 23
+    minus              shift, and go to state 24
+    number             shift, and go to state 25
+    identifier         shift, and go to state 54
+    string             shift, and go to state 27
+
+    $default  reduce using rule 60 (default_case)
+
+    pine_type     go to state 36
+    case_stmt     go to state 199
+    default_case  go to state 200
+    dot_expr      go to state 55
+    expr          go to state 201
+
+
+State 191
+
+   44 func_type: pine_type lesser_than func_type greater_than • identifier
+
+    identifier  shift, and go to state 202
+
+
+State 192
+
+   45 func_type: pine_type dot pine_type lesser_than • func_type greater_than identifier
+
+    int_type        shift, and go to state 16
+    bool_type       shift, and go to state 17
+    float_type      shift, and go to state 18
+    color_type      shift, and go to state 19
+    string_as_type  shift, and go to state 20
+    identifier      shift, and go to state 114
+
+    func_type  go to state 203
+    pine_type  go to state 118
+
+
+State 193
+
+   42 func_type: pine_type dot pine_type identifier •
+
+    $default  reduce using rule 42 (func_type)
+
+
+State 194
+
+   21 block: left_brace stmt_list right_brace •
+
+    $default  reduce using rule 21 (block)
+
+
+State 195
+
+   22 stmt_list: stmt_list stmt_block •
+
+    $default  reduce using rule 22 (stmt_list)
+
+
+State 196
+
+   30 if_stmt: if_statement left_paren expr right_paren if_body else_statement if_body •
+
+    $default  reduce using rule 30 (if_stmt)
+
+
+State 197
+
+   31 for_stmt: for_statement left_paren identifier assign expr to expr • right_paren block
+   32         | for_statement left_paren identifier assign expr to expr • step expr right_paren block
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    step                    shift, and go to state 204
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    right_paren             shift, and go to state 205
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 198
+
+   59 default_case: default_statement • left_brace switch_block_stmts right_brace semicolon
+
+    left_brace  shift, and go to state 206
+
+
+State 199
+
+   56 case_list: case_list case_stmt •
+
+    $default  reduce using rule 56 (case_list)
+
+
+State 200
+
+   55 switch_stmt: switch_statement left_paren expr right_paren left_brace case_list default_case • right_brace
+
+    right_brace  shift, and go to state 207
+
+
+State 201
+
+   58 case_stmt: expr • left_brace switch_block_stmts right_brace semicolon
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    left_quad_brace         shift, and go to state 86
+    left_brace              shift, and go to state 208
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 202
+
+   44 func_type: pine_type lesser_than func_type greater_than identifier •
+
+    $default  reduce using rule 44 (func_type)
+
+
+State 203
+
+   45 func_type: pine_type dot pine_type lesser_than func_type • greater_than identifier
+
+    greater_than  shift, and go to state 209
+
+
+State 204
+
+   32 for_stmt: for_statement left_paren identifier assign expr to expr step • expr right_paren block
+
+    logical_not      shift, and go to state 13
+    bitwise_not      shift, and go to state 14
+    int_type         shift, and go to state 16
+    bool_type        shift, and go to state 17
+    float_type       shift, and go to state 18
+    color_type       shift, and go to state 19
+    string_as_type   shift, and go to state 20
+    left_paren       shift, and go to state 21
+    left_quad_brace  shift, and go to state 22
+    plus             shift, and go to state 23
+    minus            shift, and go to state 24
+    number           shift, and go to state 25
+    identifier       shift, and go to state 54
+    string           shift, and go to state 27
+
+    pine_type  go to state 36
+    dot_expr   go to state 55
+    expr       go to state 210
+
+
+State 205
+
+   31 for_stmt: for_statement left_paren identifier assign expr to expr right_paren • block
+
+    left_brace  shift, and go to state 171
+
+    block  go to state 211
+
+
+State 206
+
+   59 default_case: default_statement left_brace • switch_block_stmts right_brace semicolon
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 212
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    switch_block_stmt   go to state 213
+    switch_block_stmts  go to state 214
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 207
+
+   55 switch_stmt: switch_statement left_paren expr right_paren left_brace case_list default_case right_brace •
+
+    $default  reduce using rule 55 (switch_stmt)
+
+
+State 208
+
+   58 case_stmt: expr left_brace • switch_block_stmts right_brace semicolon
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 212
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    switch_block_stmt   go to state 213
+    switch_block_stmts  go to state 215
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 209
+
+   45 func_type: pine_type dot pine_type lesser_than func_type greater_than • identifier
+
+    identifier  shift, and go to state 216
+
+
+State 210
+
+   32 for_stmt: for_statement left_paren identifier assign expr to expr step expr • right_paren block
+   90 expr: expr • plus expr
+   91     | expr • minus expr
+   92     | expr • multiply expr
+   93     | expr • divide expr
+   94     | expr • divide_with_remind expr
+   95     | expr • logical_and expr
+   96     | expr • logical_or expr
+   97     | expr • equals expr
+   98     | expr • dont_equal expr
+   99     | expr • greater_than expr
+  100     | expr • lesser_than expr
+  101     | expr • greater_than_or_equals expr
+  102     | expr • lesser_than_or_equals expr
+  103     | expr • bitwise_and expr
+  104     | expr • bitwise_or expr
+  105     | expr • bitwise_xor expr
+  106     | expr • bitwise_shift_to_left expr
+  107     | expr • bitwise_shift_to_right expr
+  113     | expr • left_quad_brace expr right_quad_brace
+  115     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 77
+    logical_or              shift, and go to state 78
+    dont_equal              shift, and go to state 79
+    question_sign           shift, and go to state 80
+    bitwise_and             shift, and go to state 81
+    bitwise_or              shift, and go to state 82
+    bitwise_xor             shift, and go to state 83
+    bitwise_shift_to_left   shift, and go to state 84
+    bitwise_shift_to_right  shift, and go to state 85
+    right_paren             shift, and go to state 217
+    left_quad_brace         shift, and go to state 86
+    equals                  shift, and go to state 89
+    greater_than            shift, and go to state 90
+    lesser_than             shift, and go to state 91
+    plus                    shift, and go to state 92
+    minus                   shift, and go to state 93
+    multiply                shift, and go to state 94
+    divide                  shift, and go to state 95
+    divide_with_remind      shift, and go to state 96
+    greater_than_or_equals  shift, and go to state 97
+    lesser_than_or_equals   shift, and go to state 98
+
+
+State 211
+
+   31 for_stmt: for_statement left_paren identifier assign expr to expr right_paren block •
+
+    $default  reduce using rule 31 (for_stmt)
+
+
+State 212
+
+   61 switch_block_stmt: statement •
+
+    $default  reduce using rule 61 (switch_block_stmt)
+
+
+State 213
+
+   62 switch_block_stmts: switch_block_stmt •
+
+    $default  reduce using rule 62 (switch_block_stmts)
+
+
+State 214
+
+   59 default_case: default_statement left_brace switch_block_stmts • right_brace semicolon
+   63 switch_block_stmts: switch_block_stmts • switch_block_stmt
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    right_brace         shift, and go to state 218
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 212
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    switch_block_stmt   go to state 219
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 215
+
+   58 case_stmt: expr left_brace switch_block_stmts • right_brace semicolon
+   63 switch_block_stmts: switch_block_stmts • switch_block_stmt
+
+    indicator_function  shift, and go to state 1
+    strategy_function   shift, and go to state 2
+    if_statement        shift, and go to state 3
+    for_statement       shift, and go to state 4
+    return_statement    shift, and go to state 5
+    while_statement     shift, and go to state 6
+    break_statement     shift, and go to state 7
+    continue_statement  shift, and go to state 8
+    switch_statement    shift, and go to state 9
+    var                 shift, and go to state 10
+    const_statement     shift, and go to state 11
+    simple              shift, and go to state 12
+    logical_not         shift, and go to state 13
+    bitwise_not         shift, and go to state 14
+    import_statement    shift, and go to state 15
+    int_type            shift, and go to state 16
+    bool_type           shift, and go to state 17
+    float_type          shift, and go to state 18
+    color_type          shift, and go to state 19
+    string_as_type      shift, and go to state 20
+    left_paren          shift, and go to state 21
+    left_quad_brace     shift, and go to state 22
+    right_brace         shift, and go to state 220
+    plus                shift, and go to state 23
+    minus               shift, and go to state 24
+    number              shift, and go to state 25
+    identifier          shift, and go to state 26
+    string              shift, and go to state 27
+
+    statement           go to state 212
+    indicator_stmt      go to state 30
+    strategy_stmt       go to state 31
+    if_stmt             go to state 32
+    for_stmt            go to state 33
+    while_stmt          go to state 34
+    func_stmt           go to state 35
+    pine_type           go to state 36
+    return_stmt_expr    go to state 37
+    break_stmt          go to state 38
+    continue_stmt       go to state 39
+    switch_stmt         go to state 40
+    switch_block_stmt   go to state 219
+    dot_expr            go to state 41
+    call_arg_stmt       go to state 42
+    var_stmt            go to state 43
+    const_stmt          go to state 44
+    simple_stmt         go to state 45
+    import_stmt         go to state 46
+    assignment_stmt     go to state 47
+    assignment_re_stmt  go to state 48
+    expr                go to state 49
+
+
+State 216
+
+   45 func_type: pine_type dot pine_type lesser_than func_type greater_than identifier •
+
+    $default  reduce using rule 45 (func_type)
+
+
+State 217
+
+   32 for_stmt: for_statement left_paren identifier assign expr to expr step expr right_paren • block
+
+    left_brace  shift, and go to state 171
+
+    block  go to state 221
+
+
+State 218
+
+   59 default_case: default_statement left_brace switch_block_stmts right_brace • semicolon
+
+    semicolon  shift, and go to state 222
+
+
+State 219
+
+   63 switch_block_stmts: switch_block_stmts switch_block_stmt •
+
+    $default  reduce using rule 63 (switch_block_stmts)
+
+
+State 220
+
+   58 case_stmt: expr left_brace switch_block_stmts right_brace • semicolon
+
+    semicolon  shift, and go to state 223
+
+
+State 221
+
+   32 for_stmt: for_statement left_paren identifier assign expr to expr step expr right_paren block •
+
+    $default  reduce using rule 32 (for_stmt)
+
+
+State 222
+
+   59 default_case: default_statement left_brace switch_block_stmts right_brace semicolon •
+
+    $default  reduce using rule 59 (default_case)
+
+
+State 223
+
+   58 case_stmt: expr left_brace switch_block_stmts right_brace semicolon •
+
+    $default  reduce using rule 58 (case_stmt)

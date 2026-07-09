@@ -313,21 +313,9 @@ ast_node* new_call_node(char* name, ast_node* args) {
   node->call_node.arg_count = count;
   return node;
 }
-ast_node* new_call_node_dot(char* name, char* scnd_name, ast_node* args) {
-  int len_frst = strlen(name);
-  int len_scnd = strlen(scnd_name);
+ast_node* new_call_node_dot(char* name, ast_node* args) {
 
-  char* with_dot = malloc(len_frst + 2 + len_scnd);
-  strcpy(with_dot, name);
-
-  with_dot[len_frst] = '.';
-
-  strcpy(with_dot + len_frst + 1, scnd_name);
-  
-  if(name) free(name);
-  if(scnd_name) free(scnd_name);
-
-  return new_call_node(with_dot, args);
+  return new_call_node(name, args);
 }
 
 ast_node* new_call_arg_node(ast_node* expr) {

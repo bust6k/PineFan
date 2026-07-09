@@ -336,15 +336,15 @@ switch_block_stmts:
    ;
 
 dot_expr:
-    identifier dot identifier
+    pine_type dot identifier %prec PREC_TERNARY_IDENT
     { $$ = new_var_dot_node($1, $3); }
     ;
 
 call_arg_stmt:
    identifier left_paren call_list right_paren %prec PREC_CALL
    { $$ = new_call_node($1,$3); }
-   | identifier dot identifier  left_paren call_list right_paren %prec PREC_CALL
-   { $$ = new_call_node_dot($1,$3,$5);}
+   | dot_expr  left_paren call_list right_paren %prec PREC_CALL
+   { $$ = new_call_node_dot($1->var.name,$3);}
    ;
 
 call_list:
