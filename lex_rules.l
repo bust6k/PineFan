@@ -63,6 +63,11 @@ and { col += 3; return logical_and; }
 ":=" { col += 2; return re_assign; }
 ">" { col++; return greater_than; }
 "<" { col++; return lesser_than; }
+"+=" { col += 2; return plus_and_assign;}
+"-=" { col += 2;return minus_and_assign;}
+"*=" { col += 2; return multiply_and_assign;}
+"/=" { col += 2;return divide_and_assign;}
+"%=" { col += 2;return remind_and_assign;}
 "+" { col++; return plus; }
 "-" { col++; return minus; }
 "*" { col++; return multiply; }

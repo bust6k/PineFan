@@ -74,6 +74,11 @@ extern void yyerror(const char *s);
 %token equals
 %token greater_than
 %token lesser_than
+%token plus_and_assign
+%token minus_and_assign
+%token multiply_and_assign
+%token divide_and_assign
+%token remind_and_assign
 %token plus
 %token minus
 %token multiply
@@ -418,6 +423,16 @@ expr:
     { $$ = new_string_node($1); }
     | dot_expr
     { $$ = $1;}
+    | expr plus_and_assign expr
+    { $$ = new_binop_node("+=",$1,$3); }
+    | expr minus_and_assign expr 
+    { $$ = new_binop_node("-=",$1,$3); }
+    | expr multiply_and_assign expr
+    { $$ = new_binop_node("*=",$1,$3); }
+    | expr divide_and_assign expr
+    { $$ = new_binop_node("/=",$1,$3); }
+    | expr remind_and_assign expr
+    { $$ = new_binop_node("%=",$1,$3); }
     | expr plus expr
     { $$ = new_binop_node("+", $1, $3); }
     | expr minus expr

@@ -4,10 +4,10 @@ const fol = 30
 
 complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string name) => 
    indicator("Function started")
-   foo.foo(5,5,5)
-   timeframe.isintraday ? color.red : timeframe.isdaily ? colorr.green : timeframe.ismonthly ? colorr.blue : na
+   string.foo(5,5,5)
+   timeframe.isintraday ? color.red : timeframe.isdaily ? string.green : int.ismonthly ? colorr.blue : na
    foo =   [MAX_COUNT][5]
-   foo := ((((5 + 5))))
+   foo += ((((5 + 5))))
    
    if flag == true
       strategy("Flag is active")

@@ -15,13 +15,12 @@ FOL = 30
 def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: str):
     # indicator
     print ("Function started")
-    foo.foo(5, 5, 5)
-    color.red if timeframe.isintraday else colorr.green if timeframe.isdaily else colorr.blue if timeframe.ismonthly else na
+    str.foo(5, 5, 5)
+    color.red if timeframe.isintraday else str.green if timeframe.isdaily else colorr.blue if int.ismonthly else na
 
 
     foo = [MAX_COUNT][5]
-    foo = ( ( ( ( 5 + 5 ) ) ) )
-    if flag == true:
+foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
         # strategy
         print ("Flag is active")
         if arr > THRESHOLD:

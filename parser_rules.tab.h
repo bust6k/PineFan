@@ -111,30 +111,35 @@ extern int yydebug;
     equals = 305,                  /* equals  */
     greater_than = 306,            /* greater_than  */
     lesser_than = 307,             /* lesser_than  */
-    plus = 308,                    /* plus  */
-    minus = 309,                   /* minus  */
-    multiply = 310,                /* multiply  */
-    divide = 311,                  /* divide  */
-    divide_with_remind = 312,      /* divide_with_remind  */
-    greater_than_or_equals = 313,  /* greater_than_or_equals  */
-    lesser_than_or_equals = 314,   /* lesser_than_or_equals  */
-    bitwise_and_with_equals = 315, /* bitwise_and_with_equals  */
-    bitwise_or_with_equals = 316,  /* bitwise_or_with_equals  */
-    bitwise_xor_with_equals = 317, /* bitwise_xor_with_equals  */
-    bitwise_not_with_equals = 318, /* bitwise_not_with_equals  */
-    bitwise_shift_right_with_equals = 319, /* bitwise_shift_right_with_equals  */
-    bitwise_shift_left_with_equals = 320, /* bitwise_shift_left_with_equals  */
-    comma = 321,                   /* comma  */
-    dot = 322,                     /* dot  */
-    colon = 323,                   /* colon  */
-    number = 324,                  /* number  */
-    identifier = 325,              /* identifier  */
-    string = 326,                  /* string  */
-    PREC_SINGLE_NAME = 327,        /* PREC_SINGLE_NAME  */
-    PREC_TYPE_NAME = 328,          /* PREC_TYPE_NAME  */
-    PREC_FUNC = 329,               /* PREC_FUNC  */
-    PREC_CALL = 330,               /* PREC_CALL  */
-    PREC_TERNARY_IDENT = 331       /* PREC_TERNARY_IDENT  */
+    plus_and_assign = 308,         /* plus_and_assign  */
+    minus_and_assign = 309,        /* minus_and_assign  */
+    multiply_and_assign = 310,     /* multiply_and_assign  */
+    divide_and_assign = 311,       /* divide_and_assign  */
+    remind_and_assign = 312,       /* remind_and_assign  */
+    plus = 313,                    /* plus  */
+    minus = 314,                   /* minus  */
+    multiply = 315,                /* multiply  */
+    divide = 316,                  /* divide  */
+    divide_with_remind = 317,      /* divide_with_remind  */
+    greater_than_or_equals = 318,  /* greater_than_or_equals  */
+    lesser_than_or_equals = 319,   /* lesser_than_or_equals  */
+    bitwise_and_with_equals = 320, /* bitwise_and_with_equals  */
+    bitwise_or_with_equals = 321,  /* bitwise_or_with_equals  */
+    bitwise_xor_with_equals = 322, /* bitwise_xor_with_equals  */
+    bitwise_not_with_equals = 323, /* bitwise_not_with_equals  */
+    bitwise_shift_right_with_equals = 324, /* bitwise_shift_right_with_equals  */
+    bitwise_shift_left_with_equals = 325, /* bitwise_shift_left_with_equals  */
+    comma = 326,                   /* comma  */
+    dot = 327,                     /* dot  */
+    colon = 328,                   /* colon  */
+    number = 329,                  /* number  */
+    identifier = 330,              /* identifier  */
+    string = 331,                  /* string  */
+    PREC_SINGLE_NAME = 332,        /* PREC_SINGLE_NAME  */
+    PREC_TYPE_NAME = 333,          /* PREC_TYPE_NAME  */
+    PREC_FUNC = 334,               /* PREC_FUNC  */
+    PREC_CALL = 335,               /* PREC_CALL  */
+    PREC_TERNARY_IDENT = 336       /* PREC_TERNARY_IDENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -149,7 +154,7 @@ union YYSTYPE
     char *sval;
     struct ast_node *node;
 
-#line 153 "parser_rules.tab.h"
+#line 158 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
