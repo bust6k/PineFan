@@ -13,5 +13,85 @@ THRESHOLD = 50
 # a constant variable!
 FOL = 30
 def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: str):
-    return     if result > 5:
-result + 2
+    # indicator
+    print ("Function started")
+    str.foo(5, 5, 5)
+    color.red if timeframe.isintraday else str.green if timeframe.isdaily else colorr.blue if int.ismonthly else na
+
+
+    foo = [MAX_COUNT][5]
+foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
+        # strategy
+        print ("Flag is active")
+        if arr > THRESHOLD:
+            # indicator
+            print ("Array first element above threshold")
+            for i in range(0, arr + 1):
+                if i % 2 == 0:
+                    # indicator
+                    print ("Even iteration")
+                elif i > 25:
+                    break
+                elif i % 3 == 0:
+                    # indicator
+                    print ("Divisible by 3")
+                    continue
+                elif i == 1:
+                    # strategy
+                    print ("Odd iteration")
+                elif i == 45:
+                    # indicator
+                    print ("Halfway point!")
+        # indicator
+        print ("Array first element below threshold")
+        # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+        # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+        # elif is all the other conditions
+        # and else - it's an optional last condition like default in switch-statement
+
+        if arr == 10:
+            # strategy
+            print ("Exactly 10")
+        elif arr == 75:
+            # strategy
+            print ("Three quarters")
+        elif arr == 50:
+            # indicator
+            print ("Half way")
+        elif arr == 25:
+            # indicator
+            print ("Quarter way")
+        else:
+            # indicator
+            print ("Default value")
+    elif flag == false:
+        # indicator
+        print ("Flag is false")
+        while arr < THRESHOLD:
+            arr = arr + 5
+            if arr > 40:
+                # strategy
+                print ("Approaching threshold")
+                if arr == 45:
+                    break
+    # strategy
+    print ("Flag state unknown")
+    return -1
+    result = ( arr0 * 2 + ( THRESHOLD - 10 ) )
+    nested_call(complex_func, arr0 + arr, !flag)
+    # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+    # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+    # elif is all the other conditions
+    # and else - it's an optional last condition like default in switch-statement
+
+    if result == 0:
+        # indicator
+        print ("Zero result")
+    elif result == 50:
+        # indicator
+        print ("Fifty")
+    elif result == 25:
+        # indicator
+        print ("Twenty five")
+    
+return result + 2

@@ -3,5 +3,55 @@ const THRESHOLD = 50
 const fol = 30
 
 complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string name) =>     
-    if result > 5
-      result + 2
+   indicator("Function started")
+   string.foo(5,5,5)
+   timeframe.isintraday ? color.red : timeframe.isdaily ? string.green : int.ismonthly ? colorr.blue : na
+   foo =   [MAX_COUNT][5]
+   foo += ((((5 + 5))))
+
+   if flag == true
+      strategy("Flag is active")
+      if arr > THRESHOLD
+         indicator("Array first element above threshold")
+         for i = 0 to arr
+            if i % 2 == 0
+               indicator("Even iteration")
+            else if i > 25
+                  break
+            else if i % 3 == 0
+               indicator("Divisible by 3")
+               continue
+            else if i == 1
+               strategy("Odd iteration")
+            else if i == 45
+                  indicator("Halfway point!")
+      else
+         indicator("Array first element below threshold")
+         switch arr
+            10 => strategy("Exactly 10")
+            25 => indicator("Quarter way")
+            50 => indicator("Half way")
+            75 => strategy("Three quarters")
+            => indicator("Default value")
+   else if flag == false
+      indicator("Flag is false")
+      while arr < THRESHOLD
+         arr = arr + 5
+         if arr > 40
+            strategy("Approaching threshold")
+            if arr == 45
+               break
+   else
+      strategy("Flag state unknown")
+      return -1
+
+   result = (arr0 * 2 + (THRESHOLD - 10))
+
+   nested_call(complex_func, arr0 + arr, !flag)
+
+   switch result
+      0 => indicator("Zero result")
+      25 => indicator("Twenty five")
+      50 => indicator("Fifty")   
+      
+   result + 2

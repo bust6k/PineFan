@@ -745,22 +745,10 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
 
     case AST_STMT: {
-      if (last_node != NULL && last_node == node->block_node.stmt) {
+            if (last_node != NULL && last_node == node->block_node.stmt) {
         output << indent_str << "\nreturn ";
       }
-      ast_node* last_in_stmt = node->block_node.stmt;
-
-      // Если это AST_IF, ищем последний statement внутри then/else
-      if (last_in_stmt && last_in_stmt->type == AST_IF) {
-        // Пройти по then или else_ до последнего выражения
-        last_in_stmt = find_last_statement(last_in_stmt);
-      }
-
-      if (last_node != NULL && last_node == last_in_stmt) {
-        output << indent_str << "return ";
-      }
-
-      if (node->block_node.stmt != NULL &&
+            if (node->block_node.stmt != NULL &&
           node->block_node.stmt->type == AST_IF &&
           node->block_node.is_else == 1) {
         // it's else if — generating directly
