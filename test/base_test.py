@@ -30,32 +30,794 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
                 if i % 2 == 0:
                     # indicator
                     print ("Even iteration")
-                    return # TODO: unknown node type 1852143173
+                    return # indicator
+print ("Even iteration")
 
                 elif i > 25:
                     break
-                    return 
+                    return break
+
                 elif i % 3 == 0:
                     # indicator
                     print ("Divisible by 3")
                     continue
-                    return 
+                    return continue
+
                 elif i == 1:
                     # strategy
                     print ("Odd iteration")
-                    return # TODO: unknown node type 543450191
+                    return # strategy
+print ("Odd iteration")
 
                 elif i == 45:
                     # indicator
                     print ("Halfway point!")
-                    return # TODO: unknown node type 1718378824
+                    return # indicator
+print ("Halfway point!")
 
-                return i == 45
-                return i == 1
-                return i % 3 == 0
-                return i > 25
-                return i % 2 == 0
-            return # TODO: unknown node type 1409351785
+                return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+                return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+                return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+                return elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+
+                return if i % 2 == 0:
+    # indicator
+    print ("Even iteration")
+    return # indicator
+print ("Even iteration")
+
+elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+return elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+
+
+            return for i in range(0, arr + 1):
+    if i % 2 == 0:
+        # indicator
+        print ("Even iteration")
+        return # indicator
+print ("Even iteration")
+
+    elif i > 25:
+        break
+        return break
+
+    elif i % 3 == 0:
+        # indicator
+        print ("Divisible by 3")
+        continue
+        return continue
+
+    elif i == 1:
+        # strategy
+        print ("Odd iteration")
+        return # strategy
+print ("Odd iteration")
+
+    elif i == 45:
+        # indicator
+        print ("Halfway point!")
+        return # indicator
+print ("Halfway point!")
+
+    return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+    return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+    return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+    return elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+
+    return if i % 2 == 0:
+    # indicator
+    print ("Even iteration")
+    return # indicator
+print ("Even iteration")
+
+elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+return elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+
+
 
         # indicator
         print ("Array first element below threshold")
@@ -67,30 +829,939 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
         if arr == 10:
             # strategy
             print ("Exactly 10")
-            return # TODO: unknown node type 1667332165
+            return # strategy
+print ("Exactly 10")
 
         elif arr == 75:
             # strategy
             print ("Three quarters")
-            return # TODO: unknown node type 1701996628
+            return # strategy
+print ("Three quarters")
 
         elif arr == 50:
             # indicator
             print ("Half way")
-            return # TODO: unknown node type 1718378824
+            return # indicator
+print ("Half way")
 
         elif arr == 25:
             # indicator
             print ("Quarter way")
-            return # TODO: unknown node type 1918989649
+            return # indicator
+print ("Quarter way")
 
         else:
             # indicator
             print ("Default value")
-            return # TODO: unknown node type 1634100548
+            return # indicator
+print ("Default value")
 
-        return arr
-        return arr > THRESHOLD
+        return # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
+
+if arr == 10:
+    # strategy
+    print ("Exactly 10")
+    return # strategy
+print ("Exactly 10")
+
+elif arr == 75:
+    # strategy
+    print ("Three quarters")
+    return # strategy
+print ("Three quarters")
+
+elif arr == 50:
+    # indicator
+    print ("Half way")
+    return # indicator
+print ("Half way")
+
+elif arr == 25:
+    # indicator
+    print ("Quarter way")
+    return # indicator
+print ("Quarter way")
+
+else:
+    # indicator
+    print ("Default value")
+    return # indicator
+print ("Default value")
+
+
+        return if arr > THRESHOLD:
+    # indicator
+    print ("Array first element above threshold")
+    for i in range(0, arr + 1):
+        if i % 2 == 0:
+            # indicator
+            print ("Even iteration")
+            return # indicator
+print ("Even iteration")
+
+        elif i > 25:
+            break
+            return break
+
+        elif i % 3 == 0:
+            # indicator
+            print ("Divisible by 3")
+            continue
+            return continue
+
+        elif i == 1:
+            # strategy
+            print ("Odd iteration")
+            return # strategy
+print ("Odd iteration")
+
+        elif i == 45:
+            # indicator
+            print ("Halfway point!")
+            return # indicator
+print ("Halfway point!")
+
+        return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+        return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+        return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+        return elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+
+        return if i % 2 == 0:
+    # indicator
+    print ("Even iteration")
+    return # indicator
+print ("Even iteration")
+
+elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+return elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+
+
+    return for i in range(0, arr + 1):
+    if i % 2 == 0:
+        # indicator
+        print ("Even iteration")
+        return # indicator
+print ("Even iteration")
+
+    elif i > 25:
+        break
+        return break
+
+    elif i % 3 == 0:
+        # indicator
+        print ("Divisible by 3")
+        continue
+        return continue
+
+    elif i == 1:
+        # strategy
+        print ("Odd iteration")
+        return # strategy
+print ("Odd iteration")
+
+    elif i == 45:
+        # indicator
+        print ("Halfway point!")
+        return # indicator
+print ("Halfway point!")
+
+    return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+    return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+    return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+    return elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+
+    return if i % 2 == 0:
+    # indicator
+    print ("Even iteration")
+    return # indicator
+print ("Even iteration")
+
+elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+return elif i > 25:
+    break
+    return break
+
+elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+return elif i % 3 == 0:
+    # indicator
+    print ("Divisible by 3")
+    continue
+    return continue
+
+elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+return elif i == 1:
+    # strategy
+    print ("Odd iteration")
+    return # strategy
+print ("Odd iteration")
+
+elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+return elif i == 45:
+    # indicator
+    print ("Halfway point!")
+    return # indicator
+print ("Halfway point!")
+
+
+
+
+
+
+
+# indicator
+print ("Array first element below threshold")
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
+
+if arr == 10:
+    # strategy
+    print ("Exactly 10")
+    return # strategy
+print ("Exactly 10")
+
+elif arr == 75:
+    # strategy
+    print ("Three quarters")
+    return # strategy
+print ("Three quarters")
+
+elif arr == 50:
+    # indicator
+    print ("Half way")
+    return # indicator
+print ("Half way")
+
+elif arr == 25:
+    # indicator
+    print ("Quarter way")
+    return # indicator
+print ("Quarter way")
+
+else:
+    # indicator
+    print ("Default value")
+    return # indicator
+print ("Default value")
+
+return # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
+
+if arr == 10:
+    # strategy
+    print ("Exactly 10")
+    return # strategy
+print ("Exactly 10")
+
+elif arr == 75:
+    # strategy
+    print ("Three quarters")
+    return # strategy
+print ("Three quarters")
+
+elif arr == 50:
+    # indicator
+    print ("Half way")
+    return # indicator
+print ("Half way")
+
+elif arr == 25:
+    # indicator
+    print ("Quarter way")
+    return # indicator
+print ("Quarter way")
+
+else:
+    # indicator
+    print ("Default value")
+    return # indicator
+print ("Default value")
+
+
+
     elif flag == false:
         # indicator
         print ("Flag is false")
@@ -101,15 +1772,123 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
                 print ("Approaching threshold")
                 if arr == 45:
                     break
-                    return 
-                return arr == 45
-            return arr > 40
-        return arr < THRESHOLD
+                    return break
+
+                return if arr == 45:
+    break
+    return break
+
+
+            return if arr > 40:
+    # strategy
+    print ("Approaching threshold")
+    if arr == 45:
+        break
+        return break
+
+    return if arr == 45:
+    break
+    return break
+
+
+
+        return while arr < THRESHOLD:
+    arr = arr + 5
+    if arr > 40:
+        # strategy
+        print ("Approaching threshold")
+        if arr == 45:
+            break
+            return break
+
+        return if arr == 45:
+    break
+    return break
+
+
+    return if arr > 40:
+    # strategy
+    print ("Approaching threshold")
+    if arr == 45:
+        break
+        return break
+
+    return if arr == 45:
+    break
+    return break
+
+
+
+
     # strategy
     print ("Flag state unknown")
     return -1
-    return -1
-    return flag == false
+    return return -1
+
+    return elif flag == false:
+    # indicator
+    print ("Flag is false")
+    while arr < THRESHOLD:
+        arr = arr + 5
+        if arr > 40:
+            # strategy
+            print ("Approaching threshold")
+            if arr == 45:
+                break
+                return break
+
+            return if arr == 45:
+    break
+    return break
+
+
+        return if arr > 40:
+    # strategy
+    print ("Approaching threshold")
+    if arr == 45:
+        break
+        return break
+
+    return if arr == 45:
+    break
+    return break
+
+
+
+    return while arr < THRESHOLD:
+    arr = arr + 5
+    if arr > 40:
+        # strategy
+        print ("Approaching threshold")
+        if arr == 45:
+            break
+            return break
+
+        return if arr == 45:
+    break
+    return break
+
+
+    return if arr > 40:
+    # strategy
+    print ("Approaching threshold")
+    if arr == 45:
+        break
+        return break
+
+    return if arr == 45:
+    break
+    return break
+
+
+
+
+# strategy
+print ("Flag state unknown")
+return -1
+return return -1
+
+
     result = ( arr0 * 2 + ( THRESHOLD - 10 ) )
     nested_call(complex_func, arr0 + arr, !flag)
     # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
@@ -120,27 +1899,31 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
     if result == 0:
         # indicator
         print ("Zero result")
-        return # TODO: unknown node type 1869768026
+        return # indicator
+print ("Zero result")
 
     elif result == 75:
         # strategy
         print ("Seventy five")
-        return # TODO: unknown node type 1702258003
+        return # strategy
+print ("Seventy five")
 
     elif result == 50:
         # indicator
         print ("Fifty")
-        return # TODO: unknown node type 1952868678
+        return # indicator
+print ("Fifty")
 
     elif result == 25:
         # indicator
         print ("Twenty five")
-        return # TODO: unknown node type 1852143444
+        return # indicator
+print ("Twenty five")
 
     else:
         # indicator
         print ("Default")
-        return # TODO: unknown node type 1634100548
+        return # indicator
+print ("Default")
 
-result + 1    return # TODO: unknown node type 43
-
+result + 1    return result + 1

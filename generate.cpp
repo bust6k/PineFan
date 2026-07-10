@@ -708,9 +708,12 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
       if (node->block_node.next != NULL) {
         generate_code(node->block_node.next, output, indent);
       } else if(node->block_node.next == NULL) {
+      ast_node* new_node = new_return_node(node->block_node.stmt);
+      /*
       node->block_node.stmt->type = AST_RETURN;
       node->return_node.value = node->block_node.stmt;
-      generate_code(node->block_node.stmt,output,indent);
+      */
+      generate_code(new_node,output,indent);
       }
 
       break;
