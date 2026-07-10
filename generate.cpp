@@ -774,10 +774,10 @@ int main(int argc, char* argv[]) {
       generate_code(val, output_file);
     }
   }
-/*
+
   for (int f = 0; f < program_cpp_root.size(); f++) {
     ast_free(program_cpp_root.at(f));
   }
-*/
+
   Pinefan::Ppp::clean_prp_files();
 }
