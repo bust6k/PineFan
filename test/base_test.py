@@ -30,18 +30,33 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
                 if i % 2 == 0:
                     # indicator
                     print ("Even iteration")
+                    return # TODO: unknown node type 1852143173
+
                 elif i > 25:
                     break
+                    return 
                 elif i % 3 == 0:
                     # indicator
                     print ("Divisible by 3")
                     continue
+                    return 
                 elif i == 1:
                     # strategy
                     print ("Odd iteration")
+                    return # TODO: unknown node type 543450191
+
                 elif i == 45:
                     # indicator
                     print ("Halfway point!")
+                    return # TODO: unknown node type 1718378824
+
+                return i == 45
+                return i == 1
+                return i % 3 == 0
+                return i > 25
+                return i % 2 == 0
+            return # TODO: unknown node type 1409351785
+
         # indicator
         print ("Array first element below threshold")
         # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
@@ -52,18 +67,30 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
         if arr == 10:
             # strategy
             print ("Exactly 10")
+            return # TODO: unknown node type 1667332165
+
         elif arr == 75:
             # strategy
             print ("Three quarters")
+            return # TODO: unknown node type 1701996628
+
         elif arr == 50:
             # indicator
             print ("Half way")
+            return # TODO: unknown node type 1718378824
+
         elif arr == 25:
             # indicator
             print ("Quarter way")
+            return # TODO: unknown node type 1918989649
+
         else:
             # indicator
             print ("Default value")
+            return # TODO: unknown node type 1634100548
+
+        return arr
+        return arr > THRESHOLD
     elif flag == false:
         # indicator
         print ("Flag is false")
@@ -74,9 +101,15 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
                 print ("Approaching threshold")
                 if arr == 45:
                     break
+                    return 
+                return arr == 45
+            return arr > 40
+        return arr < THRESHOLD
     # strategy
     print ("Flag state unknown")
     return -1
+    return -1
+    return flag == false
     result = ( arr0 * 2 + ( THRESHOLD - 10 ) )
     nested_call(complex_func, arr0 + arr, !flag)
     # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
@@ -87,16 +120,27 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
     if result == 0:
         # indicator
         print ("Zero result")
+        return # TODO: unknown node type 1869768026
+
     elif result == 75:
         # strategy
         print ("Seventy five")
+        return # TODO: unknown node type 1702258003
+
     elif result == 50:
         # indicator
         print ("Fifty")
+        return # TODO: unknown node type 1952868678
+
     elif result == 25:
         # indicator
         print ("Twenty five")
+        return # TODO: unknown node type 1852143444
+
     else:
         # indicator
         print ("Default")
-    return result + 1
+        return # TODO: unknown node type 1634100548
+
+result + 1    return # TODO: unknown node type 43
+

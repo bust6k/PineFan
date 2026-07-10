@@ -124,9 +124,9 @@ void transform_constants(ast_node* node) {
       transform_constants(node->call_arg.next);
       break;
 
-    case AST_FUNC: {
+    case AST_FUNC: 
       transform_constants(node->func_node.body);
-    } break;
+      break;
 
     case AST_FUNC_ARG:
       transform_constants(node->func_arg.next);
@@ -557,7 +557,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
     case AST_RETURN: {
       output << indent_str << "return ";
-      generate_code(node->return_node.value, output, 0);
+      if(node->return_node.value) generate_code(node->return_node.value, output, 0);
       output << "\n";
       break;
     }
@@ -707,6 +707,10 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
       if (node->block_node.next != NULL) {
         generate_code(node->block_node.next, output, indent);
+      } else if(node->block_node.next == NULL) {
+      node->block_node.stmt->type = AST_RETURN;
+      node->return_node.value = node->block_node.stmt;
+      generate_code(node->block_node.stmt,output,indent);
       }
 
       break;
@@ -767,10 +771,10 @@ int main(int argc, char* argv[]) {
       generate_code(val, output_file);
     }
   }
-
+/*
   for (int f = 0; f < program_cpp_root.size(); f++) {
     ast_free(program_cpp_root.at(f));
   }
-
+*/
   Pinefan::Ppp::clean_prp_files();
 }

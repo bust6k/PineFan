@@ -55,6 +55,6 @@ complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string nam
       50 => indicator("Fifty")
       75 => strategy("Seventy five")
       => indicator("Default")
-
-   return result + 1
+   
+   result + 1
 
