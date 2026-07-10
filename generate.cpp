@@ -397,7 +397,7 @@ ast_node* find_last_statement(ast_node* node) {
       return find_last_statement(node->if_node.else_);
     }
     // if без else — возвращаем сам if (он не возвращает значение в PineScript)
-    return NULL;
+    return find_last_statement(node->if_node.then);
   }
 
   // AST_FOR, AST_WHILE — возвращают последнее после цикла
@@ -595,10 +595,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       }
       output << "):\n";
       ast_node* last = find_last_statement(node->func_node.body);
-      last->is_last = 1;
 
       generate_code(node->func_node.body, output, indent + 4, last);
-      //generate_code(last, output, indent + 4);
       break;
     }
     case AST_UNOP: {
@@ -749,29 +747,40 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     case AST_STMT: {
       if (last_node != NULL && last_node == node->block_node.stmt) {
         output << indent_str << "\nreturn ";
-    }
+      }
+      ast_node* last_in_stmt = node->block_node.stmt;
 
-        if (node->block_node.stmt != NULL &&
-            node->block_node.stmt->type == AST_IF &&
-            node->block_node.is_else == 1) {
-          // it's else if — generating directly
-          node->block_node.stmt->if_node.is_elif = 1;
-          generate_code(node->block_node.stmt, output, indent,last_node);
-        } else {
-          // common block
-          generate_code(node->block_node.stmt, output, indent,last_node);
-        }
+      // Если это AST_IF, ищем последний statement внутри then/else
+      if (last_in_stmt && last_in_stmt->type == AST_IF) {
+        // Пройти по then или else_ до последнего выражения
+        last_in_stmt = find_last_statement(last_in_stmt);
+      }
 
-        if (node->block_node.next != NULL) {
-          generate_code(node->block_node.next, output, indent,last_node);
-        } else if (node->block_node.next == NULL)
-          break;
-      
+      if (last_node != NULL && last_node == last_in_stmt) {
+        output << indent_str << "return ";
+      }
+
+      if (node->block_node.stmt != NULL &&
+          node->block_node.stmt->type == AST_IF &&
+          node->block_node.is_else == 1) {
+        // it's else if — generating directly
+        node->block_node.stmt->if_node.is_elif = 1;
+        generate_code(node->block_node.stmt, output, indent, last_node);
+      } else {
+        // common block
+        generate_code(node->block_node.stmt, output, indent, last_node);
+      }
+
+      if (node->block_node.next != NULL) {
+        generate_code(node->block_node.next, output, indent, last_node);
+      } else if (node->block_node.next == NULL)
+        break;
+
       break;
     }
 
     case AST_STMTS: {
-      generate_code(node->stmt_node.stmt, output, indent,last_node);
+      generate_code(node->stmt_node.stmt, output, indent, last_node);
       break;
     }
 

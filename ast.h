@@ -5,7 +5,6 @@
 
 typedef struct ast_node {
   int type;
-  int is_last;
   union {
     struct {
       char* name;

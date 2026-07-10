@@ -11,3 +11,7 @@ MAX_COUNT = 100
 # a constant variable!
 THRESHOLD = 50
 # a constant variable!
+FOL = 30
+def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: str):
+    return     if result > 5:
+result + 2
