@@ -124,7 +124,7 @@ void transform_constants(ast_node* node) {
       transform_constants(node->call_arg.next);
       break;
 
-    case AST_FUNC: 
+    case AST_FUNC:
       transform_constants(node->func_node.body);
       break;
 
@@ -142,7 +142,7 @@ void transform_constants(ast_node* node) {
       transform_constants(node->if_node.then);
       transform_constants(node->if_node.else_);
       break;
-      
+
     case AST_TERNARY:
       transform_constants(node->ternary_node.cond);
       transform_constants(node->ternary_node.then);
@@ -372,7 +372,55 @@ void gen_switch_speak(bool is_case, std::ofstream& output,
     return;
   }
 }
-void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
+
+ast_node* find_last_statement(ast_node* node) {
+  if (!node) return NULL;
+
+  // AST_STMTS: тело функции/блока
+  if (node->type == AST_STMTS) {
+    return find_last_statement(node->stmt_node.stmt);
+  }
+
+  // AST_STMT: одиночный statement в списке
+  if (node->type == AST_STMT) {
+    // Если есть следующий — идём в него
+    if (node->block_node.next) {
+      return find_last_statement(node->block_node.next);
+    }
+    // Последний в списке — его содержимое
+    return find_last_statement(node->block_node.stmt);
+  }
+
+  // AST_IF: последнее — то, что после if/else
+  if (node->type == AST_IF) {
+    if (node->if_node.else_) {
+      return find_last_statement(node->if_node.else_);
+    }
+    // if без else — возвращаем сам if (он не возвращает значение в PineScript)
+    return NULL;
+  }
+
+  // AST_FOR, AST_WHILE — возвращают последнее после цикла
+  // (не внутри цикла)
+  if (node->type == AST_FOR || node->type == AST_WHILE) {
+    return NULL;  // циклы не возвращают значение сами по себе
+  }
+
+  // AST_SWITCH — аналогично if/else
+  if (node->type == AST_SWITCH) {
+    if (node->switch_node.default_body) {
+      return find_last_statement(node->switch_node.default_body);
+    }
+    return NULL;
+  }
+
+  // Все остальные (AST_ASSIGN, AST_CALL, AST_BINOP, etc.) —
+  // это и есть "последнее выражение"
+  return node;
+}
+
+void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
+                   ast_node* last_node = NULL) {
   if (!node) return;
 
   std::string indent_str(indent, ' ');
@@ -417,15 +465,15 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_TERNARY: {
-    transform_constants(node->ternary_node.cond);  
-    output << indent_str;
-    generate_code(node->ternary_node.then,output,indent); 
-    output << " if ";
-    generate_code(node->ternary_node.cond,output,0);
-    output << " else ";
-    generate_code(node->ternary_node.else_,output,0);
-    output << '\n';
-    break;
+      transform_constants(node->ternary_node.cond);
+      output << indent_str;
+      generate_code(node->ternary_node.then, output, indent);
+      output << " if ";
+      generate_code(node->ternary_node.cond, output, 0);
+      output << " else ";
+      generate_code(node->ternary_node.else_, output, 0);
+      output << '\n';
+      break;
     }
 
     case AST_SWITCH: {
@@ -546,7 +594,11 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
         generate_code(node->func_node.args, output, 0);
       }
       output << "):\n";
-      generate_code(node->func_node.body, output, indent + 4);
+      ast_node* last = find_last_statement(node->func_node.body);
+      last->is_last = 1;
+
+      generate_code(node->func_node.body, output, indent + 4, last);
+      //generate_code(last, output, indent + 4);
       break;
     }
     case AST_UNOP: {
@@ -557,7 +609,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
     case AST_RETURN: {
       output << indent_str << "return ";
-      if(node->return_node.value) generate_code(node->return_node.value, output, 0);
+      if (node->return_node.value)
+        generate_code(node->return_node.value, output, 0);
       output << "\n";
       break;
     }
@@ -694,32 +747,31 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
     }
 
     case AST_STMT: {
-      if (node->block_node.stmt != NULL &&
-          node->block_node.stmt->type == AST_IF &&
-          node->block_node.is_else == 1) {
-        // it's else if — generating directly
-        node->block_node.stmt->if_node.is_elif = 1;
-        generate_code(node->block_node.stmt, output, indent);
-      } else {
-        // common block
-        generate_code(node->block_node.stmt, output, indent);
-      }
+      if (last_node != NULL && last_node == node->block_node.stmt) {
+        output << indent_str << "\nreturn ";
+    }
 
-      if (node->block_node.next != NULL) {
-        generate_code(node->block_node.next, output, indent);
-      } else if(node->block_node.next == NULL) {
-      ast_node* new_node = new_return_node(node->block_node.stmt);
-      /*
-      node->block_node.stmt->type = AST_RETURN;
-      node->return_node.value = node->block_node.stmt;
-      */
-      generate_code(new_node,output,indent);
-      }
+        if (node->block_node.stmt != NULL &&
+            node->block_node.stmt->type == AST_IF &&
+            node->block_node.is_else == 1) {
+          // it's else if — generating directly
+          node->block_node.stmt->if_node.is_elif = 1;
+          generate_code(node->block_node.stmt, output, indent,last_node);
+        } else {
+          // common block
+          generate_code(node->block_node.stmt, output, indent,last_node);
+        }
 
+        if (node->block_node.next != NULL) {
+          generate_code(node->block_node.next, output, indent,last_node);
+        } else if (node->block_node.next == NULL)
+          break;
+      
       break;
     }
+
     case AST_STMTS: {
-      generate_code(node->stmt_node.stmt, output, indent);
+      generate_code(node->stmt_node.stmt, output, indent,last_node);
       break;
     }
 
@@ -733,7 +785,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0) {
 
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
-  //yydebug = 1;
+  // yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);

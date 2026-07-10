@@ -37,13 +37,13 @@ ast_node* new_if_node(ast_node* cond, ast_node* then, ast_node* else_) {
   return node;
 }
 
-ast_node* new_ternary_node(ast_node* cond,ast_node* then,ast_node* else_) {
-ast_node* node = calloc(1,sizeof(ast_node));
-node->type = AST_TERNARY;
-node->ternary_node.cond = cond;
-node->ternary_node.then = then;
-node->ternary_node.else_ = else_;
-return node;
+ast_node* new_ternary_node(ast_node* cond, ast_node* then, ast_node* else_) {
+  ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_TERNARY;
+  node->ternary_node.cond = cond;
+  node->ternary_node.then = then;
+  node->ternary_node.else_ = else_;
+  return node;
 }
 
 ast_node* new_for_node(char* var, ast_node* start, ast_node* end,
@@ -213,7 +213,7 @@ ast_node* new_var_node(char* name) {
   return node;
 }
 
-ast_node* new_var_dot_node(char* name,char* scnd_name) {
+ast_node* new_var_dot_node(char* name, char* scnd_name) {
   int len_frst = strlen(name);
   int len_scnd = strlen(scnd_name);
 
@@ -223,9 +223,9 @@ ast_node* new_var_dot_node(char* name,char* scnd_name) {
   with_dot[len_frst] = '.';
 
   strcpy(with_dot + len_frst + 1, scnd_name);
- 
-  if(name) free(name);
-  if(scnd_name) free(scnd_name);
+
+  if (name) free(name);
+  if (scnd_name) free(scnd_name);
 
   return new_var_node(with_dot);
 }
@@ -314,7 +314,6 @@ ast_node* new_call_node(char* name, ast_node* args) {
   return node;
 }
 ast_node* new_call_node_dot(char* name, ast_node* args) {
-
   return new_call_node(name, args);
 }
 

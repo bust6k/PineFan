@@ -5,6 +5,7 @@
 
 typedef struct ast_node {
   int type;
+  int is_last;
   union {
     struct {
       char* name;
@@ -19,7 +20,7 @@ typedef struct ast_node {
       int is_elif;
     } if_node;
     struct {
-    struct ast_node *cond,*then,*else_;
+      struct ast_node *cond, *then, *else_;
     } ternary_node;
     struct {
       char* var;
@@ -164,7 +165,7 @@ ast_node* new_expr_assign_node(ast_node* name, ast_node* value);
 ast_node* new_if_node(ast_node* cond, ast_node* then, ast_node* else_);
 ast_node* new_for_node(char* var, ast_node* start, ast_node* end,
                        ast_node* step, ast_node* body);
-ast_node* new_ternary_node(ast_node* cond,ast_node* then,ast_node* else_);
+ast_node* new_ternary_node(ast_node* cond, ast_node* then, ast_node* else_);
 ast_node* new_while_node(ast_node* cond, ast_node* body);
 ast_node* new_return_node(ast_node* value);
 ast_node* new_var_node(char* name);
@@ -177,7 +178,7 @@ ast_node* new_index_node(ast_node* expr, ast_node* value);
 ast_node* new_comma_expr_node(ast_node* expr);
 ast_node* new_unop_node(char* op, ast_node* operand);
 ast_node* new_call_node(char* name, ast_node* args);
-ast_node* new_call_node_dot(char* name,ast_node* args);
+ast_node* new_call_node_dot(char* name, ast_node* args);
 ast_node* new_call_arg_node(ast_node* expr);
 ast_node* new_func_node(char* ident, ast_node* args, ast_node* body);
 ast_node* new_func_type_node(char* type, char* name);
@@ -203,5 +204,5 @@ ast_node* new_assign_re_node(char* name, ast_node* value);
 ast_node* new_assign_expr_re_node(ast_node* name, ast_node* value);
 ast_node* new_block_node(ast_node* stmt);
 ast_node* new_stmt_node(ast_node* stmts);
-ast_node* new_var_dot_node(char* name,char* scnd_name);
+ast_node* new_var_dot_node(char* name, char* scnd_name);
 void ast_free(ast_node* node);
