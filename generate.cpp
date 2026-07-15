@@ -285,7 +285,8 @@ void prologue(std::ofstream& output, const std::filesystem::path& source_name) {
          << std::format("# - PineFan's version: {}\n", pinefan_version.data())
          << std::format("# - source: {}\n\n", source_name.string());
   output << "from typing import List as array \n";
-  output << "from typing import Dict as map \n\n";
+  output << "from typing import Dict as map \n";
+  output << "ohlcArr = []\n\n";
 }
 
 void indicator(std::string_view str, std::ofstream& output,

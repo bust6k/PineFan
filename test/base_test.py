@@ -5,6 +5,7 @@
 
 from typing import List as array 
 from typing import Dict as map 
+ohlcArr = []
 
 # a constant variable!
 MAX_COUNT = 100
