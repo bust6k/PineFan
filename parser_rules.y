@@ -41,6 +41,7 @@ extern int func_cnt;
 %token case_statement
 %token default_statement
 %token var
+%token varip
 %token const_statement
 %token simple
 %token logical_and
@@ -101,7 +102,7 @@ extern int func_cnt;
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -159,6 +160,7 @@ statement:
     | break_stmt
     | continue_stmt
     | switch_stmt
+    | varip_stmt
     | var_stmt
     | const_stmt
     | simple_stmt
@@ -368,12 +370,19 @@ call_stmt:
 
 var_stmt:
     var identifier assign expr
-    { $$ = new_var_node($2); }
+    { $$ = new_var_node($2,$4); }
     | var identifier
-    { $$ = new_var_node($2); }
+    { $$ = new_var_node($2,NULL); }
     | var identifier assign call_arg_stmt
-     { $$ = new_var_node($2); }
+     { $$ = new_var_node($2,$4); }
     ;
+varip_stmt:
+   varip identifier assign expr
+   { $$ = new_varip_node($2,$4); }
+   | varip identifier
+   { $$ = new_varip_node($2,NULL); }
+   | varip identifier assign call_arg_stmt
+   { $$ = new_varip_node($2,$4);}
 
 const_stmt:
     const_statement identifier assign expr
@@ -384,11 +393,11 @@ const_stmt:
 
 simple_stmt:
     simple identifier
-    { $$ = new_simple_node($2); }
+    { $$ = new_simple_node($2,NULL); }
     | simple identifier assign expr
-    { $$ = new_simple_node($2); }
+    { $$ = new_simple_node($2,$4); }
     |simple identifier assign call_arg_stmt
-    { $$ = new_simple_node($2); }
+    { $$ = new_simple_node($2,$4); }
     ;
 
 import_stmt:
@@ -419,7 +428,7 @@ expr:
     number
     { $$ = new_number_node($1); }
     | identifier
-    { $$ = new_var_node($1); }
+    { $$ = new_var_node($1,NULL); }
     | string
     { $$ = new_string_node($1); }
     | dot_expr

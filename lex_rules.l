@@ -34,6 +34,7 @@ switch { col += 6; return switch_statement; }
 break { col += 5; return break_statement; }
 default { col += 7; return default_statement; }
 while { col += 5; return while_statement; }
+varip { col += 5;return varip;}
 var { col += 3; return var; }
 const { col += 5; return const_statement; }
 simple { col += 6; return simple; }

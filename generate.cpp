@@ -86,9 +86,11 @@ void transform_constants(ast_node* node) {
   switch (node->type) {
     case AST_VAR:
     case AST_SIMPLE:
+    case AST_VARIP:
       if (const_table.count(node->var.name)) {
-        fast_toupper(node->var.name);
+        fast_toupper(node->assign.name);
       }
+      transform_constants(node->assign.value);
       break;
 
     case AST_ASSIGN:
@@ -575,11 +577,13 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       break;
     }
 
+    /*
     case AST_VAR: {
       output << is_in_const_table(node->var.name);
       break;
     }
-
+    */
+  
     case AST_STRING: {
       output << "\"" << node->string.value << "\"";
       break;
@@ -624,7 +628,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       break;
     }
 
-    case AST_ASSIGN: {
+    case AST_ASSIGN: case AST_SIMPLE: case AST_VAR: case AST_VARIP: {
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
       output << "\n";
@@ -792,7 +796,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
   if ((func_cnt == 0) || (udf_depth == 0 && func_cnt != 0 &&
                           func_cnt == func_rg && func_cnt != magic_ohlc)) {
-    output << "\n\nfor bar in ohlcArr\n";
+    output << "\n\nfor bar in ohlcArr:\n";
     indent += 4;
     indent_str += "    ";
     udf_depth = 21103030;

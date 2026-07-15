@@ -206,10 +206,20 @@ ast_node* new_return_node(ast_node* value) {
   return node;
 }
 
-ast_node* new_var_node(char* name) {
+ast_node* new_var_node(char* name,ast_node* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_VAR;
-  node->var.name = name;
+  node->assign.name = name;
+  node->assign.value = value;
+  return node;
+}
+
+
+ast_node* new_varip_node(char* name,ast_node* value){
+ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_VARIP;
+  node->assign.name = name;
+  node->assign.value = value;
   return node;
 }
 
@@ -226,8 +236,8 @@ ast_node* new_var_dot_node(char* name, char* scnd_name) {
 
   if (name) free(name);
   if (scnd_name) free(scnd_name);
-
-  return new_var_node(with_dot);
+//TODO
+  return new_var_node(with_dot,NULL);
 }
 
 ast_node* new_number_node(int value) {
@@ -408,10 +418,11 @@ ast_node* new_const_node(char* name, ast_node* value) {
   return node;
 }
 
-ast_node* new_simple_node(char* name) {
+ast_node* new_simple_node(char* name,ast_node * value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_SIMPLE;
-  node->var.name = name;
+  node->assign.name = name;
+  node->assign.value = value;
   return node;
 }
 
