@@ -22,9 +22,14 @@ extern "C" {
 #include "ppp.hpp"
 
 constexpr std::string_view pinefan_version = "v1.0.0\n";
+const int magic_ohlc = 400000000;
 
 int line = 1;
 int col = 0;
+int udf_depth = 0;
+int func_cnt = 0;
+int func_rg = 0;
+int is_in_exec_model = 0;
 std::unordered_map<std::string, int> const_table;
 
 std::vector<struct ast_node*> program_cpp_root;
@@ -428,6 +433,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
   std::string indent_next(indent + 4, ' ');
 
   int idt = indent;
+  
+  if(is_in_exec_model == 1) indent_str += "    ";
 
   switch (node->type) {
     case AST_IF: {
@@ -589,6 +596,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
 
     case AST_FUNC: {
+      udf_depth++;
+      func_rg++;
       output << "def ";
       output << node->func_node.ident << "(";
       for (int i = 0; i < node->func_node.arg_count; i++) {
@@ -598,6 +607,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       ast_node* last = find_last_statement(node->func_node.body);
 
       generate_code(node->func_node.body, output, indent + 4, last);
+      udf_depth--;
       break;
     }
     case AST_UNOP: {
@@ -746,10 +756,10 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
 
     case AST_STMT: {
-            if (last_node != NULL && last_node == node->block_node.stmt) {
+      if (last_node != NULL && last_node == node->block_node.stmt) {
         output << indent_str << "\nreturn ";
       }
-            if (node->block_node.stmt != NULL &&
+      if (node->block_node.stmt != NULL &&
           node->block_node.stmt->type == AST_IF &&
           node->block_node.is_else == 1) {
         // it's else if — generating directly
@@ -778,6 +788,16 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
              << "\n";
       break;
     }
+  }
+
+  if ((func_cnt == 0) || (udf_depth == 0 && func_cnt != 0 &&
+                          func_cnt == func_rg && func_cnt != magic_ohlc)) {
+    output << "\n\nfor bar in ohlcArr\n";
+    indent += 4;
+    indent_str += "    ";
+    udf_depth = 21103030;
+    func_cnt = magic_ohlc;
+    is_in_exec_model = 1;
   }
 }
 

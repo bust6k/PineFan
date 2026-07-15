@@ -96,3 +96,10 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
         print ("Twenty five")
     
 return result + 2
+
+for bar in ohlcArr
+    foo = 5
+    if foo > 5:
+        foo = 10
+        while foo < 4:
+            y = 7 + foo

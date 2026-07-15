@@ -55,3 +55,9 @@ complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string nam
       50 => indicator("Fifty")   
       
    result + 2
+
+foo = 5
+if foo > 5
+   foo = 10
+   while foo < 4
+      y = 7 + foo

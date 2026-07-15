@@ -14,6 +14,7 @@ extern Vector* program_root;
 
 %{
 extern void yyerror(const char *s);
+extern int func_cnt;
 %}
 
 %union {
@@ -226,7 +227,7 @@ while_stmt:
 
 func_stmt:
    identifier func_paren opt_arg_list func_paren block %prec PREC_FUNC
-   { $$ = new_func_node($1,$3,$5); }
+   { $$ = new_func_node($1,$3,$5);func_cnt++; }
    ; 
 
 opt_arg_list:
