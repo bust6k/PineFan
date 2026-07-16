@@ -10,6 +10,7 @@ ohlcArr = []
 ll = 5
 foo = 10
 lifterfoo = "ss"
+nnn = 1
 10 if no else 5
 # a constant variable!
 MAX_COUNT = 100
@@ -113,6 +114,12 @@ lifterfoo = "ss"
 
 
 for bar in ohlcArr:
+
+
+    nnn = 1
+
+
+    lifter = [    MAX_COUNT][5]
     foo = 5
     if     foo > 5:
         foo = 10

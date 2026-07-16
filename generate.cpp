@@ -37,6 +37,7 @@ std::unordered_map<std::string, int> const_table;
 
 std::vector<struct ast_node*> program_cpp_root;
 std::vector<struct ast_node*> var_buffer;
+std::vector<struct ast_node*> varip_buffer;
 
 Vector* program_root;
 
@@ -443,7 +444,8 @@ ast_node* find_last_statement(ast_node* node) {
 
 void collect_var_variables(ast_node* node, std::ofstream& output,int indent = 0);
 void generate_var_buffer(std::ofstream& output, int indent);
-
+void collect_varip_variables(ast_node* node, std::ofstream& output, int indent);
+void generate_varip_buffer(std::ofstream& output, int indent);
 
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
                    ast_node* last_node = NULL) {
@@ -648,13 +650,21 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
 
     case AST_ASSIGN:
-    case AST_SIMPLE:
-    case AST_VARIP: {
+    case AST_SIMPLE: {
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
       output << "\n";
       break;
     }
+
+
+   case AST_VARIP: {
+      collect_varip_variables(node,output,indent);
+      output << indent_str << node->assign.name << " = ";
+      generate_code(node->assign.value, output, 0);
+      output << "\n";
+      break;
+   }
 
    case AST_VAR: {
    collect_var_variables(node,output,indent);
@@ -841,6 +851,16 @@ var_buffer.push_back(node);
    
 }
 
+void collect_varip_variables(ast_node* node, std::ofstream& output, int indent) {
+    if (!node) return;
+    
+    std::string indent_str(indent, ' ');
+
+ if (node->type == AST_VARIP && node->assign.value != NULL) {
+varip_buffer.push_back(node); 
+}
+}
+
 void generate_bar_loop(std::ofstream& output,int indent = 0,std::string indent_str = "    ") {
   if ((var_collection_done == false) && (func_cnt == 0) || (udf_depth == 0 && func_cnt != 0 &&
                           func_cnt == func_rg && func_cnt != magic_ohlc)) {
@@ -850,6 +870,7 @@ void generate_bar_loop(std::ofstream& output,int indent = 0,std::string indent_s
     
     output << "\n\nfor bar in ohlcArr:\n";
     indent += 4;
+    generate_varip_buffer(output,indent);
     //indent_str += "    ";
     udf_depth = 21103030;
     func_cnt = magic_ohlc;
@@ -868,6 +889,17 @@ void generate_var_buffer(std::ofstream& output, int indent) {
         output << "\n";
     }
 }
+void generate_varip_buffer(std::ofstream& output, int indent) {
+    var_collection_done = true;
+    std::string indent_str(indent, ' ');
+    for (auto* varip : varip_buffer) {
+        output << "\n\n";
+	output << indent_str << varip->assign.name << " = ";
+        generate_code(varip->assign.value, output, indent);
+        output << "\n";
+    }
+}
+
 
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
