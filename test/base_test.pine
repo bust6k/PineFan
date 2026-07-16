@@ -1,12 +1,17 @@
+var ll = 5
+no ? 10 : 5
 const MAX_COUNT = 100
 const THRESHOLD = 50
 const fol = 30
+foo ? 5 : 4
+
 
 complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string name) =>     
+   n = 4
    indicator("Function started")
-   string.foo(5,5,5)
+   foo(5,5,5)
    timeframe.isintraday ? color.red : timeframe.isdaily ? string.green : int.ismonthly ? colorr.blue : na
-   varip lifter =   [MAX_COUNT][5]
+   lifter =   [MAX_COUNT][5]
    foo += ((((5 + 5))))
 
    if flag == true

@@ -131,6 +131,7 @@ typedef enum ast_node_kind {
   AST_RETURN,
   AST_VARIP,
   AST_VAR,
+  AST_VARN,
   AST_NUMBER,
   AST_STRING,
   AST_BINOP,
@@ -168,8 +169,9 @@ ast_node* new_for_node(char* var, ast_node* start, ast_node* end,
 ast_node* new_ternary_node(ast_node* cond, ast_node* then, ast_node* else_);
 ast_node* new_while_node(ast_node* cond, ast_node* body);
 ast_node* new_return_node(ast_node* value);
-ast_node* new_var_node(char* name,ast_node* value);
-ast_node* new_varip_node(char* name,ast_node* value);
+ast_node* new_var_node(char* name, ast_node* value);
+ast_node* new_varip_node(char* name, ast_node* value);
+ast_node* new_varn_node(char* name);
 ast_node* new_number_node(int value);
 ast_node* new_string_node(char* value);
 ast_node* new_binop_node(char* op, ast_node* left, ast_node* right);
@@ -199,7 +201,7 @@ ast_node* new_case_node(ast_node* expr, ast_node* switch_blk_node);
 // ast_node* new_case_node_range(ast_node* from, ast_node* to, ast_node* body);
 ast_node* new_default_node(ast_node* body);
 ast_node* new_const_node(char* name, ast_node* value);
-ast_node* new_simple_node(char* name,ast_node* value);
+ast_node* new_simple_node(char* name, ast_node* value);
 ast_node* new_import_node(char* name);
 ast_node* new_assign_re_node(char* name, ast_node* value);
 ast_node* new_assign_expr_re_node(ast_node* name, ast_node* value);

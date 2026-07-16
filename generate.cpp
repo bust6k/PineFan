@@ -30,9 +30,14 @@ int udf_depth = 0;
 int func_cnt = 0;
 int func_rg = 0;
 int is_in_exec_model = 0;
+
+static bool var_collection_done = false;
+
 std::unordered_map<std::string, int> const_table;
 
 std::vector<struct ast_node*> program_cpp_root;
+std::vector<struct ast_node*> var_buffer;
+
 Vector* program_root;
 
 extern int yylex(void);
@@ -87,10 +92,16 @@ void transform_constants(ast_node* node) {
     case AST_VAR:
     case AST_SIMPLE:
     case AST_VARIP:
-      if (const_table.count(node->var.name)) {
+      if (const_table.count(node->assign.name)) {
         fast_toupper(node->assign.name);
       }
       transform_constants(node->assign.value);
+      break;
+    
+    case AST_VARN:
+      if(const_table.count(node->var.name)) {
+      fast_toupper(node->var.name);
+      }
       break;
 
     case AST_ASSIGN:
@@ -243,6 +254,7 @@ void transform_constants(ast_node* node) {
       break;
   }
 }
+
 void read_source_file(const std::filesystem::path& filename) {
   std::ifstream file(filename);
   if (!file.is_open()) return;
@@ -254,6 +266,7 @@ void read_source_file(const std::filesystem::path& filename) {
 }
 
 extern "C" {
+
 void yyerror(const char* s) {
   const std::string_view& message(s);
 
@@ -301,6 +314,7 @@ void indicator(std::string_view str, std::ofstream& output,
   output << indent_str << "# indicator\n";
   output << indent_str << std::format("print (\"{}\")\n", str);
 }
+
 void strategy(std::string_view str, std::ofstream& output,
               std::string indent_str) {
   output << indent_str << "# strategy\n";
@@ -427,6 +441,10 @@ ast_node* find_last_statement(ast_node* node) {
   return node;
 }
 
+void collect_var_variables(ast_node* node, std::ofstream& output,int indent = 0);
+void generate_var_buffer(std::ofstream& output, int indent);
+
+
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
                    ast_node* last_node = NULL) {
   if (!node) return;
@@ -435,8 +453,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
   std::string indent_next(indent + 4, ' ');
 
   int idt = indent;
-  
-  if(is_in_exec_model == 1) indent_str += "    ";
+
+  if (is_in_exec_model == 1) indent_str += "    ";
 
   switch (node->type) {
     case AST_IF: {
@@ -577,13 +595,13 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       break;
     }
 
-    /*
-    case AST_VAR: {
-      output << is_in_const_table(node->var.name);
-      break;
-    }
-    */
-  
+      /*
+      case AST_VAR: {
+        output << is_in_const_table(node->var.name);
+        break;
+      }
+      */
+
     case AST_STRING: {
       output << "\"" << node->string.value << "\"";
       break;
@@ -602,6 +620,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     case AST_FUNC: {
       udf_depth++;
       func_rg++;
+
       output << "def ";
       output << node->func_node.ident << "(";
       for (int i = 0; i < node->func_node.arg_count; i++) {
@@ -628,13 +647,28 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       break;
     }
 
-    case AST_ASSIGN: case AST_SIMPLE: case AST_VAR: case AST_VARIP: {
+    case AST_ASSIGN:
+    case AST_SIMPLE:
+    case AST_VARIP: {
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
       output << "\n";
       break;
     }
 
+   case AST_VAR: {
+   collect_var_variables(node,output,indent);
+   output << indent_str << node->assign.name << " = ";
+      generate_code(node->assign.value, output, 0);
+      output << "\n";
+      break;
+   }
+    
+   case AST_VARN: {
+   output << indent_str << node->var.name;
+   break;
+   }
+   
     case AST_EXPR_ASSIGN: {
       generate_code(node->ast_assign.name, output, indent);
       output << " = ";
@@ -793,21 +827,50 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       break;
     }
   }
+}
 
-  if ((func_cnt == 0) || (udf_depth == 0 && func_cnt != 0 &&
+void collect_var_variables(ast_node* node, std::ofstream& output, int indent) {
+    if (!node) return;
+    
+    std::string indent_str(indent, ' ');
+
+ if (node->type == AST_VAR && node->assign.value != NULL) {
+var_buffer.push_back(node); 
+}
+
+   
+}
+
+void generate_bar_loop(std::ofstream& output,int indent = 0,std::string indent_str = "    ") {
+  if ((var_collection_done == false) && (func_cnt == 0) || (udf_depth == 0 && func_cnt != 0 &&
                           func_cnt == func_rg && func_cnt != magic_ohlc)) {
+    var_collection_done = true;
+
+    generate_var_buffer(output,indent);
+    
     output << "\n\nfor bar in ohlcArr:\n";
     indent += 4;
-    indent_str += "    ";
+    //indent_str += "    ";
     udf_depth = 21103030;
     func_cnt = magic_ohlc;
     is_in_exec_model = 1;
   }
+
+}
+
+void generate_var_buffer(std::ofstream& output, int indent) {
+    var_collection_done = true;
+    std::string indent_str(indent, ' ');
+    for (auto* var : var_buffer) {
+        output << indent_str << var->assign.name << " = ";
+        generate_code(var->assign.value, output, 0);
+        output << "\n";
+    }
 }
 
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
-  // yydebug = 1;
+  yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
@@ -845,6 +908,7 @@ int main(int argc, char* argv[]) {
 
     for (int j = 0; j < program_cpp_root.size(); j++) {
       auto* val = program_cpp_root.at(j);
+      generate_bar_loop(output_file);
       generate_code(val, output_file);
     }
   }

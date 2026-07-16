@@ -7,59 +7,44 @@ from typing import List as array
 from typing import Dict as map 
 ohlcArr = []
 
+ll = 5
+10 if no else 5
 # a constant variable!
 MAX_COUNT = 100
 # a constant variable!
 THRESHOLD = 50
 # a constant variable!
 FOL = 30
+5 if foo else 4
 def complex_func(arr: array[int], map_name: array.ta[str.ta], flag: bool, name: str):
+    n = 4
     # indicator
     print ("Function started")
-    str.foo(5, 5, 5)
-        color.red = 
- if timeframe.isintraday = 
- else str.green = 
- if timeframe.isdaily = 
- else colorr.blue = 
- if int.ismonthly = 
- else na = 
+    foo(5, 5, 5)
+        color.red if timeframe.isintraday else str.green if timeframe.isdaily else colorr.blue if int.ismonthly else na
 
 
-
-    lifter = [MAX_COUNT = 
-][5]
-foo = 
- += ( ( ( ( 5 + 5 ) ) ) )    if flag = 
- == true = 
-:
+    lifter = [MAX_COUNT][5]
+foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
         # strategy
         print ("Flag is active")
-        if arr = 
- > THRESHOLD = 
-:
+        if arr > THRESHOLD:
             # indicator
             print ("Array first element above threshold")
-            for i in range(0, arr = 
- + 1):
-                if i = 
- % 2 == 0:
+            for i in range(0, arr + 1):
+                if i % 2 == 0:
                     # indicator
                     print ("Even iteration")
-                elif i = 
- > 25:
+                elif i > 25:
                     break
-                elif i = 
- % 3 == 0:
+                elif i % 3 == 0:
                     # indicator
                     print ("Divisible by 3")
                     continue
-                elif i = 
- == 1:
+                elif i == 1:
                     # strategy
                     print ("Odd iteration")
-                elif i = 
- == 45:
+                elif i == 45:
                     # indicator
                     print ("Halfway point!")
         # indicator
@@ -69,80 +54,57 @@ foo =
         # elif is all the other conditions
         # and else - it's an optional last condition like default in switch-statement
 
-        if arr = 
- == 10:
+        if arr == 10:
             # strategy
             print ("Exactly 10")
-        elif arr = 
- == 75:
+        elif arr == 75:
             # strategy
             print ("Three quarters")
-        elif arr = 
- == 50:
+        elif arr == 50:
             # indicator
             print ("Half way")
-        elif arr = 
- == 25:
+        elif arr == 25:
             # indicator
             print ("Quarter way")
         else:
             # indicator
             print ("Default value")
-    elif flag = 
- == false = 
-:
+    elif flag == false:
         # indicator
         print ("Flag is false")
-        while arr = 
- < THRESHOLD = 
-:
-            arr = arr = 
- + 5
-            if arr = 
- > 40:
+        while arr < THRESHOLD:
+            arr = arr + 5
+            if arr > 40:
                 # strategy
                 print ("Approaching threshold")
-                if arr = 
- == 45:
+                if arr == 45:
                     break
     # strategy
     print ("Flag state unknown")
     return -1
-    result = ( arr0 = 
- * 2 + ( THRESHOLD = 
- - 10 ) )
-    nested_call(complex_func = 
-, arr0 = 
- + arr = 
-, !flag = 
-)
+    result = ( arr0 * 2 + ( THRESHOLD - 10 ) )
+    nested_call(complex_func, arr0 + arr, !flag)
     # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
     # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
     # elif is all the other conditions
     # and else - it's an optional last condition like default in switch-statement
 
-    if result = 
- == 0:
+    if result == 0:
         # indicator
         print ("Zero result")
-    elif result = 
- == 50:
+    elif result == 50:
         # indicator
         print ("Fifty")
-    elif result = 
- == 25:
+    elif result == 25:
         # indicator
         print ("Twenty five")
     
-return result = 
- + 2
+return result + 2ll = 5
+
 
 for bar in ohlcArr:
     foo = 5
-    if     foo = 
- > 5:
+    if     foo > 5:
         foo = 10
-        while     foo = 
- < 4:
-            y = 7 +     foo = 
-
+        while     foo < 4:
+            y = 7 +     foo

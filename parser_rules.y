@@ -371,8 +371,6 @@ call_stmt:
 var_stmt:
     var identifier assign expr
     { $$ = new_var_node($2,$4); }
-    | var identifier
-    { $$ = new_var_node($2,NULL); }
     | var identifier assign call_arg_stmt
      { $$ = new_var_node($2,$4); }
     ;
@@ -428,7 +426,7 @@ expr:
     number
     { $$ = new_number_node($1); }
     | identifier
-    { $$ = new_var_node($1,NULL); }
+    { $$ = new_varn_node($1); }
     | string
     { $$ = new_string_node($1); }
     | dot_expr
