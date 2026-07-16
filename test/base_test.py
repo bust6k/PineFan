@@ -8,6 +8,8 @@ from typing import Dict as map
 ohlcArr = []
 
 ll = 5
+foo = 10
+lifterfoo = "ss"
 10 if no else 5
 # a constant variable!
 MAX_COUNT = 100
@@ -99,7 +101,15 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
         # indicator
         print ("Twenty five")
     
-return result + 2ll = 5
+return result + 2
+
+ll = 5
+
+
+foo = 10
+
+
+lifterfoo = "ss"
 
 
 for bar in ohlcArr:

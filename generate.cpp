@@ -862,7 +862,8 @@ void generate_var_buffer(std::ofstream& output, int indent) {
     var_collection_done = true;
     std::string indent_str(indent, ' ');
     for (auto* var : var_buffer) {
-        output << indent_str << var->assign.name << " = ";
+        output << "\n\n";
+	output << indent_str << var->assign.name << " = ";
         generate_code(var->assign.value, output, 0);
         output << "\n";
     }
