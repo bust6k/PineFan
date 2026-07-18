@@ -448,7 +448,7 @@ void collect_varip_variables(ast_node* node, std::ofstream& output, int indent);
 void generate_varip_buffer(std::ofstream& output, int indent);
 
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
-                   ast_node* last_node = NULL) {
+                   ast_node* last_node = NULL,int is_quad = 0) {
   if (!node) return;
 
   std::string indent_str(indent, ' ');
@@ -580,7 +580,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
     case AST_QUAD_BRACE_OP: {
       output << "[";
-      generate_code(node->quad_expr.expr, output, indent);
+      generate_code(node->quad_expr.expr, output, indent,NULL,1);
       output << "]";
       break;
     }
@@ -675,7 +675,13 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
    }
     
    case AST_VARN: {
-   output << indent_str << node->var.name;
+   if(!is_quad){
+    output << indent_str << node->var.name;
+   } else {
+   output << node->var.name;
+   }
+
+   if(node->var.n) output << "\n";
    break;
    }
    
@@ -805,7 +811,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
     case AST_STMT: {
       if (last_node != NULL && last_node == node->block_node.stmt) {
-        output << indent_str << "\nreturn ";
+        output << indent_str << "return ";
       }
       if (node->block_node.stmt != NULL &&
           node->block_node.stmt->type == AST_IF &&
@@ -883,7 +889,7 @@ void generate_var_buffer(std::ofstream& output, int indent) {
     var_collection_done = true;
     std::string indent_str(indent, ' ');
     for (auto* var : var_buffer) {
-        output << "\n\n";
+        //output << "\n";
 	output << indent_str << var->assign.name << " = ";
         generate_code(var->assign.value, output, 0);
         output << "\n";
@@ -893,7 +899,7 @@ void generate_varip_buffer(std::ofstream& output, int indent) {
     var_collection_done = true;
     std::string indent_str(indent, ' ');
     for (auto* varip : varip_buffer) {
-        output << "\n\n";
+        //output << "\n";
 	output << indent_str << varip->assign.name << " = ";
         generate_code(varip->assign.value, output, indent);
         output << "\n";

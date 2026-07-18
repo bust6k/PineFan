@@ -8,7 +8,8 @@ from typing import Dict as map
 ohlcArr = []
 
 foo.foo = 1
-ccc5 if foo else 2
+ccc
+5 if foo else 2
 ll = 5
 foo = 10
 lifterfoo = "ss"
@@ -104,24 +105,15 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
     elif result == 25:
         # indicator
         print ("Twenty five")
-    res    
-return     f
-
+    res
+    return     f
 ll = 5
-
-
 foo = 10
-
-
 lifterfoo = "ss"
 
 
 for bar in ohlcArr:
-
-
     nnn = 1
-
-
-    lifter = [    MAX_COUNT][5]
+    lifter = [MAX_COUNT][5]
     if     foo > 5:
         y = 10 + 5

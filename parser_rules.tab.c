@@ -1810,7 +1810,7 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 
   case 25: /* ident_stmt: identifier  */
 #line 181 "parser_rules.y"
-   { ((*yyvalp).node) = new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.sval));}
+   { ((*yyvalp).node) = new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.sval),1);}
 #line 1815 "parser_rules.tab.c"
     break;
 
@@ -2248,31 +2248,31 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 
   case 95: /* compound_assign_stmt: identifier plus_and_assign expr  */
 #line 439 "parser_rules.y"
-    { ((*yyvalp).node) = new_binop_node("+=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval)), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
+    { ((*yyvalp).node) = new_binop_node("+=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval),0), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
 #line 2253 "parser_rules.tab.c"
     break;
 
   case 96: /* compound_assign_stmt: identifier minus_and_assign expr  */
 #line 441 "parser_rules.y"
-    { ((*yyvalp).node) = new_binop_node("-=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval)), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
+    { ((*yyvalp).node) = new_binop_node("-=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval),0), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
 #line 2259 "parser_rules.tab.c"
     break;
 
   case 97: /* compound_assign_stmt: identifier multiply_and_assign expr  */
 #line 443 "parser_rules.y"
-    { ((*yyvalp).node) = new_binop_node("*=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval)), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
+    { ((*yyvalp).node) = new_binop_node("*=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval),0), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
 #line 2265 "parser_rules.tab.c"
     break;
 
   case 98: /* compound_assign_stmt: identifier divide_and_assign expr  */
 #line 445 "parser_rules.y"
-    { ((*yyvalp).node) = new_binop_node("/=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval)), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
+    { ((*yyvalp).node) = new_binop_node("/=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval),0), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
 #line 2271 "parser_rules.tab.c"
     break;
 
   case 99: /* compound_assign_stmt: identifier remind_and_assign expr  */
 #line 447 "parser_rules.y"
-    { ((*yyvalp).node) = new_binop_node("%=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval)), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
+    { ((*yyvalp).node) = new_binop_node("%=", new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.sval),0), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
 #line 2277 "parser_rules.tab.c"
     break;
 
@@ -2308,7 +2308,7 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 
   case 105: /* ternary_expr: identifier question_sign expr colon expr  */
 #line 462 "parser_rules.y"
-    { ((*yyvalp).node) = new_ternary_node(new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-4)].yystate.yysemantics.yyval.sval)), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.node), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
+    { ((*yyvalp).node) = new_ternary_node(new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-4)].yystate.yysemantics.yyval.sval),0), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.node), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node)); }
 #line 2313 "parser_rules.tab.c"
     break;
 
@@ -2500,7 +2500,7 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 
   case 137: /* expr: identifier  */
 #line 529 "parser_rules.y"
-    { ((*yyvalp).node) = new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.sval)); }
+    { ((*yyvalp).node) = new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.sval),0); }
 #line 2505 "parser_rules.tab.c"
     break;
 

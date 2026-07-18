@@ -178,7 +178,7 @@ statement:
 
 ident_stmt:
    identifier
-   { $$ = new_varn_node($1);}
+   { $$ = new_varn_node($1,1);}
 
 block:
     left_brace stmt_list right_brace
@@ -436,15 +436,15 @@ assignment_re_stmt:
 
 compound_assign_stmt:
     identifier plus_and_assign expr
-    { $$ = new_binop_node("+=", new_varn_node($1), $3); }
+    { $$ = new_binop_node("+=", new_varn_node($1,0), $3); }
     | identifier minus_and_assign expr
-    { $$ = new_binop_node("-=", new_varn_node($1), $3); }
+    { $$ = new_binop_node("-=", new_varn_node($1,0), $3); }
     | identifier multiply_and_assign expr
-    { $$ = new_binop_node("*=", new_varn_node($1), $3); }
+    { $$ = new_binop_node("*=", new_varn_node($1,0), $3); }
     | identifier divide_and_assign expr
-    { $$ = new_binop_node("/=", new_varn_node($1), $3); }
+    { $$ = new_binop_node("/=", new_varn_node($1,0), $3); }
     | identifier remind_and_assign expr
-    { $$ = new_binop_node("%=", new_varn_node($1), $3); }
+    { $$ = new_binop_node("%=", new_varn_node($1,0), $3); }
     | dot_expr plus_and_assign expr
     { $$ = new_binop_node("+=", $1, $3); }
     | dot_expr minus_and_assign expr
@@ -459,7 +459,7 @@ compound_assign_stmt:
 
 ternary_expr:
     identifier question_sign expr colon expr
-    { $$ = new_ternary_node(new_varn_node($1), $3, $5); }
+    { $$ = new_ternary_node(new_varn_node($1,0), $3, $5); }
     | dot_expr question_sign expr colon expr
     { $$ = new_ternary_node($1, $3, $5); }
     | left_paren expr right_paren question_sign expr colon expr
@@ -526,7 +526,7 @@ expr:
     | dot_expr
     { $$ = $1; } 
     | identifier %prec LOWEST_PREC
-    { $$ = new_varn_node($1); }
+    { $$ = new_varn_node($1,0); }
     ;
 
 %%

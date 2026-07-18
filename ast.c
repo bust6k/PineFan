@@ -222,10 +222,11 @@ ast_node* new_varip_node(char* name, ast_node* value) {
   return node;
 }
 
-ast_node* new_varn_node(char* name) {
+ast_node* new_varn_node(char* name,int is_need_n) {
 ast_node* node = calloc(1,sizeof(ast_node));
 node->type = AST_VARN;
 node->var.name = name;
+node->var.n = is_need_n;
 return node;
 
 }
@@ -244,7 +245,7 @@ ast_node* new_var_dot_node(char* name, char* scnd_name) {
   if (name) free(name);
   if (scnd_name) free(scnd_name);
   // TODO
-  return new_varn_node(with_dot);
+  return new_varn_node(with_dot,0);
 }
 
 ast_node* new_number_node(int value) {
