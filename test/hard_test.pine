@@ -6,35 +6,36 @@ fooisisisisiiisi(a,b) =>
 // © AlgoAlpha
 
 //@version=6
-indicator("SuperTrend Take-Profit Dimensions [AlgoAlpha]", "AlgoAlpha - SuperTrend TP Dimensions", true, max_boxes_count = 500, explicit_plot_zorder = true, max_bars_back = 5000)
+//indicator("SuperTrend Take-Profit Dimensions [AlgoAlpha]", "AlgoAlpha - SuperTrend TP Dimensions", true, max_boxes_count = 500, explicit_plot_zorder = true, max_bars_back = 5000)
 
 // === INPUTS ===
-atrPeriod = input.int(10, "SuperTrend ATR period", minval = 1, group = "Signal Settings", tooltip = "ATR length used inside SuperTrend. Higher values smooth the stop; lower values react faster to volatility changes.")
-stFactor = input.float(3.0, "SuperTrend factor", minval = 0.1, step = 0.1, group = "Signal Settings", tooltip = "Multiplier applied to ATR for stop distance. Larger values widen the band (fewer trend flips); smaller values tighten the band.")
 
-zzLen = input.int(3, "Zig Zag pivot length", minval = 2, maxval = 50, group = "Signal Settings", tooltip = "Bars on each side required to confirm a pivot. Lower values will record more TP points, potentially subject to more noise. Exit samples are taken from the pivot bar, not from the bar where the pivot first prints.")
+//atrPeriod = input.int(10, "SuperTrend ATR period", minval = 1, group = "Signal Settings", tooltip = "ATR length used inside SuperTrend. Higher values smooth the stop; lower values react faster to volatility changes.")
+//stFactor = input.float(3.0, "SuperTrend factor", minval = 0.1, step = 0.1, group = "Signal Settings", tooltip = "Multiplier applied to ATR for stop distance. Larger values widen the band (fewer trend flips); smaller values tighten the band.")
 
-component_1 = input.bool(true, "Relative volume percentile", group = "Context Axes", tooltip = "When on, 50-bar volume percentile (0–100) buckets past zigzag exits and feeds the conditional histogram, profiles, and blended favourability score.")
-component_2 = input.bool(true, "Time of day", group = "Context Axes", tooltip = "When on, a session time-of-day score (0–100) buckets exits and feeds conditioning, profiles, and the favourability blend. Intraday timeframes only — automatically disabled on daily and higher timeframes where time-of-day has no meaning.")
-component_3 = input.bool(true, "Position in recent range", group = "Context Axes", tooltip = "When on, price position within the recent high–low window (0–100) buckets exits and feeds conditioning, profiles, and the favourability blend.")
+//zzLen = input.int(3, "Zig Zag pivot length", minval = 2, maxval = 50, group = "Signal Settings", tooltip = "Bars on each side required to confirm a pivot. Lower values will record more TP points, potentially subject to more noise. Exit samples are taken from the pivot bar, not from the bar where the pivot first prints.")
 
-component_custom = input.bool(false, "", inline = "cust", group = "Context Axes")
-c_custom = input.source(close, "Custom signal", inline = "cust", group = "Context Axes", tooltip = "Checkbox + source: adds a fourth axis from this plot. Values must stay within 0–100 on every loaded bar and on the current bar (checked with ta.max/ta.min and the live value); otherwise the custom leg is ignored and a bottom-centre warning is shown. Use a series already scaled to 0–100, or rescale your indicator. Note: toggling this setting on a live chart starts the all-time range check from the current bar — reload the chart to validate against the full loaded history.")
+//component_1 = input.bool(true, "Relative volume percentile", group = "Context Axes", tooltip = "When on, 50-bar volume percentile (0–100) buckets past zigzag exits and feeds the conditional histogram, profiles, and blended favourability score.")
+//component_2 = input.bool(true, "Time of day", group = "Context Axes", tooltip = "When on, a session time-of-day score (0–100) buckets exits and feeds conditioning, profiles, and the favourability blend. Intraday timeframes only — automatically disabled on daily and higher timeframes where time-of-day has no meaning.")
+//component_3 = input.bool(true, "Position in recent range", group = "Context Axes", tooltip = "When on, price position within the recent high–low window (0–100) buckets exits and feeds conditioning, profiles, and the favourability blend.")
 
-binCount = input.int(5, "Profile bin count", minval = 2, maxval = 100, group = "Appearance", tooltip = "Number of equal-width bins spanning 0–100 for each axis. More bins give finer resolution; fewer bins aggregate more mass per bar.")
-contextGaugeRows = input.int(15, "Favourability gauge rows", minval = 3, maxval = 40, group = "Appearance", tooltip = "Vertical row count for the exit favourability gauge. More rows give a finer vertical marker step; fewer rows compress the display.")
+//component_custom = input.bool(false, "", inline = "cust", group = "Context Axes")
+//c_custom = input.source(close, "Custom signal", inline = "cust", group = "Context Axes", tooltip = "Checkbox + source: adds a fourth axis from this plot. Values must stay within 0–100 on every loaded bar and on the current bar (checked with ta.max/ta.min and the live value); otherwise the custom leg is ignored and a bottom-centre warning is shown. Use a series already scaled to 0–100, or rescale your indicator. Note: toggling this setting on a live chart starts the all-time range check from the current bar — reload the chart to validate against the full loaded history.")
 
-green = input.color(#00ffbb, title = "Bullish Colour", group = "Appearance", tooltip = "Accent for bullish regime: SuperTrend up line and fill, bullish-side profile bars, and positive histogram styling where applicable.")
-red = input.color(#ff1100, title = "Bearish Colour", group = "Appearance", tooltip = "Accent for bearish regime: SuperTrend down line and fill, bearish-side profile bars, and negative histogram styling where applicable.")
+//binCount = input.int(5, "Profile bin count", minval = 2, maxval = 100, group = "Appearance", tooltip = "Number of equal-width bins spanning 0–100 for each axis. More bins give finer resolution; fewer bins aggregate more mass per bar.")
+//contextGaugeRows = input.int(15, "Favourability gauge rows", minval = 3, maxval = 40, group = "Appearance", tooltip = "Vertical row count for the exit favourability gauge. More rows give a finer vertical marker step; fewer rows compress the display.")
 
-show_take_profit_signals = input.bool(true, "Take profit signals", group = "Appearance", tooltip = "When on, small orange markers print when the blended favourability score is at or near 100 — i.e., the current bar's context matches the historical peak-density exit context for the active SuperTrend direction.")
-show_bar_coloring = input.bool(true, "Bar coloring", group = "Appearance", tooltip = "When on, bars shade from neutral gray toward the opposing trend colour as the blended favourability score rises toward 100.")
-show_context_profiles = input.bool(true, "Context profiles", group = "Appearance", tooltip = "When on, draws the stacked mini histograms to the right of price — one slot per enabled axis — showing conditional exit counts per bin. Dashed vertical line marks the current bar's bin on each axis.")
-show_supertrend = input.bool(true, "SuperTrend line & fill", group = "Appearance", tooltip = "When on, shows the SuperTrend stop line, bull/bear fill between mid-price and the stop, and flip markers at trend changes.")
-show_exit_favourability_gauge = input.bool(true, "Exit favourability gauge", group = "Appearance", tooltip = "When on, shows the bottom-right table gauge: blended favourability score (0–100) with a colour gradient and a chevron marker row. The score measures how closely the current bar's context matches the peak historical exit context, not a forward probability.")
-show_favourability_breakdown_table = input.bool(true, "Favourability breakdown table", group = "Appearance", tooltip = "When on, shows a two-column table: each enabled axis lists its conditional score out of 100; the last row classifies the blended score used by the gauge.")
-contextTablePosition = input.string("top right", "Breakdown table position", options = ["bottom center", "bottom left", "bottom right", "middle center", "middle left", "middle right", "top center", "top left", "top right"], group = "Appearance", tooltip = "Chart corner where the breakdown table is anchored (independent from the favourability gauge position).")
-contextTableSize = input.string("Small", "Breakdown table text size", options = ["Tiny", "Small", "Medium", "Large"], group = "Appearance", tooltip = "Text size for breakdown table headers and body cells.")
+//green = input.color(#00ffbb, title = "Bullish Colour", group = "Appearance", tooltip = "Accent for bullish regime: SuperTrend up line and fill, bullish-side profile bars, and positive histogram styling where applicable.")
+//red = input.color(#ff1100, title = "Bearish Colour", group = "Appearance", tooltip = "Accent for bearish regime: SuperTrend down line and fill, bearish-side profile bars, and negative histogram styling where applicable.")
+
+//show_take_profit_signals = input.bool(true, "Take profit signals", group = "Appearance", tooltip = "When on, small orange markers print when the blended favourability score is at or near 100 — i.e., the current bar's context matches the historical peak-density exit context for the active SuperTrend direction.")
+//show_bar_coloring = input.bool(true, "Bar coloring", group = "Appearance", tooltip = "When on, bars shade from neutral gray toward the opposing trend colour as the blended favourability score rises toward 100.")
+//show_context_profiles = input.bool(true, "Context profiles", group = "Appearance", tooltip = "When on, draws the stacked mini histograms to the right of price — one slot per enabled axis — showing conditional exit counts per bin. Dashed vertical line marks the current bar's bin on each axis.")
+//show_supertrend = input.bool(true, "SuperTrend line & fill", group = "Appearance", tooltip = "When on, shows the SuperTrend stop line, bull/bear fill between mid-price and the stop, and flip markers at trend changes.")
+//show_exit_favourability_gauge = input.bool(true, "Exit favourability gauge", group = "Appearance", tooltip = "When on, shows the bottom-right table gauge: blended favourability score (0–100) with a colour gradient and a chevron marker row. The score measures how closely the current bar's context matches the peak historical exit context, not a forward probability.")
+//show_favourability_breakdown_table = input.bool(true, "Favourability breakdown table", group = "Appearance", tooltip = "When on, shows a two-column table: each enabled axis lists its conditional score out of 100; the last row classifies the blended score used by the gauge.")
+contextTablePosition = lif.stri("top right", "Breakdown table position", options = ["bottom center", "bottom left", "bottom right", "middle center", "middle left", "middle right", "top center", "top left", "top right"], group = "Appearance", tooltip = "Chart corner where the breakdown table is anchored (independent from the favourability gauge position).")
+//contextTableSize = input.string("Small", "Breakdown table text size", options = ["Tiny", "Small", "Medium", "Large"], group = "Appearance", tooltip = "Text size for breakdown table headers and body cells.")
 
 const int PROFILE_OFFSET_BARS = 70
 const int PROFILE_BIN_SPACING = 12
