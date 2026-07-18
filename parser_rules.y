@@ -1,3 +1,4 @@
+
 %define parse.error verbose
 %glr-parser
 
@@ -391,10 +392,10 @@ varip_stmt:
    { $$ = new_varip_node($2,$4);}
 
 const_stmt:
-    const_statement identifier assign expr
-    { $$ = new_const_node($2, $4); }
-    | const_statement identifier assign call_arg_stmt
-    { $$ = new_const_node($2, $4);}
+    const_statement pine_type identifier assign expr
+    { $$ = new_const_node($3, $5); }
+    | const_statement pine_type identifier assign call_arg_stmt
+    { $$ = new_const_node($3, $5);}
     ;
 
 simple_stmt:
@@ -412,7 +413,7 @@ import_stmt:
     ;
 
 assignment_stmt:
-     identifier assign expr
+    identifier assign expr
     { $$ = new_assign_node($1, $3); }
     | identifier assign call_arg_stmt
     { $$ = new_assign_node($1,$3); }
