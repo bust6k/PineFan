@@ -7,11 +7,14 @@ from typing import List as array
 from typing import Dict as map 
 ohlcArr = []
 
+foo.foo = 1
+ccc5 if foo else 2
 ll = 5
 foo = 10
 lifterfoo = "ss"
 nnn = 1
-10 if no else 5
+y = 5
+foo.foo = 5
 # a constant variable!
 MAX_COUNT = 100
 # a constant variable!
@@ -101,8 +104,8 @@ foo += ( ( ( ( 5 + 5 ) ) ) )    if flag == true:
     elif result == 25:
         # indicator
         print ("Twenty five")
-    
-return result + 2
+    res    
+return     f
 
 ll = 5
 
@@ -120,8 +123,5 @@ for bar in ohlcArr:
 
 
     lifter = [    MAX_COUNT][5]
-    foo = 5
     if     foo > 5:
-        foo = 10
-        while     foo < 4:
-            y = 7 +     foo
+        y = 10 + 5

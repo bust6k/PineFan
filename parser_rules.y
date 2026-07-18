@@ -1,4 +1,5 @@
 %define parse.error verbose
+%glr-parser
 
 %code requires {
 #include <stdio.h>
@@ -26,7 +27,6 @@ extern int func_cnt;
 %token LOWEST_PREC
 %right LOWEST_PREC
 
-%right question_sign
 
 %token indicator_function
 %token strategy_function
@@ -104,7 +104,7 @@ extern int func_cnt;
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt compound_assign_stmt 
+%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt  compound_assign_stmt ternary_expr ident_stmt
 %start program
 
 
@@ -171,9 +171,15 @@ statement:
     | import_stmt
     | assignment_stmt
     | assignment_re_stmt
+    | ternary_expr
     | compound_assign_stmt
+    | ident_stmt
     ;
- 
+
+ident_stmt:
+   identifier
+   { $$ = new_varn_node($1);}
+
 block:
     left_brace stmt_list right_brace
     { $$ = new_stmt_node($2); }
@@ -283,6 +289,7 @@ pine_type:
   { $$ = new_type_name(color_type);}
   | identifier
   { $$ = $1;}
+  ;
  
 return_stmt_expr:
      return_statement  expr
@@ -346,7 +353,7 @@ switch_block_stmts:
    ;
 
 dot_expr:
-    pine_type dot identifier %prec PREC_TERNARY_IDENT
+    pine_type dot identifier
     { $$ = new_var_dot_node($1, $3); }
     ;
 
@@ -450,15 +457,22 @@ compound_assign_stmt:
     { $$ = new_binop_node("%=", $1, $3); }
     ;
 
+ternary_expr:
+    identifier question_sign expr colon expr
+    { $$ = new_ternary_node(new_varn_node($1), $3, $5); }
+    | dot_expr question_sign expr colon expr
+    { $$ = new_ternary_node($1, $3, $5); }
+    | left_paren expr right_paren question_sign expr colon expr
+    { $$ = new_ternary_node($2, $5, $7); }
+    ;
+
 expr:
-    number
+    ternary_expr
+    { $$ = $1;}
+    | number
     { $$ = new_number_node($1); }
-    | identifier
-    { $$ = new_varn_node($1); }
     | string
     { $$ = new_string_node($1); }
-    | dot_expr
-    { $$ = $1;}
     | expr plus expr
     { $$ = new_binop_node("+", $1, $3); }
     | expr minus expr
@@ -499,18 +513,20 @@ expr:
     { $$ = new_unop_node("!", $2); }
     | bitwise_not expr
     { $$ = new_unop_node("~", $2); }
-    | minus  expr %prec multiply
+    | minus expr %prec multiply
     { $$ = new_unop_node("-", $2); }
-    | plus  expr %prec multiply
+    | plus expr %prec multiply
     { $$ = new_unop_node("+", $2); }
     | left_paren expr right_paren
     { $$ = new_paren_expr_node($2); }
     | expr left_quad_brace expr right_quad_brace
     { $$ = new_index_node($1,$3); }
     | left_quad_brace expr right_quad_brace
-    { $$ = new_quad_brace_expr_node($2); }
-    | expr question_sign expr colon expr %prec PREC_TERNARY_IDENT
-    { $$ = new_ternary_node($1,$3,$5); }
+    { $$ = new_quad_brace_expr_node($2); } 
+    | dot_expr
+    { $$ = $1; } 
+    | identifier %prec LOWEST_PREC
+    { $$ = new_varn_node($1); }
     ;
 
 %%

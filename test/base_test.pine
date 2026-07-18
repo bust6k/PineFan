@@ -1,9 +1,14 @@
+foo.foo=1
+ccc
+foo ? 5 : 2
 var ll = 5
 var foo = 10 
 var lifterfoo = "ss"
 varip nnn = 1
+y = 5
 
-no ? 10 : 5
+foo.foo = 5
+
 const MAX_COUNT = 100
 const THRESHOLD = 50
 const fol = 30
@@ -16,8 +21,7 @@ complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string nam
    foo(5,5,5)
    timeframe.isintraday ? color.red : timeframe.isdaily ? string.green : int.ismonthly ? colorr.blue : na
    varip lifter =   [MAX_COUNT][5]
-   foo += ((((5 + 5))))
-
+   foo += ((((5 + 5)))) 
    if flag == true
       strategy("Flag is active")
       if arr > THRESHOLD
@@ -53,20 +57,17 @@ complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string nam
    else
       strategy("Flag state unknown")
       return -1
-
+   
    result = (arr0 * 2 + (THRESHOLD - 10))
 
    nested_call(complex_func, arr0 + arr, !flag)
-
+   
    switch result
       0 => indicator("Zero result")
       25 => indicator("Twenty five")
       50 => indicator("Fifty")   
-      
-   result + 2
+   res
+   f     
 
-foo = 5
 if foo > 5
-   foo = 10
-   while foo < 4
-      y = 7 + foo
+   y = 10 + 5 
