@@ -26,6 +26,8 @@ extern int func_cnt;
 %token LOWEST_PREC
 %right LOWEST_PREC
 
+%right question_sign
+
 %token indicator_function
 %token strategy_function
 %token if_statement
@@ -102,7 +104,7 @@ extern int func_cnt;
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt compound_assign_stmt 
 %start program
 
 
@@ -169,7 +171,7 @@ statement:
     | import_stmt
     | assignment_stmt
     | assignment_re_stmt
-    | expr %prec LOWEST_PREC
+    | compound_assign_stmt
     ;
  
 block:
@@ -408,8 +410,10 @@ assignment_stmt:
     { $$ = new_assign_node($1, $3); }
     | identifier assign call_arg_stmt
     { $$ = new_assign_node($1,$3); }
-    | expr assign expr
-    { $$ = new_expr_assign_node($1,$3); }
+    | dot_expr assign expr
+    { $$ = new_assign_node($1->var.name, $3); }
+    | dot_expr assign call_arg_stmt
+    { $$ = new_assign_node($1->var.name, $3); }
     ;
 
 assignment_re_stmt:
@@ -417,10 +421,34 @@ assignment_re_stmt:
     { $$ = new_assign_re_node($1, $3); }
     | identifier re_assign call_arg_stmt
     { $$ = new_assign_re_node($1,$3) ; }
-    | expr re_assign expr
-    { $$ = new_assign_expr_re_node($1,$3); }
+    | dot_expr re_assign expr
+    { $$ = new_assign_re_node($1->var.name, $3); }
+    | dot_expr re_assign call_arg_stmt
+    { $$ = new_assign_re_node($1->var.name, $3); }
     ;
 
+compound_assign_stmt:
+    identifier plus_and_assign expr
+    { $$ = new_binop_node("+=", new_varn_node($1), $3); }
+    | identifier minus_and_assign expr
+    { $$ = new_binop_node("-=", new_varn_node($1), $3); }
+    | identifier multiply_and_assign expr
+    { $$ = new_binop_node("*=", new_varn_node($1), $3); }
+    | identifier divide_and_assign expr
+    { $$ = new_binop_node("/=", new_varn_node($1), $3); }
+    | identifier remind_and_assign expr
+    { $$ = new_binop_node("%=", new_varn_node($1), $3); }
+    | dot_expr plus_and_assign expr
+    { $$ = new_binop_node("+=", $1, $3); }
+    | dot_expr minus_and_assign expr
+    { $$ = new_binop_node("-=", $1, $3); }
+    | dot_expr multiply_and_assign expr
+    { $$ = new_binop_node("*=", $1, $3); }
+    | dot_expr divide_and_assign expr
+    { $$ = new_binop_node("/=", $1, $3); }
+    | dot_expr remind_and_assign expr
+    { $$ = new_binop_node("%=", $1, $3); }
+    ;
 
 expr:
     number
@@ -431,16 +459,6 @@ expr:
     { $$ = new_string_node($1); }
     | dot_expr
     { $$ = $1;}
-    | expr plus_and_assign expr
-    { $$ = new_binop_node("+=",$1,$3); }
-    | expr minus_and_assign expr 
-    { $$ = new_binop_node("-=",$1,$3); }
-    | expr multiply_and_assign expr
-    { $$ = new_binop_node("*=",$1,$3); }
-    | expr divide_and_assign expr
-    { $$ = new_binop_node("/=",$1,$3); }
-    | expr remind_and_assign expr
-    { $$ = new_binop_node("%=",$1,$3); }
     | expr plus expr
     { $$ = new_binop_node("+", $1, $3); }
     | expr minus expr
