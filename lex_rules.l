@@ -40,7 +40,6 @@ const { col += 5; return const_statement; }
 simple { col += 6; return simple; }
 import { col += 6; return import_statement; }
 as { col += 2; return as; }
-input { col += 5; return input_func; }
 int { col += 3; return int_type; }
 bool { col += 4; return bool_type; }
 float { col += 5; return float_type; }

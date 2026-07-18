@@ -60,7 +60,6 @@ extern int func_cnt;
 %token semicolon
 %token import_statement
 %token as
-%token input_func
 %token <ival> int_type
 %token <ival> bool_type
 %token <ival> float_type
@@ -421,6 +420,10 @@ assignment_stmt:
     { $$ = new_assign_node($1->var.name, $3); }
     | dot_expr assign call_arg_stmt
     { $$ = new_assign_node($1->var.name, $3); }
+    | pine_type identifier assign expr
+    { $$ = new_assign_node($2,$4); }
+    | pine_type identifier assign call_arg_stmt
+   { $$ = new_assign_node($2,$4); }
     ;
 
 assignment_re_stmt:
@@ -432,6 +435,11 @@ assignment_re_stmt:
     { $$ = new_assign_re_node($1->var.name, $3); }
     | dot_expr re_assign call_arg_stmt
     { $$ = new_assign_re_node($1->var.name, $3); }
+    | pine_type identifier re_assign expr
+    { $$ = new_assign_re_node($2,$4); }
+    | pine_type identifier re_assign call_arg_stmt
+    { $$ = new_assign_re_node($2,$4); }
+
     ;
 
 compound_assign_stmt:
