@@ -26,7 +26,6 @@ extern int func_cnt;
 %token LOWEST_PREC
 %right LOWEST_PREC
 
-
 %token indicator_function
 %token strategy_function
 %token if_statement
@@ -59,6 +58,7 @@ extern int func_cnt;
 %token semicolon
 %token import_statement
 %token as
+%token input_func
 %token <ival> int_type
 %token <ival> bool_type
 %token <ival> float_type
@@ -101,8 +101,9 @@ extern int func_cnt;
 %token <ival> number
 %token <sval> identifier string
 %type <sval> pine_type 
+%type <sval> pine_type_primitive
 
-%type <node> program statement   expr block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt  compound_assign_stmt ternary_expr ident_stmt
+%type <node> program statement   expr expr_list block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -169,14 +170,9 @@ statement:
     | import_stmt
     | assignment_stmt
     | assignment_re_stmt
-    | compound_assign_stmt
-    | ident_stmt
+    | expr %prec LOWEST_PREC
     ;
-
-ident_stmt:
-   identifier
-   { $$ = new_varn_node($1,1);}
-
+ 
 block:
     left_brace stmt_list right_brace
     { $$ = new_stmt_node($2); }
@@ -273,6 +269,18 @@ func_type:
    { $$ = new_array_func_type_dot_node($1,$3,$5,$7);}
   ; 
 
+pine_type_primitive:
+  int_type
+  { $$ = new_type_name(int_type);}
+  | bool_type
+  { $$ = new_type_name(bool_type);}
+  | string_as_type
+  { $$ = new_type_name(string_as_type);}
+  | float_type
+  { $$ = new_type_name(float_type);}
+  | color_type
+  { $$ = new_type_name(color_type);}
+
 pine_type:
   int_type
   { $$ = new_type_name(int_type);}
@@ -287,7 +295,7 @@ pine_type:
   | identifier
   { $$ = $1;}
   ;
- 
+
 return_stmt_expr:
      return_statement  expr
     { $$ = new_return_node($2); }
@@ -350,7 +358,7 @@ switch_block_stmts:
    ;
 
 dot_expr:
-    pine_type dot identifier
+    pine_type dot pine_type %prec PREC_TERNARY_IDENT
     { $$ = new_var_dot_node($1, $3); }
     ;
 
@@ -373,10 +381,14 @@ call_list:
 call_stmt:
   expr 
   { $$ = new_call_arg_node($1); }
+  | identifier assign expr
+  { $$ = new_call_arg_node($3); }
 
 var_stmt:
     var identifier assign expr
     { $$ = new_var_node($2,$4); }
+    | var identifier
+    { $$ = new_var_node($2,NULL); }
     | var identifier assign call_arg_stmt
      { $$ = new_var_node($2,$4); }
     ;
@@ -410,18 +422,14 @@ import_stmt:
     ;
 
 assignment_stmt:
-    identifier assign expr
+     identifier assign expr
     { $$ = new_assign_node($1, $3); }
     | identifier assign call_arg_stmt
     { $$ = new_assign_node($1,$3); }
-    | dot_expr assign expr
-    { $$ = new_assign_node($1->var.name, $3); }
-    | dot_expr assign call_arg_stmt
-    { $$ = new_assign_node($1->var.name, $3); }
-    | pine_type identifier assign expr
+    | expr assign expr
+    { $$ = new_expr_assign_node($1,$3); }
+    | pine_type_primitive identifier assign expr
     { $$ = new_assign_node($2,$4); }
-    | pine_type identifier assign call_arg_stmt
-   { $$ = new_assign_node($2,$4); }
     ;
 
 assignment_re_stmt:
@@ -429,46 +437,30 @@ assignment_re_stmt:
     { $$ = new_assign_re_node($1, $3); }
     | identifier re_assign call_arg_stmt
     { $$ = new_assign_re_node($1,$3) ; }
-    | dot_expr re_assign expr
-    { $$ = new_assign_re_node($1->var.name, $3); }
-    | dot_expr re_assign call_arg_stmt
-    { $$ = new_assign_re_node($1->var.name, $3); }
-    | pine_type identifier re_assign expr
-    { $$ = new_assign_re_node($2,$4); }
-    | pine_type identifier re_assign call_arg_stmt
-    { $$ = new_assign_re_node($2,$4); }
-
+    | expr re_assign expr
+    { $$ = new_assign_expr_re_node($1,$3); }
     ;
 
-compound_assign_stmt:
-    expr plus_and_assign expr
-    { $$ = new_binop_node("+=", $1, $3); }
-    | expr minus_and_assign expr
-    { $$ = new_binop_node("-=",$1, $3); }
-    | expr multiply_and_assign expr
-    { $$ = new_binop_node("*=", $1, $3); }
-    | expr divide_and_assign expr
-    { $$ = new_binop_node("/=", $1, $3); }
-    | expr remind_and_assign expr
-    { $$ = new_binop_node("%=", $1, $3); }
-    ;
-
-ternary_expr:
-    expr question_sign expr colon expr
-    { $$ = new_ternary_node($1, $3, $5); }
-    | dot_expr question_sign expr colon expr
-    { $$ = new_ternary_node($1, $3, $5); }
-    | left_paren expr right_paren question_sign expr colon expr
-    { $$ = new_ternary_node($2, $5, $7); }
-    ;
 
 expr:
-    ternary_expr
-    { $$ = $1;} 
-    |number
+    number
     { $$ = new_number_node($1); }
+    | identifier
+    { $$ = new_varn_node($1,0); }
     | string
     { $$ = new_string_node($1); }
+    | dot_expr
+    { $$ = $1;}
+    | expr plus_and_assign expr
+    { $$ = new_binop_node("+=",$1,$3); }
+    | expr minus_and_assign expr 
+    { $$ = new_binop_node("-=",$1,$3); }
+    | expr multiply_and_assign expr
+    { $$ = new_binop_node("*=",$1,$3); }
+    | expr divide_and_assign expr
+    { $$ = new_binop_node("/=",$1,$3); }
+    | expr remind_and_assign expr
+    { $$ = new_binop_node("%=",$1,$3); }
     | expr plus expr
     { $$ = new_binop_node("+", $1, $3); }
     | expr minus expr
@@ -509,16 +501,26 @@ expr:
     { $$ = new_unop_node("!", $2); }
     | bitwise_not expr
     { $$ = new_unop_node("~", $2); }
-    | minus expr %prec multiply
+    | minus  expr %prec multiply
     { $$ = new_unop_node("-", $2); }
-    | plus expr %prec multiply
+    | plus  expr %prec multiply
     { $$ = new_unop_node("+", $2); }
     | left_paren expr right_paren
     { $$ = new_paren_expr_node($2); }
     | expr left_quad_brace expr right_quad_brace
     { $$ = new_index_node($1,$3); }
     | left_quad_brace expr right_quad_brace
-    { $$ = new_quad_brace_expr_node($2); } 
+    { $$ = new_quad_brace_expr_node($2); }
+    | expr question_sign expr colon expr %prec PREC_TERNARY_IDENT
+    { $$ = new_ternary_node($1,$3,$5); }
+    | left_quad_brace expr_list right_quad_brace
+    { $$ = new_array_node($2); }
+    ;
+
+expr_list:
+    expr
+    | expr_list comma expr
     ;
 
 %%
+

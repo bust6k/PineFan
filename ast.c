@@ -479,6 +479,12 @@ ast_node* new_stmt_node(ast_node* stmts) {
   return node;
 }
 
+ast_node* new_array_node(ast_node* expr_list) {
+//stub
+ast_node* node = calloc(1,sizeof(ast_node));
+return node;
+}
+
 void ast_free(ast_node* node) {
   if (!node) return;
   switch (node->type) {
