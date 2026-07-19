@@ -1,6 +1,4 @@
-
 %define parse.error verbose
-%glr-parser
 
 %code requires {
 #include <stdio.h>
@@ -171,7 +169,6 @@ statement:
     | import_stmt
     | assignment_stmt
     | assignment_re_stmt
-    | ternary_expr
     | compound_assign_stmt
     | ident_stmt
     ;
@@ -444,31 +441,21 @@ assignment_re_stmt:
     ;
 
 compound_assign_stmt:
-    identifier plus_and_assign expr
-    { $$ = new_binop_node("+=", new_varn_node($1,0), $3); }
-    | identifier minus_and_assign expr
-    { $$ = new_binop_node("-=", new_varn_node($1,0), $3); }
-    | identifier multiply_and_assign expr
-    { $$ = new_binop_node("*=", new_varn_node($1,0), $3); }
-    | identifier divide_and_assign expr
-    { $$ = new_binop_node("/=", new_varn_node($1,0), $3); }
-    | identifier remind_and_assign expr
-    { $$ = new_binop_node("%=", new_varn_node($1,0), $3); }
-    | dot_expr plus_and_assign expr
+    expr plus_and_assign expr
     { $$ = new_binop_node("+=", $1, $3); }
-    | dot_expr minus_and_assign expr
-    { $$ = new_binop_node("-=", $1, $3); }
-    | dot_expr multiply_and_assign expr
+    | expr minus_and_assign expr
+    { $$ = new_binop_node("-=",$1, $3); }
+    | expr multiply_and_assign expr
     { $$ = new_binop_node("*=", $1, $3); }
-    | dot_expr divide_and_assign expr
+    | expr divide_and_assign expr
     { $$ = new_binop_node("/=", $1, $3); }
-    | dot_expr remind_and_assign expr
+    | expr remind_and_assign expr
     { $$ = new_binop_node("%=", $1, $3); }
     ;
 
 ternary_expr:
-    identifier question_sign expr colon expr
-    { $$ = new_ternary_node(new_varn_node($1,0), $3, $5); }
+    expr question_sign expr colon expr
+    { $$ = new_ternary_node($1, $3, $5); }
     | dot_expr question_sign expr colon expr
     { $$ = new_ternary_node($1, $3, $5); }
     | left_paren expr right_paren question_sign expr colon expr
@@ -477,8 +464,8 @@ ternary_expr:
 
 expr:
     ternary_expr
-    { $$ = $1;}
-    | number
+    { $$ = $1;} 
+    |number
     { $$ = new_number_node($1); }
     | string
     { $$ = new_string_node($1); }
@@ -532,10 +519,6 @@ expr:
     { $$ = new_index_node($1,$3); }
     | left_quad_brace expr right_quad_brace
     { $$ = new_quad_brace_expr_node($2); } 
-    | dot_expr
-    { $$ = $1; } 
-    | identifier %prec LOWEST_PREC
-    { $$ = new_varn_node($1,0); }
     ;
 
 %%
