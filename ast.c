@@ -178,8 +178,8 @@ ast_node* new_array_func_type_dot_node(char* p_b, char* p_a, ast_node* arr_type,
 #include "parser_rules.tab.h"
 
 char* new_type_name(int token) {
-//  printf("token = %d, int_type = %d, bool_type = %d\n", token, int_type,
-//         bool_type);
+  //  printf("token = %d, int_type = %d, bool_type = %d\n", token, int_type,
+  //         bool_type);
   char* type = malloc(8);
 
   if (token == int_type) {

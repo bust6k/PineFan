@@ -584,15 +584,15 @@ int preprocess_files(int argc, char* argv[]) {
     auto* file = new Pinefan::File::Prp_file(f_name, output);
 
     file->Pinefan::File::Prp_file::add_preprocessed_file(file);
-    
-   #ifdef  _IS_MAIN
+
+#ifdef _IS_MAIN
     auto* f = file->Pinefan::File::Prp_file::get_preprocessed_file(i - 1);
 
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
     std::cout << f->get_content();
-   #endif
+#endif
     // delete file;
   }
 
