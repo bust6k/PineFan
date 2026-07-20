@@ -36,6 +36,7 @@ enum KeywordState {
   KW_ACCEPT_TYPE,
   KW_ACCEPT_SWITCH,
   KW_ACCEPT_ELSE_IF,
+  KW_ACCEPT_ELSE,
 };
 
 // DFA for keyword detection
@@ -63,6 +64,7 @@ struct LineInfo {
   enum Type {
     NORMAL,
     KEYWORD,
+    KEYWORD_WITHOUT_PARENS,
     FUNCTION,
   } type;
   std::string keyword;

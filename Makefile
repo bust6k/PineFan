@@ -22,6 +22,9 @@ C_SOURCES := $(wildcard *.c)
 # C++ source files
 CPP_SOURCES := $(wildcard *.cpp)
 
+PPP_SOURCE := ppp.cpp
+PPP_EXE := ppp
+
 # Object files
 C_OBJECTS := $(C_SOURCES:.c=.o)
 CPP_OBJECTS := $(CPP_SOURCES:.cpp=.o)
@@ -73,3 +76,8 @@ $(TARGET): $(OBJECTS)
 
 clean:
 	rm -f $(LEX_SRC) $(BISON_SRC) $(BISON_HEADER) $(OBJECTS) $(TARGET)
+ppp:
+	g++ -D_IS_MAIN -g $(PPP_SOURCE) file.cpp -o $(PPP_EXE)
+
+ppp_clean:
+	rm -f $(PPP_EXE)

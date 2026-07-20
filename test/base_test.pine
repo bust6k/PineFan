@@ -1,4 +1,4 @@
-float c = 5
+float c = (5 + 5)
 foo?5:2
 foo.foo=1
 ccc
@@ -11,9 +11,9 @@ y = 5
 
 foo.foo = 5
 
-const MAX_COUNT = 100
-const THRESHOLD = 50
-const fol = 30
+const int MAX_COUNT = 100
+const int THRESHOLD = 50
+const int fol = 30
 foo ? 5 : 4
 
 
@@ -70,6 +70,5 @@ complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string nam
       50 => indicator("Fifty")   
    res
    f     
-
 if foo > 5
    y = 10 + 5 
