@@ -31,7 +31,7 @@
 
 #include "file.hpp"
 
-// #define _IS_MAIN
+#define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {
@@ -468,6 +468,11 @@ void preprocess(const std::string& input, std::string& output) {
     }
     while (current_indent < indent_stack.top() && !info.content.empty()) {
       indent_stack.pop();
+
+      if (!info.content.empty() && info.content.back() == '\n') {
+        output.pop_back();
+      }
+
       output += "}\n";
     }
 
@@ -477,11 +482,17 @@ void preprocess(const std::string& input, std::string& output) {
     }
 
     if (info.is_switch_stmt == true && info.is_default == false) {
+      if (!info.content.empty() && info.content.back() == '\n') {
+        output.pop_back();
+      }
       output += info.arrow_before + " {\n" + remove_arrow(info.content_after) +
-                "\n};\n";
+                "};\n";
     } else if (info.is_switch_stmt == true && info.is_default == true) {
+      if (!info.content.empty() && info.content.back() == '\n') {
+        output.pop_back();
+      }
       output += info.arrow_before + " {\n" + remove_arrow(info.content_after) +
-                "\n};\n";
+                "};\n";
     }
 
     switch (info.type) {
@@ -522,6 +533,10 @@ void preprocess(const std::string& input, std::string& output) {
   // Close any remaining blocks
   while (indent_stack.size() > 1) {
     indent_stack.pop();
+    if (!infos.at(infos.size()-1).content.empty() &&
+       infos.at(infos.size()-1).content.back() == '\n') {
+      output.pop_back();
+    }
     output += "}\n";
   }
 }

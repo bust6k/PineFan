@@ -77,11 +77,11 @@ profileHistXRight(int leftX, int bins) =>
 //    label      topTipLbl
 //    label      rightTipLbl
 
-newProfileSlot() =>
-     ProfileSlot.new(array.new_box(), na, na, na, na, na, na, na)
+//newProfileSlot() =>
+//ProfileSlot.new(array.new_box(), na, na, na, na, na, na, na)
 
 clearProfileSlot(ProfileSlot s) =>
-    if not na(s.bars)
+    if s.bars > 7
         for b in s.bars
             box.delete(b)
         array.clear(s.bars)

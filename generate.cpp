@@ -98,10 +98,10 @@ void transform_constants(ast_node* node) {
       }
       transform_constants(node->assign.value);
       break;
-    
+
     case AST_VARN:
-      if(const_table.count(node->var.name)) {
-      fast_toupper(node->var.name);
+      if (const_table.count(node->var.name)) {
+        fast_toupper(node->var.name);
       }
       break;
 
@@ -274,7 +274,7 @@ void yyerror(const char* s) {
   auto* file = Pinefan::File::preprocessed_files.back();
 
   std::cerr << std::format(
-      "\e[91m[ERROR]\e[0m: {} \e[92mline\e[0m {} \e[94mcolumn\e[0m {}: {}\n",
+      "\e[93m[WARNING]\e[0m: {} \e[92mline\e[0m {} \e[94mcolumn\e[0m {}: {}\n",
       file->get_name(), line, col, message);
 
   if (source_lines.empty() ||
@@ -442,13 +442,14 @@ ast_node* find_last_statement(ast_node* node) {
   return node;
 }
 
-void collect_var_variables(ast_node* node, std::ofstream& output,int indent = 0);
+void collect_var_variables(ast_node* node, std::ofstream& output,
+                           int indent = 0);
 void generate_var_buffer(std::ofstream& output, int indent);
 void collect_varip_variables(ast_node* node, std::ofstream& output, int indent);
 void generate_varip_buffer(std::ofstream& output, int indent);
 
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
-                   ast_node* last_node = NULL,int is_quad = 0) {
+                   ast_node* last_node = NULL, int is_quad = 0) {
   if (!node) return;
 
   std::string indent_str(indent, ' ');
@@ -580,7 +581,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
     case AST_QUAD_BRACE_OP: {
       output << "[";
-      generate_code(node->quad_expr.expr, output, indent,NULL,1);
+      generate_code(node->quad_expr.expr, output, indent, NULL, 1);
       output << "]";
       break;
     }
@@ -657,34 +658,33 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       break;
     }
 
-
-   case AST_VARIP: {
-      collect_varip_variables(node,output,indent);
+    case AST_VARIP: {
+      collect_varip_variables(node, output, indent);
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
       output << "\n";
       break;
-   }
+    }
 
-   case AST_VAR: {
-   collect_var_variables(node,output,indent);
-   output << indent_str << node->assign.name << " = ";
+    case AST_VAR: {
+      collect_var_variables(node, output, indent);
+      output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
       output << "\n";
       break;
-   }
-    
-   case AST_VARN: {
-   if(!is_quad){
-    output << indent_str << node->var.name;
-   } else {
-   output << node->var.name;
-   }
+    }
 
-   if(node->var.n) output << "\n";
-   break;
-   }
-   
+    case AST_VARN: {
+      if (!is_quad) {
+        output << indent_str << node->var.name;
+      } else {
+        output << node->var.name;
+      }
+
+      if (node->var.n) output << "\n";
+      break;
+    }
+
     case AST_EXPR_ASSIGN: {
       generate_code(node->ast_assign.name, output, indent);
       output << " = ";
@@ -846,66 +846,65 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 }
 
 void collect_var_variables(ast_node* node, std::ofstream& output, int indent) {
-    if (!node) return;
-    
-    std::string indent_str(indent, ' ');
+  if (!node) return;
 
- if (node->type == AST_VAR && node->assign.value != NULL) {
-var_buffer.push_back(node); 
+  std::string indent_str(indent, ' ');
+
+  if (node->type == AST_VAR && node->assign.value != NULL) {
+    var_buffer.push_back(node);
+  }
 }
 
-   
+void collect_varip_variables(ast_node* node, std::ofstream& output,
+                             int indent) {
+  if (!node) return;
+
+  std::string indent_str(indent, ' ');
+
+  if (node->type == AST_VARIP && node->assign.value != NULL) {
+    varip_buffer.push_back(node);
+  }
 }
 
-void collect_varip_variables(ast_node* node, std::ofstream& output, int indent) {
-    if (!node) return;
-    
-    std::string indent_str(indent, ' ');
-
- if (node->type == AST_VARIP && node->assign.value != NULL) {
-varip_buffer.push_back(node); 
-}
-}
-
-void generate_bar_loop(std::ofstream& output,int indent = 0,std::string indent_str = "    ") {
-  if ((var_collection_done == false) && (func_cnt == 0) || (udf_depth == 0 && func_cnt != 0 &&
-                          func_cnt == func_rg && func_cnt != magic_ohlc)) {
+void generate_bar_loop(std::ofstream& output, int indent = 0,
+                       std::string indent_str = "    ") {
+  if ((var_collection_done == false) && (func_cnt == 0) ||
+      (udf_depth == 0 && func_cnt != 0 && func_cnt == func_rg &&
+       func_cnt != magic_ohlc)) {
     var_collection_done = true;
 
-    generate_var_buffer(output,indent);
-    
+    generate_var_buffer(output, indent);
+
     output << "\n\nfor bar in ohlcArr:\n";
     indent += 4;
-    generate_varip_buffer(output,indent);
-    //indent_str += "    ";
+    generate_varip_buffer(output, indent);
+    // indent_str += "    ";
     udf_depth = 21103030;
     func_cnt = magic_ohlc;
     is_in_exec_model = 1;
   }
-
 }
 
 void generate_var_buffer(std::ofstream& output, int indent) {
-    var_collection_done = true;
-    std::string indent_str(indent, ' ');
-    for (auto* var : var_buffer) {
-        //output << "\n";
-	output << indent_str << var->assign.name << " = ";
-        generate_code(var->assign.value, output, 0);
-        output << "\n";
-    }
+  var_collection_done = true;
+  std::string indent_str(indent, ' ');
+  for (auto* var : var_buffer) {
+    // output << "\n";
+    output << indent_str << var->assign.name << " = ";
+    generate_code(var->assign.value, output, 0);
+    output << "\n";
+  }
 }
 void generate_varip_buffer(std::ofstream& output, int indent) {
-    var_collection_done = true;
-    std::string indent_str(indent, ' ');
-    for (auto* varip : varip_buffer) {
-        //output << "\n";
-	output << indent_str << varip->assign.name << " = ";
-        generate_code(varip->assign.value, output, indent);
-        output << "\n";
-    }
+  var_collection_done = true;
+  std::string indent_str(indent, ' ');
+  for (auto* varip : varip_buffer) {
+    // output << "\n";
+    output << indent_str << varip->assign.name << " = ";
+    generate_code(varip->assign.value, output, indent);
+    output << "\n";
+  }
 }
-
 
 int main(int argc, char* argv[]) {
   Pinefan::Ppp::preprocess_files(argc, argv);
@@ -928,16 +927,17 @@ int main(int argc, char* argv[]) {
     program_root = make_vector();
     int r = yyparse();
 
-    if (r) {
-      convert_program_root();
-      vec_free(program_root);
+    if (0) {
+      if (r) {
+        convert_program_root();
+        vec_free(program_root);
 
-      for (int f = 0; f < program_cpp_root.size(); f++) {
-        ast_free(program_cpp_root.at(f));
+        for (int f = 0; f < program_cpp_root.size(); f++) {
+          ast_free(program_cpp_root.at(f));
+        }
+
+        Pinefan::Ppp::clean_prp_files();
       }
-
-      Pinefan::Ppp::clean_prp_files();
-      exit(1);
     }
 
     convert_program_root();
@@ -957,4 +957,5 @@ int main(int argc, char* argv[]) {
   }
 
   Pinefan::Ppp::clean_prp_files();
+  return 0;
 }

@@ -172,7 +172,7 @@ ast_node* new_while_node(ast_node* cond, ast_node* body);
 ast_node* new_return_node(ast_node* value);
 ast_node* new_var_node(char* name, ast_node* value);
 ast_node* new_varip_node(char* name, ast_node* value);
-ast_node* new_varn_node(char* name,int is_need_n);
+ast_node* new_varn_node(char* name, int is_need_n);
 ast_node* new_number_node(int value);
 ast_node* new_string_node(char* value);
 ast_node* new_binop_node(char* op, ast_node* left, ast_node* right);
