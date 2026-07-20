@@ -3,6 +3,7 @@
 %code requires {
 #include <stdio.h>
 #include "ast.h"
+#include<string.h>
 }
 
 %code {
@@ -103,7 +104,7 @@ extern int func_cnt;
 %type <sval> pine_type 
 %type <sval> pine_type_primitive
 
-%type <node> program statement   expr expr_list block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr expr_list block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -523,4 +524,5 @@ expr_list:
     ;
 
 %%
+
 

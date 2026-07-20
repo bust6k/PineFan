@@ -39,7 +39,7 @@
 # define YY_YY_PARSER_RULES_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -49,8 +49,9 @@ extern int yydebug;
 
 #include <stdio.h>
 #include "ast.h"
+#include<string.h>
 
-#line 54 "parser_rules.tab.h"
+#line 55 "parser_rules.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -149,13 +150,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "parser_rules.y"
+#line 21 "parser_rules.y"
 
     int ival;
     char *sval;
     struct ast_node *node;
 
-#line 159 "parser_rules.tab.h"
+#line 160 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

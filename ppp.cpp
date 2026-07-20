@@ -1,15 +1,16 @@
 // ppp(pinescript preprocessor) - is a preprocessor for the PineScript language.
-// that does to find the keyword(i.e if,for,while,else,type,switch) or a function to do it to the
+// that does to find the keyword(i.e if,for,while,else,type,switch) or a
+// function to do it to the
 // // C-like form. it needed to simplify the other pipeline, especially the
-// parser. To determinig the keywords  it uses tabs and for body selecting it uses the
-// 5-tuple
+// parser. To determinig the keywords  it uses tabs and for body selecting it
+// uses the 5-tuple
 // // DFA-keyword (Q,Σ,δ,q0,F) consisting of
 //- a set of states Q
 //{S_START,S_I,S_IF,S_F,S_FO,S_FOR,S_W,S_WH,S_WHI,S_WHIL,S_WHILE,S_END_IF,S_END_FOR,S_END_WHILE,etc....}
 //- a finite set of input symbols Σ {i,f,w,h,i,l,e,o,r,s,t,c,h,y,p,}
 //- a transition function δ {dfa_keyw_trn_table} //- a start state q0 ∈ Q
 //{S_START} //- a finite set of accept states
-// F{S_END_IF,S_END_FOR,S_END_WHILE,S_ARROW_END} 
+// F{S_END_IF,S_END_FOR,S_END_WHILE,S_ARROW_END}
 // // at the same time, for
 // determining the function body it uses the  5-tuple
 // DFA-arrow (Q,Σ,δ,q0,F) consisting of
@@ -32,7 +33,7 @@
 
 #include "file.hpp"
 
-//#define _IS_MAIN
+// #define _IS_MAIN
 
 namespace Pinefan {
 namespace Ppp {
@@ -377,7 +378,7 @@ void preprocess(const std::string& input, std::string& output) {
   std::istringstream iss(input);
 
   while (std::getline(iss, line)) {
-    lines.push_back(line+'\n');
+    lines.push_back(line + '\n');
   }
   // First pass: classify each line
   std::vector<LineInfo> infos;
@@ -439,13 +440,13 @@ void preprocess(const std::string& input, std::string& output) {
     } else {
       auto kw = find_keyword_at(info.content, 0);
       if (kw.has_value()) {
-        if(kw.value() == "else"){
-        info.type = LineInfo::KEYWORD_WITHOUT_PARENS;
-	info.keyword = kw.value();
-	} else {
-	info.type = LineInfo::KEYWORD;
-        info.keyword = kw.value();
-	}
+        if (kw.value() == "else") {
+          info.type = LineInfo::KEYWORD_WITHOUT_PARENS;
+          info.keyword = kw.value();
+        } else {
+          info.type = LineInfo::KEYWORD;
+          info.keyword = kw.value();
+        }
       } else {
         info.type = LineInfo::NORMAL;
         info.keyword = "";
@@ -471,7 +472,7 @@ void preprocess(const std::string& input, std::string& output) {
 
     while (current_indent > indent_stack.top() && !info.content.empty()) {
       indent_stack.push(current_indent);
-      
+
       if (!output.empty() && output.back() == 0xA) {
         output.pop_back();
       }
@@ -496,14 +497,14 @@ void preprocess(const std::string& input, std::string& output) {
       if (!output.empty() && output.back() == 0xA) {
         output.pop_back();
       }
-      output += "\n" + info.arrow_before + "{\n" + remove_arrow(info.content_after) +
-                "};\n";
+      output += "\n" + info.arrow_before + "{\n" +
+                remove_arrow(info.content_after) + "};\n";
     } else if (info.is_switch_stmt == true && info.is_default == true) {
-      if (!output.empty() && output.back() ==  0xA) {
+      if (!output.empty() && output.back() == 0xA) {
         output.pop_back();
       }
-      output += "\n" + info.arrow_before + " {\n" + remove_arrow(info.content_after) +
-                "};\n";
+      output += "\n" + info.arrow_before + " {\n" +
+                remove_arrow(info.content_after) + "};\n";
     }
 
     switch (info.type) {
@@ -524,11 +525,11 @@ void preprocess(const std::string& input, std::string& output) {
         output += condition + ") ";
         break;
       }
-   
-     case LineInfo::KEYWORD_WITHOUT_PARENS: {
-     output += info.keyword;
-     break;
-     }
+
+      case LineInfo::KEYWORD_WITHOUT_PARENS: {
+        output += info.keyword;
+        break;
+      }
 
       case LineInfo::FUNCTION: {
         output += info.content + ' ';
@@ -549,7 +550,7 @@ void preprocess(const std::string& input, std::string& output) {
   // Close any remaining blocks
   while (indent_stack.size() > 1) {
     indent_stack.pop();
-    
+
     if (!output.empty() && output.back() == 0xA) {
       output.pop_back();
     }
@@ -583,14 +584,15 @@ int preprocess_files(int argc, char* argv[]) {
     auto* file = new Pinefan::File::Prp_file(f_name, output);
 
     file->Pinefan::File::Prp_file::add_preprocessed_file(file);
-
+    
+   #ifdef  _IS_MAIN
     auto* f = file->Pinefan::File::Prp_file::get_preprocessed_file(i - 1);
 
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
     std::cout << f->get_content();
-
+   #endif
     // delete file;
   }
 

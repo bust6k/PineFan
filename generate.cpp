@@ -21,7 +21,7 @@ extern "C" {
 #include "file.hpp"
 #include "ppp.hpp"
 
-constexpr std::string_view pinefan_version = "v1.0.0\n";
+constexpr std::string_view pinefan_version = "v0.0.1\n";
 const int magic_ohlc = 400000000;
 
 int line = 1;
@@ -274,7 +274,7 @@ void yyerror(const char* s) {
   auto* file = Pinefan::File::preprocessed_files.back();
 
   std::cerr << std::format(
-      "\e[93m[WARNING]\e[0m: {} \e[92mline\e[0m {} \e[94mcolumn\e[0m {}: {}\n",
+      "\e[91m[ERROR]\e[0m: {} \e[92mline\e[0m {} \e[94mcolumn\e[0m {}: {}\n",
       file->get_name(), line, col, message);
 
   if (source_lines.empty() ||
@@ -307,7 +307,43 @@ void prologue(std::ofstream& output, const std::filesystem::path& source_name) {
          << std::format("# - source: {}\n\n", source_name.string());
   output << "from typing import List as array \n";
   output << "from typing import Dict as map \n";
-  output << "ohlcArr = []\n\n";
+  output << "import csv\n";
+  output << "import os\n";
+
+  output << R"(
+csv_path = input("Enter the path to your OHLC CSV file: ").strip()
+
+csv_path = csv_path.strip('"').strip("'")
+
+if not os.path.exists(csv_path):
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    alt_path = os.path.join(script_dir, os.path.basename(csv_path))
+    if os.path.exists(alt_path):
+        csv_path = alt_path
+    else:
+        raise FileNotFoundError(f"File not found: {csv_path}")
+
+open = []
+high = []
+low = []
+close = []
+volume = []
+time = []
+
+with open(csv_path, 'r') as f:
+    reader = csv.reader(f)
+    header = next(reader, None)
+    for row in reader:
+        if len(row) >= 5:
+            time.append(row[0])
+            open.append(float(row[1]))
+            high.append(float(row[2]))
+            low.append(float(row[3]))
+            close.append(float(row[4]))
+            volume.append(float(row[5]) if len(row) > 5 else 0.0)
+
+print(f"Loaded {len(close)} bars from {csv_path}\n")
+)";
 }
 
 void indicator(std::string_view str, std::ofstream& output,
@@ -569,6 +605,11 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       generate_code(node->binop.left, output, 0);
       output << " " << node->binop.op << " ";
       generate_code(node->binop.right, output, 0);
+      if (!strcmp(node->binop.op, "+=") || !strcmp(node->binop.op, "-=") ||
+          !strcmp(node->binop.op, "*=") || !strcmp(node->binop.op, "/=") ||
+          !strcmp(node->binop.op, "%=")) {
+        output << "\n";
+      }
       break;
     }
 
@@ -907,8 +948,24 @@ void generate_varip_buffer(std::ofstream& output, int indent) {
 }
 
 int main(int argc, char* argv[]) {
+  if (argc > 1 && strcmp(argv[1], "--install") == 0) {
+    if (Pinefan::File::install_pinefan()) {
+      printf("PineFan installed successfully.\n");
+      printf("Restart your terminal and run 'pinefan' from anywhere.\n");
+      return 0;
+    } else {
+      fprintf(stderr, "Installation failed.\n");
+      return 1;
+    }
+  }
+
+  if (argc < 2) {
+    fprintf(stderr, "Usage: pinefan <file.pine>\n");
+    fprintf(stderr, "       pinefan --install\n");
+    return 1;
+  }
   Pinefan::Ppp::preprocess_files(argc, argv);
-  yydebug = 1;
+  // yydebug = 1;
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);

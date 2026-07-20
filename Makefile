@@ -2,14 +2,14 @@
 # Compiles Flex/Bison lexer and parser, then links C and C++ object files
 
 TARGET_ARCH = x86_64
-CXX = g++
-CC = gcc
+CXX ?= g++
+CC ?= gcc
 
 override CXXFLAGS += -std=c++20 -Wno-write-strings
 override CFLAGS += -Wno-write-strings
 override BFLAGS += -d -o
 
-TARGET = g
+TARGET = pinefan
 
 # Generated files
 LEX_SRC = lex.yy.c
@@ -81,3 +81,4 @@ ppp:
 
 ppp_clean:
 	rm -f $(PPP_EXE)
+
