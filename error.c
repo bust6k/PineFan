@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "color.h"
 
 #ifdef _WIN32
     #include <io.h>
@@ -46,23 +47,34 @@ void error_free_source_lines(void) {
     }
     source_lines_count = 0;
 }
-
 static void print_error(int line, int pos, const char* label, const char* fmt, va_list args) {
+#ifdef _WIN32
+    RED_COLOR;
+    fprintf(stderr, "[%s]: ", label);
+    RESET_COLOR;
+    fprintf(stderr, "%s ", current_file_name);
+    GREEN_COLOR;
+    fprintf(stderr, "line");
+    RESET_COLOR;
+    fprintf(stderr, " %d ", line);
+    CYAN_COLOR;
+    fprintf(stderr, "column");
+    RESET_COLOR;
+    fprintf(stderr, " %d: ", pos);
+#else
     int tty = isatty(fileno(stderr));
-
     if (tty) {
         fprintf(stderr, "\e[91m[%s]\e[0m: ", label);
     } else {
         fprintf(stderr, "[%s]: ", label);
     }
-
     fprintf(stderr, "%s ", current_file_name);
-
     if (tty) {
         fprintf(stderr, "\e[92mline\e[0m %d \e[94mcolumn\e[0m %d: ", line, pos);
     } else {
         fprintf(stderr, "line %d column %d: ", line, pos);
     }
+#endif
 
     vfprintf(stderr, fmt, args);
     fprintf(stderr, "\n");
@@ -82,11 +94,17 @@ static void print_error(int line, int pos, const char* label, const char* fmt, v
                 for (int i = 1; i < pos; i++) {
                     fprintf(stderr, "~");
                 }
+#ifdef _WIN32
+                GREEN_COLOR;
+                fprintf(stderr, "^");
+                RESET_COLOR;
+#else
                 if (tty) {
                     fprintf(stderr, "\e[1;32m^\e[0m");
                 } else {
                     fprintf(stderr, "^");
                 }
+#endif
                 if (pos <= (int)len) {
                     for (int i = pos; i < (int)len; i++) {
                         if (src[i] != '\n') {

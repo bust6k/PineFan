@@ -4,6 +4,9 @@
 TARGET_ARCH = x86_64
 CXX ?= g++
 CC ?= gcc
+OBFUSCATE_FLAGS = -s -fno-ident -fno-asynchronous-unwind-tables \
+                  -fmerge-all-constants -ffunction-sections -fdata-sections \
+                  -Wl,--gc-sections -Wl,--strip-all
 
 override CXXFLAGS += -std=c++20 -Wno-write-strings
 override CFLAGS += -Wno-write-strings
@@ -56,23 +59,23 @@ generate.o: $(BISON_HEADER)
 
 # Compile C sources
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS)  -c $< -o $@
 
 # Compile C++ sources
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS)   -c $< -o $@
 
 # Explicit rule for lex.yy.o to ensure header dependency
 $(LEX_OBJ): $(LEX_SRC) $(BISON_HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS)   -c $< -o $@
 
 # Explicit rule for parser_rules.tab.o
 $(BISON_OBJ): $(BISON_SRC) $(BISON_HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS)  -c $< -o $@
 
 # Link everything together
 $(TARGET): $(OBJECTS)
-	$(CXX) $^ -o $@ $(CXXFLAGS)
+	$(CXX) $^ -o $@ $(CXXFLAGS) 
 
 clean:
 	rm -f $(LEX_SRC) $(BISON_SRC) $(BISON_HEADER) $(OBJECTS) $(TARGET)

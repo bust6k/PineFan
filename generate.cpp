@@ -20,6 +20,7 @@ extern "C" {
 
 #include "file.hpp"
 #include "ppp.hpp"
+#include "color.h"
 
 constexpr std::string_view pinefan_version = "v0.0.1\n";
 const int magic_ohlc = 400000000;
@@ -272,10 +273,37 @@ void yyerror(const char* s) {
   const std::string_view& message(s);
 
   auto* file = Pinefan::File::preprocessed_files.back();
+#ifdef _WIN32
+    RED_COLOR;
+    std::cerr << "[ERROR]: ";
+    RESET_COLOR;
+    std::cerr << file->get_name() << " ";
+    GREEN_COLOR;
+    std::cerr << "line";
+    RESET_COLOR;
+    std::cerr << " " << line;
+    CYAN_COLOR;
+    std::cerr << " column ";
+    RESET_COLOR;
+    std::cerr << col << ": " << message << "\n";
+#else
+    std::cerr << RED_COLOR;
+    std::cerr << "[ERROR]: ";
+    std::cerr << RESET_COLOR;
+    std::cerr << file->get_name() << " ";
+    std::cerr << GREEN_COLOR;
+    std::cerr << "line";
+    std::cerr << RESET_COLOR;
+    std::cerr << " " << line;
+    std::cerr << CYAN_COLOR;
+    std::cerr << " column ";
+    std::cerr << RESET_COLOR;
+    std::cerr << col << ": " << message << "\n";
+#endif
 
-  std::cerr << std::format(
-      "\e[91m[ERROR]\e[0m: {} \e[92mline\e[0m {} \e[94mcolumn\e[0m {}: {}\n",
-      file->get_name(), line, col, message);
+  //std::cerr << std::format(
+     // "[ERROR]:" RESET_COLOR " {}" GREEN_COLOR "line"  RESET_COLOR "{} CYAN_COLOR column" RESET_COLOR "{}: {}\n",
+      //file->get_name(), line, col, message);
 
   if (source_lines.empty() ||
       static_cast<size_t>(line - 1) >= source_lines.size()) {
@@ -950,9 +978,31 @@ void generate_varip_buffer(std::ofstream& output, int indent) {
     output << "\n";
   }
 }
+#ifdef __linux__
+extern "C" {
+    #include <sys/ptrace.h>
+}
+#endif
+
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 int main(int argc, char* argv[]) {
-  if (argc > 1 && strcmp(argv[1], "--install") == 0) {
+#ifdef __linux__
+    if (ptrace(PTRACE_TRACEME, 0, 1, 0) < 0) {
+        exit(0);
+    }
+#endif
+ #ifdef _WIN32
+    if (IsDebuggerPresent()) {
+        ExitProcess(0);
+    }
+#endif
+
+
+     	if (argc > 1 && strcmp(argv[1], "--install") == 0) {
     if (Pinefan::File::install_pinefan()) {
       printf("PineFan installed successfully.\n");
       printf("Restart your terminal and run 'pinefan' from anywhere.\n");
