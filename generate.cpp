@@ -20,11 +20,12 @@ extern "C" {
 
 #include "color.h"
 #include "file.hpp"
-#include "ppp.hpp"
 #include "generate_matrolib.hpp"
+#include "ppp.hpp"
+#include "third-party/noxorany.h"
 
-constexpr std::string_view pinefan_version = "v0.0.1\n";
-const int magic_ohlc = 400000000;
+std::string_view pinefan_version = "v0.0.1\n";
+int magic_ohlc = 400000000;
 
 int line = 1;
 int col = 0;
@@ -873,8 +874,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
     case AST_STMT: {
       if (last_node != NULL && last_node == node->block_node.stmt) {
-      output << "\n";  
-      output << indent_str << "return ";
+        output << "\n";
+        output << indent_str << "return ";
       }
       if (node->block_node.stmt != NULL &&
           node->block_node.stmt->type == AST_IF &&
@@ -980,40 +981,52 @@ extern "C" {
 #endif
 
 int main(int argc, char* argv[]) {
-
-   #ifdef __linux__
-     if (ptrace(PTRACE_TRACEME, 0, 1, 0) < 0) {
+#ifdef __linux__
+  if (ptrace(PTRACE_TRACEME, 0, 1, 0) < 0) {
     exit(0);
   }
-   #endif
+#endif
 
-   #ifdef _WIN32
-    if (IsDebuggerPresent()) {
+#ifdef _WIN32
+  if (IsDebuggerPresent()) {
     ExitProcess(0);
   }
-   #endif
+#endif
 
   if (argc > 1 && strcmp(argv[1], "--install") == 0) {
     if (Pinefan::File::install_pinefan()) {
-      printf("PineFan installed successfully.\n");
-      printf("Restart your terminal and run 'pinefan' from anywhere.\n");
+      std::cout << "PineFan installed successfully." << std::endl;
+      std::cout << "Restart your terminal and run 'pinefan' from anywhere."
+                << std::endl;
       return 0;
     } else {
-      fprintf(stderr, "Installation failed.\n");
+      std::cout << "Installation failed." << std::endl;
       return 1;
     }
   }
 
   if (argc < 2) {
-    fprintf(stderr, "Usage: pinefan <file.pine>\n");
-    fprintf(stderr, "       pinefan --install\n");
-    return 1;
+#ifdef _WIN32
+    YELLOW_COLOR;
+    std::cout << "(WARNING): ";
+    RESET_COLOR;
+    std::cout << "Not enough arguments" << std::endl;
+#else
+    std::cout << YELLOW_COLOR << "(WARNING): " << RESET_COLOR
+              << "Not enough arguments" << std::endl;
+#endif
+
+    std::cout << "Usage: pinefan <file1.pine> <file2.pine> ... <filen.pine>"
+              << std::endl;
+    std::cout << "       pinefan --install" << std::endl;
+
+    return 0;
   }
 
   Pinefan::Ppp::preprocess_files(argc, argv);
-  
+
   // yydebug = 1;
-  
+
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);

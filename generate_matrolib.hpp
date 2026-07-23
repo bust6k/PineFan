@@ -1,11 +1,10 @@
 #pragma once
 
-
 int mkmatrolib();
-void generate_na();
-void generate_ta();
-void generate_math();
-void generate_array();
-void generate_color();
-void generate_init();
+int generate_na();
+int generate_ta();
+int generate_math();
+int generate_array();
+int generate_color();
+int generate_init();
 void generate_matrolib();

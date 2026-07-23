@@ -4,7 +4,7 @@
 TARGET_ARCH = x86_64
 CXX ?= g++
 CC ?= gcc
-OBFUSCATE_FLAGS = -s -fno-ident -fno-asynchronous-unwind-tables \
+override OBFUSCATE_FLAGS += -s -fno-ident \
                   -fmerge-all-constants -ffunction-sections -fdata-sections \
                   -Wl,--gc-sections -Wl,--strip-all
 
@@ -37,7 +37,7 @@ BISON_OBJ := $(BISON_SRC:.c=.o)
 # Place C++ objects first to match manual order
 OBJECTS := $(CPP_OBJECTS) $(C_OBJECTS) $(LEX_OBJ) $(BISON_OBJ)
 
-.PHONY: all clean force
+.PHONY: all clean force build obfuscate
 
 all: $(TARGET)
 
@@ -59,23 +59,23 @@ generate.o: $(BISON_HEADER)
 
 # Compile C sources
 %.o: %.c
-	$(CC) $(CFLAGS)  -c $< -o $@
+	$(CC) $(CFLAGS)  $(OBFUSCATE_FLAGS) -c $< -o $@
 
 # Compile C++ sources
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS)   -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(OBFUSCATE_FLAGS)  -c $< -o $@
 
 # Explicit rule for lex.yy.o to ensure header dependency
 $(LEX_OBJ): $(LEX_SRC) $(BISON_HEADER)
-	$(CC) $(CFLAGS)   -c $< -o $@
+	$(CC) $(CFLAGS) $(OBFUSCATE_FLAGS)  -c $< -o $@
 
 # Explicit rule for parser_rules.tab.o
 $(BISON_OBJ): $(BISON_SRC) $(BISON_HEADER)
-	$(CC) $(CFLAGS)  -c $< -o $@
+	$(CC) $(CFLAGS) $(OBFUSCATE_FLAGS) -c $< -o $@
 
 # Link everything together
 $(TARGET): $(OBJECTS)
-	$(CXX) $^ -o $@ $(CXXFLAGS) 
+	$(CXX) $^ -o $@ $(CXXFLAGS) $(OBFUSCATE_FLAGS) 
 
 clean:
 	rm -f $(LEX_SRC) $(BISON_SRC) $(BISON_HEADER) $(OBJECTS) $(TARGET)
@@ -85,3 +85,10 @@ ppp:
 ppp_clean:
 	rm -f $(PPP_EXE)
 
+build:
+	clang-format -style=Google -i *.c *.h *.cpp *.hpp
+	$(MAKE) clean all
+obfuscate:
+	strip --strip-all --remove-section=.comment --remove-section=.note pinefan.exe   && objcopy --strip-unneeded pinefan.exe
+	upx --best --lzma  pinefan.exe
+	python3 remove_signatures.py pinefan.exe
