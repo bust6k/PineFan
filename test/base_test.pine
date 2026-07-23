@@ -1,5 +1,4 @@
-$
-float c += (5 + 5)
+float c = (5 + 5)
 foo?5:2
 foo.foo=1
 ccc

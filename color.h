@@ -3,14 +3,16 @@
 #include <windows.h>
 
 void set_console_color(int color) {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, color);
+  HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+  SetConsoleTextAttribute(hConsole, color);
 }
 
 #define RED_COLOR set_console_color(FOREGROUND_RED | FOREGROUND_INTENSITY)
-#define RESET_COLOR set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE)
+#define RESET_COLOR \
+  set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE)
 #define GREEN_COLOR set_console_color(FOREGROUND_GREEN | FOREGROUND_INTENSITY)
-#define CYAN_COLOR set_console_color(FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY)
+#define CYAN_COLOR \
+  set_console_color(FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY)
 
 #else
 
@@ -19,5 +21,3 @@ void set_console_color(int color) {
 #define GREEN_COLOR "\e[92m"
 #define CYAN_COLOR "\e[94m"
 #endif
-
-

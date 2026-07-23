@@ -18,9 +18,9 @@ extern "C" {
 #include "vector.h"
 }
 
+#include "color.h"
 #include "file.hpp"
 #include "ppp.hpp"
-#include "color.h"
 
 constexpr std::string_view pinefan_version = "v0.0.1\n";
 const int magic_ohlc = 400000000;
@@ -274,36 +274,37 @@ void yyerror(const char* s) {
 
   auto* file = Pinefan::File::preprocessed_files.back();
 #ifdef _WIN32
-    RED_COLOR;
-    std::cerr << "[ERROR]: ";
-    RESET_COLOR;
-    std::cerr << file->get_name() << " ";
-    GREEN_COLOR;
-    std::cerr << "line";
-    RESET_COLOR;
-    std::cerr << " " << line;
-    CYAN_COLOR;
-    std::cerr << " column ";
-    RESET_COLOR;
-    std::cerr << col << ": " << message << "\n";
+  RED_COLOR;
+  std::cerr << "[ERROR]: ";
+  RESET_COLOR;
+  std::cerr << file->get_name() << " ";
+  GREEN_COLOR;
+  std::cerr << "line";
+  RESET_COLOR;
+  std::cerr << " " << line;
+  CYAN_COLOR;
+  std::cerr << " column ";
+  RESET_COLOR;
+  std::cerr << col << ": " << message << "\n";
 #else
-    std::cerr << RED_COLOR;
-    std::cerr << "[ERROR]: ";
-    std::cerr << RESET_COLOR;
-    std::cerr << file->get_name() << " ";
-    std::cerr << GREEN_COLOR;
-    std::cerr << "line";
-    std::cerr << RESET_COLOR;
-    std::cerr << " " << line;
-    std::cerr << CYAN_COLOR;
-    std::cerr << " column ";
-    std::cerr << RESET_COLOR;
-    std::cerr << col << ": " << message << "\n";
+  std::cerr << RED_COLOR;
+  std::cerr << "[ERROR]: ";
+  std::cerr << RESET_COLOR;
+  std::cerr << file->get_name() << " ";
+  std::cerr << GREEN_COLOR;
+  std::cerr << "line";
+  std::cerr << RESET_COLOR;
+  std::cerr << " " << line;
+  std::cerr << CYAN_COLOR;
+  std::cerr << " column ";
+  std::cerr << RESET_COLOR;
+  std::cerr << col << ": " << message << "\n";
 #endif
 
-  //std::cerr << std::format(
-     // "[ERROR]:" RESET_COLOR " {}" GREEN_COLOR "line"  RESET_COLOR "{} CYAN_COLOR column" RESET_COLOR "{}: {}\n",
-      //file->get_name(), line, col, message);
+  // std::cerr << std::format(
+  //  "[ERROR]:" RESET_COLOR " {}" GREEN_COLOR "line"  RESET_COLOR "{}
+  //  CYAN_COLOR column" RESET_COLOR "{}: {}\n",
+  // file->get_name(), line, col, message);
 
   if (source_lines.empty() ||
       static_cast<size_t>(line - 1) >= source_lines.size()) {
@@ -329,7 +330,7 @@ void yyerror(const char* s) {
 }
 
 extern "C" {
-  void error_read_source_file(const char* filename);
+void error_read_source_file(const char* filename);
 }
 
 void prologue(std::ofstream& output, const std::filesystem::path& source_name) {
@@ -343,6 +344,7 @@ void prologue(std::ofstream& output, const std::filesystem::path& source_name) {
   output << "import os\n";
 
   output << R"(
+
 csv_path = input("Enter the path to your OHLC CSV file: ").strip()
 
 csv_path = csv_path.strip('"').strip("'")
@@ -670,14 +672,6 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       output << node->number.value;
       break;
     }
-
-      /*
-      case AST_VAR: {
-        output << is_in_const_table(node->var.name);
-        break;
-      }
-      */
-
     case AST_STRING: {
       output << "\"" << node->string.value << "\"";
       break;
@@ -733,17 +727,11 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
     case AST_VARIP: {
       collect_varip_variables(node, output, indent);
-      output << indent_str << node->assign.name << " = ";
-      generate_code(node->assign.value, output, 0);
-      output << "\n";
       break;
     }
 
     case AST_VAR: {
       collect_var_variables(node, output, indent);
-      output << indent_str << node->assign.name << " = ";
-      generate_code(node->assign.value, output, 0);
-      output << "\n";
       break;
     }
 
@@ -884,7 +872,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
     case AST_STMT: {
       if (last_node != NULL && last_node == node->block_node.stmt) {
-        output << indent_str << "return ";
+      output << "\n";  
+      output << indent_str << "return ";
       }
       if (node->block_node.stmt != NULL &&
           node->block_node.stmt->type == AST_IF &&
@@ -948,7 +937,7 @@ void generate_bar_loop(std::ofstream& output, int indent = 0,
 
     generate_var_buffer(output, indent);
 
-    output << "\n\nfor bar in ohlcArr:\n";
+    output << "\n\nfor bar in close:\n";
     indent += 4;
     generate_varip_buffer(output, indent);
     // indent_str += "    ";
@@ -978,31 +967,32 @@ void generate_varip_buffer(std::ofstream& output, int indent) {
     output << "\n";
   }
 }
+
 #ifdef __linux__
 extern "C" {
-    #include <sys/ptrace.h>
+#include <sys/ptrace.h>
 }
 #endif
-
 
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
 int main(int argc, char* argv[]) {
-#ifdef __linux__
-    if (ptrace(PTRACE_TRACEME, 0, 1, 0) < 0) {
-        exit(0);
-    }
-#endif
- #ifdef _WIN32
+
+   #ifdef __linux__
+     if (ptrace(PTRACE_TRACEME, 0, 1, 0) < 0) {
+    exit(0);
+  }
+   #endif
+
+   #ifdef _WIN32
     if (IsDebuggerPresent()) {
-        ExitProcess(0);
-    }
-#endif
+    ExitProcess(0);
+  }
+   #endif
 
-
-     	if (argc > 1 && strcmp(argv[1], "--install") == 0) {
+  if (argc > 1 && strcmp(argv[1], "--install") == 0) {
     if (Pinefan::File::install_pinefan()) {
       printf("PineFan installed successfully.\n");
       printf("Restart your terminal and run 'pinefan' from anywhere.\n");
@@ -1018,13 +1008,16 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "       pinefan --install\n");
     return 1;
   }
+
   Pinefan::Ppp::preprocess_files(argc, argv);
+  
   // yydebug = 1;
+  
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
 
-error_read_source_file(prped_file->get_name().c_str());
+    error_read_source_file(prped_file->get_name().c_str());
 
     yy_scan_string(prped_file->get_content().c_str());
 
