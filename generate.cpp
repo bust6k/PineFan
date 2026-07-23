@@ -21,6 +21,7 @@ extern "C" {
 #include "color.h"
 #include "file.hpp"
 #include "ppp.hpp"
+#include "generate_matrolib.hpp"
 
 constexpr std::string_view pinefan_version = "v0.0.1\n";
 const int magic_ohlc = 400000000;
@@ -1063,5 +1064,6 @@ int main(int argc, char* argv[]) {
   }
 
   Pinefan::Ppp::clean_prp_files();
+  generate_matrolib();
   return 0;
 }

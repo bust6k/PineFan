@@ -12,8 +12,14 @@
 #define mkdir _mkdir
 #endif
 
+#include "generate_matrolib.hpp"
+
 int mkmatrolib() {
+#ifdef _WIN32
+return mkdir("matrolib");
+#else
 return mkdir("matrolib",0777);
+#endif
 }
 
 void generate_na() {
@@ -1471,5 +1477,15 @@ output_file << R"(# matrolib/__init__.py
 
 from .na import NA, na, is_na
 )";
+}
+
+void generate_matrolib() {
+  mkmatrolib();
+  generate_na();
+  generate_ta();
+  generate_math();
+  generate_array();
+  generate_color();
+  generate_init();
 }
 
