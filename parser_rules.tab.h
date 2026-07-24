@@ -39,7 +39,7 @@
 # define YY_YY_PARSER_RULES_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -63,85 +63,83 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     LOWEST_PREC = 258,             /* LOWEST_PREC  */
-    indicator_function = 259,      /* indicator_function  */
-    strategy_function = 260,       /* strategy_function  */
-    if_statement = 261,            /* if_statement  */
-    else_statement = 262,          /* else_statement  */
-    for_statement = 263,           /* for_statement  */
-    step = 264,                    /* step  */
-    to = 265,                      /* to  */
-    return_statement = 266,        /* return_statement  */
-    while_statement = 267,         /* while_statement  */
-    break_statement = 268,         /* break_statement  */
-    continue_statement = 269,      /* continue_statement  */
-    switch_statement = 270,        /* switch_statement  */
-    case_statement = 271,          /* case_statement  */
-    default_statement = 272,       /* default_statement  */
-    var = 273,                     /* var  */
-    varip = 274,                   /* varip  */
-    const_statement = 275,         /* const_statement  */
-    simple = 276,                  /* simple  */
-    logical_and = 277,             /* logical_and  */
-    logical_or = 278,              /* logical_or  */
-    logical_not = 279,             /* logical_not  */
-    dont_equal = 280,              /* dont_equal  */
-    question_sign = 281,           /* question_sign  */
-    bitwise_and = 282,             /* bitwise_and  */
-    bitwise_or = 283,              /* bitwise_or  */
-    bitwise_xor = 284,             /* bitwise_xor  */
-    bitwise_not = 285,             /* bitwise_not  */
-    bitwise_shift_to_left = 286,   /* bitwise_shift_to_left  */
-    bitwise_shift_to_right = 287,  /* bitwise_shift_to_right  */
-    semicolon = 288,               /* semicolon  */
-    import_statement = 289,        /* import_statement  */
-    as = 290,                      /* as  */
-    input_func = 291,              /* input_func  */
-    int_type = 292,                /* int_type  */
-    bool_type = 293,               /* bool_type  */
-    float_type = 294,              /* float_type  */
-    color_type = 295,              /* color_type  */
-    string_as_type = 296,          /* string_as_type  */
-    left_paren = 297,              /* left_paren  */
-    right_paren = 298,             /* right_paren  */
-    func_paren = 299,              /* func_paren  */
-    left_quad_brace = 300,         /* left_quad_brace  */
-    right_quad_brace = 301,        /* right_quad_brace  */
-    left_brace = 302,              /* left_brace  */
-    right_brace = 303,             /* right_brace  */
-    assign = 304,                  /* assign  */
-    re_assign = 305,               /* re_assign  */
-    equals = 306,                  /* equals  */
-    greater_than = 307,            /* greater_than  */
-    lesser_than = 308,             /* lesser_than  */
-    plus_and_assign = 309,         /* plus_and_assign  */
-    minus_and_assign = 310,        /* minus_and_assign  */
-    multiply_and_assign = 311,     /* multiply_and_assign  */
-    divide_and_assign = 312,       /* divide_and_assign  */
-    remind_and_assign = 313,       /* remind_and_assign  */
-    plus = 314,                    /* plus  */
-    minus = 315,                   /* minus  */
-    multiply = 316,                /* multiply  */
-    divide = 317,                  /* divide  */
-    divide_with_remind = 318,      /* divide_with_remind  */
-    greater_than_or_equals = 319,  /* greater_than_or_equals  */
-    lesser_than_or_equals = 320,   /* lesser_than_or_equals  */
-    bitwise_and_with_equals = 321, /* bitwise_and_with_equals  */
-    bitwise_or_with_equals = 322,  /* bitwise_or_with_equals  */
-    bitwise_xor_with_equals = 323, /* bitwise_xor_with_equals  */
-    bitwise_not_with_equals = 324, /* bitwise_not_with_equals  */
-    bitwise_shift_right_with_equals = 325, /* bitwise_shift_right_with_equals  */
-    bitwise_shift_left_with_equals = 326, /* bitwise_shift_left_with_equals  */
-    comma = 327,                   /* comma  */
-    dot = 328,                     /* dot  */
-    colon = 329,                   /* colon  */
-    number = 330,                  /* number  */
-    identifier = 331,              /* identifier  */
-    string = 332,                  /* string  */
-    PREC_SINGLE_NAME = 333,        /* PREC_SINGLE_NAME  */
-    PREC_TYPE_NAME = 334,          /* PREC_TYPE_NAME  */
-    PREC_FUNC = 335,               /* PREC_FUNC  */
-    PREC_CALL = 336,               /* PREC_CALL  */
-    PREC_TERNARY_IDENT = 337       /* PREC_TERNARY_IDENT  */
+    if_statement = 259,            /* if_statement  */
+    else_statement = 260,          /* else_statement  */
+    for_statement = 261,           /* for_statement  */
+    step = 262,                    /* step  */
+    to = 263,                      /* to  */
+    return_statement = 264,        /* return_statement  */
+    while_statement = 265,         /* while_statement  */
+    break_statement = 266,         /* break_statement  */
+    continue_statement = 267,      /* continue_statement  */
+    switch_statement = 268,        /* switch_statement  */
+    case_statement = 269,          /* case_statement  */
+    default_statement = 270,       /* default_statement  */
+    var = 271,                     /* var  */
+    varip = 272,                   /* varip  */
+    const_statement = 273,         /* const_statement  */
+    simple = 274,                  /* simple  */
+    logical_and = 275,             /* logical_and  */
+    logical_or = 276,              /* logical_or  */
+    logical_not = 277,             /* logical_not  */
+    dont_equal = 278,              /* dont_equal  */
+    question_sign = 279,           /* question_sign  */
+    bitwise_and = 280,             /* bitwise_and  */
+    bitwise_or = 281,              /* bitwise_or  */
+    bitwise_xor = 282,             /* bitwise_xor  */
+    bitwise_not = 283,             /* bitwise_not  */
+    bitwise_shift_to_left = 284,   /* bitwise_shift_to_left  */
+    bitwise_shift_to_right = 285,  /* bitwise_shift_to_right  */
+    semicolon = 286,               /* semicolon  */
+    import_statement = 287,        /* import_statement  */
+    as = 288,                      /* as  */
+    input_func = 289,              /* input_func  */
+    int_type = 290,                /* int_type  */
+    bool_type = 291,               /* bool_type  */
+    float_type = 292,              /* float_type  */
+    color_type = 293,              /* color_type  */
+    string_as_type = 294,          /* string_as_type  */
+    left_paren = 295,              /* left_paren  */
+    right_paren = 296,             /* right_paren  */
+    func_paren = 297,              /* func_paren  */
+    left_quad_brace = 298,         /* left_quad_brace  */
+    right_quad_brace = 299,        /* right_quad_brace  */
+    left_brace = 300,              /* left_brace  */
+    right_brace = 301,             /* right_brace  */
+    assign = 302,                  /* assign  */
+    re_assign = 303,               /* re_assign  */
+    equals = 304,                  /* equals  */
+    greater_than = 305,            /* greater_than  */
+    lesser_than = 306,             /* lesser_than  */
+    plus_and_assign = 307,         /* plus_and_assign  */
+    minus_and_assign = 308,        /* minus_and_assign  */
+    multiply_and_assign = 309,     /* multiply_and_assign  */
+    divide_and_assign = 310,       /* divide_and_assign  */
+    remind_and_assign = 311,       /* remind_and_assign  */
+    plus = 312,                    /* plus  */
+    minus = 313,                   /* minus  */
+    multiply = 314,                /* multiply  */
+    divide = 315,                  /* divide  */
+    divide_with_remind = 316,      /* divide_with_remind  */
+    greater_than_or_equals = 317,  /* greater_than_or_equals  */
+    lesser_than_or_equals = 318,   /* lesser_than_or_equals  */
+    bitwise_and_with_equals = 319, /* bitwise_and_with_equals  */
+    bitwise_or_with_equals = 320,  /* bitwise_or_with_equals  */
+    bitwise_xor_with_equals = 321, /* bitwise_xor_with_equals  */
+    bitwise_not_with_equals = 322, /* bitwise_not_with_equals  */
+    bitwise_shift_right_with_equals = 323, /* bitwise_shift_right_with_equals  */
+    bitwise_shift_left_with_equals = 324, /* bitwise_shift_left_with_equals  */
+    comma = 325,                   /* comma  */
+    dot = 326,                     /* dot  */
+    colon = 327,                   /* colon  */
+    number = 328,                  /* number  */
+    identifier = 329,              /* identifier  */
+    string = 330,                  /* string  */
+    PREC_SINGLE_NAME = 331,        /* PREC_SINGLE_NAME  */
+    PREC_TYPE_NAME = 332,          /* PREC_TYPE_NAME  */
+    PREC_FUNC = 333,               /* PREC_FUNC  */
+    PREC_CALL = 334,               /* PREC_CALL  */
+    PREC_TERNARY_IDENT = 335       /* PREC_TERNARY_IDENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -156,7 +154,7 @@ union YYSTYPE
     char *sval;
     struct ast_node *node;
 
-#line 160 "parser_rules.tab.h"
+#line 158 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

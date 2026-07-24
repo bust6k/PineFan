@@ -89,6 +89,6 @@ build:
 	clang-format -style=Google -i *.c *.h *.cpp *.hpp
 	$(MAKE) clean all
 obfuscate:
-	strip --strip-all --remove-section=.comment --remove-section=.note pinefan.exe   && objcopy --strip-unneeded pinefan.exe
-	upx --best --lzma  pinefan.exe
-	python3 remove_signatures.py pinefan.exe
+	strip --strip-all --remove-section=.comment --remove-section=.note pinefan   && objcopy --strip-unneeded pinefan
+	upx --best --lzma  pinefan
+	python3 remove_signatures.py pinefan

@@ -27,8 +27,6 @@ extern int func_cnt;
 %token LOWEST_PREC
 %right LOWEST_PREC
 
-%token indicator_function
-%token strategy_function
 %token if_statement
 %token else_statement
 %token for_statement
@@ -104,7 +102,7 @@ extern int func_cnt;
 %type <sval> pine_type 
 %type <sval> pine_type_primitive
 
-%type <node> program statement   expr expr_list block stmt_list stmt_block if_body indicator_stmt strategy_stmt if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt call_arg_stmt func_stmt opt_arg_list arg_list func_type  call_list call_stmt varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr  /*expr_list*/ block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -153,9 +151,7 @@ program:
     ;
 
 statement:
-    indicator_stmt
-    | strategy_stmt
-    | if_stmt
+     if_stmt
     | for_stmt
     | while_stmt
     | return_stmt_expr
@@ -167,13 +163,11 @@ statement:
     | const_stmt
     | simple_stmt
     | func_stmt
-    | call_arg_stmt
     | import_stmt
     | assignment_stmt
     | assignment_re_stmt
-    | expr %prec LOWEST_PREC
     ;
- 
+
 block:
     left_brace stmt_list right_brace
     { $$ = new_stmt_node($2); }
@@ -196,17 +190,6 @@ if_body:
     | statement
     { $$ = new_block_node($1); }
     ;
-
-indicator_stmt:
-    indicator_function left_paren string right_paren
-    { $$ = new_indicator_node($3); }
-    ;
-
-strategy_stmt:
-    strategy_function left_paren string right_paren
-    { $$ = new_strategy_node($3); }
-    ;
-
 if_stmt:
     if_statement  left_paren expr right_paren if_body %prec if_statement 
     { $$ = new_if_node($3,$5,NULL); }
@@ -363,57 +346,42 @@ dot_expr:
     { $$ = new_var_dot_node($1, $3); }
     ;
 
-call_arg_stmt:
-   identifier left_paren call_list right_paren %prec PREC_CALL
-   { $$ = new_call_node($1,$3); }
-   | dot_expr  left_paren call_list right_paren %prec PREC_CALL
-   { $$ = new_call_node_dot($1->var.name,$3);}
-   ;
-
 call_list:
-   call_stmt
+   expr
    { $$ = $1; }
-   | call_list comma call_stmt
+   | call_list comma expr
    { $3->call_arg.next = $1; $$ = $3; }
    | /*empty*/
    { $$ = NULL;}
    ;
 
+/*
 call_stmt:
   expr 
   { $$ = new_call_arg_node($1); }
   | identifier assign expr
   { $$ = new_call_arg_node($3); }
+*/
 
 var_stmt:
     var identifier assign expr
     { $$ = new_var_node($2,$4); }
-    | var identifier
-    { $$ = new_var_node($2,NULL); }
-    | var identifier assign call_arg_stmt
-     { $$ = new_var_node($2,$4); }
+    | var identifier dot_expr assign expr
+    { $$ = new_var_node($2,$5); }
     ;
+
 varip_stmt:
    varip identifier assign expr
    { $$ = new_varip_node($2,$4); }
-   | varip identifier
-   { $$ = new_varip_node($2,NULL); }
-   | varip identifier assign call_arg_stmt
-   { $$ = new_varip_node($2,$4);}
+   ;
 
 const_stmt:
     const_statement pine_type identifier assign expr
     { $$ = new_const_node($3, $5); }
-    | const_statement pine_type identifier assign call_arg_stmt
-    { $$ = new_const_node($3, $5);}
     ;
 
 simple_stmt:
-    simple identifier
-    { $$ = new_simple_node($2,NULL); }
-    | simple identifier assign expr
-    { $$ = new_simple_node($2,$4); }
-    |simple identifier assign call_arg_stmt
+    simple identifier assign expr
     { $$ = new_simple_node($2,$4); }
     ;
 
@@ -423,24 +391,17 @@ import_stmt:
     ;
 
 assignment_stmt:
-     identifier assign expr
-    { $$ = new_assign_node($1, $3); }
-    | identifier assign call_arg_stmt
-    { $$ = new_assign_node($1,$3); }
-    | expr assign expr
+     expr assign expr
     { $$ = new_expr_assign_node($1,$3); }
     | pine_type_primitive identifier assign expr
     { $$ = new_assign_node($2,$4); }
     ;
 
 assignment_re_stmt:
-    identifier re_assign expr
-    { $$ = new_assign_re_node($1, $3); }
-    | identifier re_assign call_arg_stmt
-    { $$ = new_assign_re_node($1,$3) ; }
-    | expr re_assign expr
+     expr re_assign expr
     { $$ = new_assign_expr_re_node($1,$3); }
     ;
+
 
 
 expr:
@@ -452,6 +413,10 @@ expr:
     { $$ = new_string_node($1); }
     | dot_expr
     { $$ = $1;}
+    | identifier left_paren call_list right_paren %prec PREC_CALL
+    { $$ = new_call_node($1,$3); }
+    | dot_expr  left_paren call_list right_paren %prec PREC_CALL
+    { $$ = new_call_node_dot($1->var.name,$3);} 
     | expr plus_and_assign expr
     { $$ = new_binop_node("+=",$1,$3); }
     | expr minus_and_assign expr 
@@ -514,15 +479,16 @@ expr:
     { $$ = new_quad_brace_expr_node($2); }
     | expr question_sign expr colon expr %prec PREC_TERNARY_IDENT
     { $$ = new_ternary_node($1,$3,$5); }
-    | left_quad_brace expr_list right_quad_brace
-    { $$ = new_array_node($2); }
+   /* | left_quad_brace expr_list right_quad_brace
+    { $$ = new_array_node($2); } */
     ;
-
+/*
 expr_list:
     expr
     | expr_list comma expr
     ;
-
+*/
 %%
+
 
 

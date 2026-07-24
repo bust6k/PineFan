@@ -269,10 +269,10 @@ std::string remove_arrow(std::string line) {
 std::string remove_parens(std::string line) {
   size_t pos = line.find("(");
   if (pos != std::string::npos) {
-    line.at(pos) = '#';
+    line.at(pos) = '$';
     pos = line.find(")");
     if (pos != std::string::npos) {
-      line.at(pos) = '#';
+      line.at(pos) = '$';
     }
   }
 
@@ -591,7 +591,7 @@ int preprocess_files(int argc, char* argv[]) {
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
-    std::cout << f->get_content();
+   std::cout << f->get_content();
 #endif
     // delete file;
   }

@@ -22,8 +22,6 @@ extern int col;
 
 (\t|\f|\v|\r) { col++; }
 
-indicator { col += 9; return indicator_function; }
-strategy { col += 8; return strategy_function; }
 if { col += 2; return if_statement; }
 else { col += 4; return else_statement; }
 for { col += 3; return for_statement; }
@@ -46,7 +44,7 @@ float { col += 5; return float_type; }
 color { col += 5; return color_type; }
 string { col += 6; return string_as_type; }
 and { col += 3; return logical_and; }
-"#" { col++; return func_paren; }
+"$" { col++; return func_paren; }
 "(" { col++; return left_paren; }
 ")" { col++; return right_paren; }
 "[" { col++; return left_quad_brace; }

@@ -1519,7 +1519,6 @@ void generate_matrolib() {
 
 #endif
   }
-
   res = 0;
   res = generate_na();
   generate_ta();
