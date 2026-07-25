@@ -95,7 +95,7 @@ typedef struct ast_node {
       struct ast_node* next;
     } call_arg;
     struct {
-      char* name;
+      struct ast_node* name;
       struct ast_node* args;
       int arg_count;
     } call_node;
@@ -181,8 +181,8 @@ ast_node* new_quad_brace_expr_node(ast_node* expr);
 ast_node* new_index_node(ast_node* expr, ast_node* value);
 ast_node* new_comma_expr_node(ast_node* expr);
 ast_node* new_unop_node(char* op, ast_node* operand);
-ast_node* new_call_node(char* name, ast_node* args);
-ast_node* new_call_node_dot(char* name, ast_node* args);
+ast_node* new_call_node(ast_node* name, ast_node* args);
+ast_node* new_call_node_dot(ast_node* name, ast_node* args);
 ast_node* new_call_arg_node(ast_node* expr);
 ast_node* new_func_node(char* ident, ast_node* args, ast_node* body);
 ast_node* new_func_type_node(char* type, char* name);

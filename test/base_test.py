@@ -41,7 +41,3 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
-
-
-for bar in close:
-    c = ( 5 + 5 )

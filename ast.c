@@ -319,7 +319,7 @@ ast_node* reverse_list(ast_node* node) {
   return prev;
 }
 
-ast_node* new_call_node(char* name, ast_node* args) {
+ast_node* new_call_node(ast_node* name, ast_node* args) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_CALL;
   node->call_node.name = name;
@@ -335,7 +335,7 @@ ast_node* new_call_node(char* name, ast_node* args) {
   node->call_node.arg_count = count;
   return node;
 }
-ast_node* new_call_node_dot(char* name, ast_node* args) {
+ast_node* new_call_node_dot(ast_node* name, ast_node* args) {
   return new_call_node(name, args);
 }
 

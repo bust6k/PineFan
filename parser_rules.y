@@ -1,4 +1,6 @@
 %define parse.error verbose
+%glr-parser
+%expect 261
 
 %code requires {
 #include <stdio.h>
@@ -102,7 +104,7 @@ extern int func_cnt;
 %type <sval> pine_type 
 %type <sval> pine_type_primitive
 
-%type <node> program statement   expr  /*expr_list*/ block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr expr_atom  postfix_expr /*expr_list*/ block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -166,6 +168,7 @@ statement:
     | import_stmt
     | assignment_stmt
     | assignment_re_stmt
+    | expr %prec LOWEST_PREC
     ;
 
 block:
@@ -366,8 +369,8 @@ call_stmt:
 var_stmt:
     var identifier assign expr
     { $$ = new_var_node($2,$4); }
-    | var identifier dot_expr assign expr
-    { $$ = new_var_node($2,$5); }
+    /*| var identifier dot_expr assign expr
+    { $$ = new_var_node($2,$5); }*/
     ;
 
 varip_stmt:
@@ -403,20 +406,35 @@ assignment_re_stmt:
     ;
 
 
+expr_atom:
+      number
+      { $$ = new_number_node($1); }
+      | identifier
+      { $$ = new_varn_node($1, 0); }
+      | string
+      { $$ = new_string_node($1); }
+      | dot_expr
+      { $$ = $1; }
+      /*| left_paren expr right_paren
+      { $$ = new_paren_expr_node($2); }*/
+      ;
+
+postfix_expr:
+       expr_atom left_paren call_list right_paren
+      {
+          $$ = new_call_node($1, $3);
+      }
+      | expr_atom left_quad_brace expr right_quad_brace
+      {
+          $$ = new_index_node($1, $3);
+      }
+      ;
 
 expr:
-    number
-    { $$ = new_number_node($1); }
-    | identifier
-    { $$ = new_varn_node($1,0); }
-    | string
-    { $$ = new_string_node($1); }
-    | dot_expr
+    expr_atom
+   { $$ = $1;}
+    |  postfix_expr
     { $$ = $1;}
-    | identifier left_paren call_list right_paren %prec PREC_CALL
-    { $$ = new_call_node($1,$3); }
-    | dot_expr  left_paren call_list right_paren %prec PREC_CALL
-    { $$ = new_call_node_dot($1->var.name,$3);} 
     | expr plus_and_assign expr
     { $$ = new_binop_node("+=",$1,$3); }
     | expr minus_and_assign expr 
@@ -463,7 +481,7 @@ expr:
     { $$ = new_binop_node("<<", $1, $3); }
     | expr bitwise_shift_to_right expr
     { $$ = new_binop_node(">>", $1, $3); }
-    | logical_not expr
+    | logical_not expr %prec logical_not
     { $$ = new_unop_node("!", $2); }
     | bitwise_not expr
     { $$ = new_unop_node("~", $2); }
@@ -471,10 +489,6 @@ expr:
     { $$ = new_unop_node("-", $2); }
     | plus  expr %prec multiply
     { $$ = new_unop_node("+", $2); }
-    | left_paren expr right_paren
-    { $$ = new_paren_expr_node($2); }
-    | expr left_quad_brace expr right_quad_brace
-    { $$ = new_index_node($1,$3); }
     | left_quad_brace expr right_quad_brace
     { $$ = new_quad_brace_expr_node($2); }
     | expr question_sign expr colon expr %prec PREC_TERNARY_IDENT
