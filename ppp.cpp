@@ -428,6 +428,8 @@ void preprocess(const std::string& input, std::string& output) {
         info.indent++;
       else if (c == '\t')
         info.indent += 4;
+      else if( c == '\"')
+	info.is_in_text = 1;
       else
         break;
     }

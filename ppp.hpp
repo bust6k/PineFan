@@ -74,6 +74,7 @@ struct LineInfo {
   bool is_switch_stmt = false;
   bool is_default = false;
   int indent;
+  int is_in_text;
 };
 
 enum SwitchState {

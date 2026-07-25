@@ -41,50 +41,28 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
-0x55dbbdd99a50("[RS]Splinter Analysis")
-strfoo = "fofof" + "fff" + "f"
-b = b + 1
-def f_highest(_source, _bars, _length):
-    float    _h_value = _source
-    int    _h_bar = _bars
-    for _i in range(0, max + 1):
-        bool        _isSourceOver = _source[_i] > _h_value
-        if _isSourceOver:
-            _h_value = _source[_i]
-            _h_bar = _bars[_i]
 
-    return     _h_valuedef f_lowest(_source, _bars, _length):
-    float    _l_value = _source
-    int    _l_bar = _bars
-    for _i in range(0, 0x55dbbdd9ede0(5)
- + 1):
-        bool        _isSourceUnder = _source[_i] < _l_value
-        if _isSourceUnder:
-            _l_value = _source[_i]
-            _l_bar = _bars[_i]
 
-    return     _l_valuelength = 0x55dbbdd9fa20(10)
-
-offset = 0x55dbbdd9b0e0(0)
-
-hv = 0x55dbbdd9b220(offset
+for bar in close:
+    i_max_bars_back = 300
+    g_zz = "██████████████████ Zig Zag ██████████████████"
+    bool    i_zz_bear_show =     0x561585910580(    true
 )
 
-lv = 0x55dbbdd9b5a0(offset
+    bool    i_zz_bear_shift_show =     0x561585910b20(    true
 )
 
-0x55dbbdd9b820(hv)
-0x55dbbdd9b8e0(lv)
-0x55dbbdd9b9a0(1)
-def f_build_ohlc(_source, _source_high, _source_low, _totalbars):
-    float    _o = _source[_totalbars]
-    float    _h = _source_high
-    float    _l = _source_low
-    float    _c = _source
-    for _i in range(0, _totalbars + 1):
-        if _source_high[_i] >= _h:
-            _h = _source_high[_i]
-        if _source_low[_i] >= _l:
-            _l = _source_low[_i]
+    bool    i_zz_bear_ret_show =     0x5615859110c0(    true
+)
 
-    return     _o
+    bool    i_zz_bull_show =     0x5615859024b0(    true
+)
+
+    bool    i_zz_bull_shift_show =     0x561585902a50(    true
+)
+
+    bool    i_zz_bull_ret_show =     0x561585902ff0(    true
+)
+
+    int    i_zz_period =     0x561585918a50(4)
+
