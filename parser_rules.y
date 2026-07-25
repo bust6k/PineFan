@@ -1,6 +1,6 @@
 %define parse.error verbose
 %glr-parser
-%expect 261
+%expect 262
 
 %code requires {
 #include <stdio.h>
@@ -68,6 +68,7 @@ extern int func_cnt;
 %token left_paren
 %token right_paren
 %token func_paren
+%token call_paren
 %token left_quad_brace
 %token right_quad_brace
 %token left_brace
@@ -415,12 +416,12 @@ expr_atom:
       { $$ = new_string_node($1); }
       | dot_expr
       { $$ = $1; }
-      /*| left_paren expr right_paren
-      { $$ = new_paren_expr_node($2); }*/
+      | left_paren expr right_paren
+      { $$ = new_paren_expr_node($2); }
       ;
 
 postfix_expr:
-       expr_atom left_paren call_list right_paren
+       expr_atom call_paren call_list call_paren
       {
           $$ = new_call_node($1, $3);
       }

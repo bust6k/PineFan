@@ -45,6 +45,7 @@ color { col += 5; return color_type; }
 string { col += 6; return string_as_type; }
 and { col += 3; return logical_and; }
 "$" { col++; return func_paren; }
+"@" { col++; return call_paren; }
 "(" { col++; return left_paren; }
 ")" { col++; return right_paren; }
 "[" { col++; return left_quad_brace; }

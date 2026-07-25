@@ -97,44 +97,45 @@ extern int yydebug;
     left_paren = 295,              /* left_paren  */
     right_paren = 296,             /* right_paren  */
     func_paren = 297,              /* func_paren  */
-    left_quad_brace = 298,         /* left_quad_brace  */
-    right_quad_brace = 299,        /* right_quad_brace  */
-    left_brace = 300,              /* left_brace  */
-    right_brace = 301,             /* right_brace  */
-    assign = 302,                  /* assign  */
-    re_assign = 303,               /* re_assign  */
-    equals = 304,                  /* equals  */
-    greater_than = 305,            /* greater_than  */
-    lesser_than = 306,             /* lesser_than  */
-    plus_and_assign = 307,         /* plus_and_assign  */
-    minus_and_assign = 308,        /* minus_and_assign  */
-    multiply_and_assign = 309,     /* multiply_and_assign  */
-    divide_and_assign = 310,       /* divide_and_assign  */
-    remind_and_assign = 311,       /* remind_and_assign  */
-    plus = 312,                    /* plus  */
-    minus = 313,                   /* minus  */
-    multiply = 314,                /* multiply  */
-    divide = 315,                  /* divide  */
-    divide_with_remind = 316,      /* divide_with_remind  */
-    greater_than_or_equals = 317,  /* greater_than_or_equals  */
-    lesser_than_or_equals = 318,   /* lesser_than_or_equals  */
-    bitwise_and_with_equals = 319, /* bitwise_and_with_equals  */
-    bitwise_or_with_equals = 320,  /* bitwise_or_with_equals  */
-    bitwise_xor_with_equals = 321, /* bitwise_xor_with_equals  */
-    bitwise_not_with_equals = 322, /* bitwise_not_with_equals  */
-    bitwise_shift_right_with_equals = 323, /* bitwise_shift_right_with_equals  */
-    bitwise_shift_left_with_equals = 324, /* bitwise_shift_left_with_equals  */
-    comma = 325,                   /* comma  */
-    dot = 326,                     /* dot  */
-    colon = 327,                   /* colon  */
-    number = 328,                  /* number  */
-    identifier = 329,              /* identifier  */
-    string = 330,                  /* string  */
-    PREC_SINGLE_NAME = 331,        /* PREC_SINGLE_NAME  */
-    PREC_TYPE_NAME = 332,          /* PREC_TYPE_NAME  */
-    PREC_FUNC = 333,               /* PREC_FUNC  */
-    PREC_CALL = 334,               /* PREC_CALL  */
-    PREC_TERNARY_IDENT = 335       /* PREC_TERNARY_IDENT  */
+    call_paren = 298,              /* call_paren  */
+    left_quad_brace = 299,         /* left_quad_brace  */
+    right_quad_brace = 300,        /* right_quad_brace  */
+    left_brace = 301,              /* left_brace  */
+    right_brace = 302,             /* right_brace  */
+    assign = 303,                  /* assign  */
+    re_assign = 304,               /* re_assign  */
+    equals = 305,                  /* equals  */
+    greater_than = 306,            /* greater_than  */
+    lesser_than = 307,             /* lesser_than  */
+    plus_and_assign = 308,         /* plus_and_assign  */
+    minus_and_assign = 309,        /* minus_and_assign  */
+    multiply_and_assign = 310,     /* multiply_and_assign  */
+    divide_and_assign = 311,       /* divide_and_assign  */
+    remind_and_assign = 312,       /* remind_and_assign  */
+    plus = 313,                    /* plus  */
+    minus = 314,                   /* minus  */
+    multiply = 315,                /* multiply  */
+    divide = 316,                  /* divide  */
+    divide_with_remind = 317,      /* divide_with_remind  */
+    greater_than_or_equals = 318,  /* greater_than_or_equals  */
+    lesser_than_or_equals = 319,   /* lesser_than_or_equals  */
+    bitwise_and_with_equals = 320, /* bitwise_and_with_equals  */
+    bitwise_or_with_equals = 321,  /* bitwise_or_with_equals  */
+    bitwise_xor_with_equals = 322, /* bitwise_xor_with_equals  */
+    bitwise_not_with_equals = 323, /* bitwise_not_with_equals  */
+    bitwise_shift_right_with_equals = 324, /* bitwise_shift_right_with_equals  */
+    bitwise_shift_left_with_equals = 325, /* bitwise_shift_left_with_equals  */
+    comma = 326,                   /* comma  */
+    dot = 327,                     /* dot  */
+    colon = 328,                   /* colon  */
+    number = 329,                  /* number  */
+    identifier = 330,              /* identifier  */
+    string = 331,                  /* string  */
+    PREC_SINGLE_NAME = 332,        /* PREC_SINGLE_NAME  */
+    PREC_TYPE_NAME = 333,          /* PREC_TYPE_NAME  */
+    PREC_FUNC = 334,               /* PREC_FUNC  */
+    PREC_CALL = 335,               /* PREC_CALL  */
+    PREC_TERNARY_IDENT = 336       /* PREC_TERNARY_IDENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -149,7 +150,7 @@ union YYSTYPE
     char *sval;
     struct ast_node *node;
 
-#line 153 "parser_rules.tab.h"
+#line 154 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

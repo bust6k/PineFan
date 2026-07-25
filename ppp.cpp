@@ -33,8 +33,6 @@
 
 #include "file.hpp"
 
-// #define _IS_MAIN
-
 namespace Pinefan {
 namespace Ppp {
 
@@ -279,6 +277,41 @@ std::string remove_parens(std::string line) {
   return line;
 }
 
+
+
+std::string remove_call_parens(std::string line) {
+  size_t pos = line.find("(");
+  if (pos != std::string::npos) {
+    line.at(pos) = '@';
+    pos = line.find(")");
+    if (pos != std::string::npos) {
+      line.at(pos) = '@';
+    }
+  }
+
+  return line;
+}
+
+bool previous_ascii_letter(const std::string& s, std::size_t pos)
+{
+    while (pos > 0)
+    {
+        --pos;
+
+        unsigned char ch = static_cast<unsigned char>(s[pos]);
+
+        if (std::isspace(ch) || ch == '\\')
+            continue;
+
+        if (ch >= 128)          // start of UTF-8 sequence
+            return false;
+
+        return std::isalpha(ch) != 0;
+    }
+
+    return false;
+}
+
 // Find keyword in line at specific position (considering boundaries)
 std::optional<std::string> find_keyword_at(const std::string& line,
                                            size_t start_pos) {
@@ -403,16 +436,30 @@ void preprocess(const std::string& input, std::string& output) {
     // other one is has arrow so then you should grab that line
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = 0;
+    size_t arrow_pos = 0;
 
     if (left_part.has_value()) {
       is_func = left_part->find("(");
       is_func = left_part->find(")");
     }
 
-    if (!left_part.has_value() && find_arrow_pos(info.content, 0).has_value())
-      is_func = 10;
+    if(!info.content.empty() && !left_part.has_value()) {
 
-    if (is_func == std::string::npos) {
+      is_func = info.content.find("(");
+      if(is_func != std::string::npos) arrow_pos = is_func;
+      is_func = info.content.find(")");
+    }
+
+    if (!left_part.has_value() && find_arrow_pos(info.content, 0).has_value())
+      is_func = 1000;
+
+
+    if (!is_arrow(info.content) && is_func != std::string::npos &&
+        is_func != 1000 && previous_ascii_letter(info.content,arrow_pos))  {
+    info.content = remove_call_parens(info.content);
+    }
+
+    if (is_func == std::string::npos && left_part.has_value()) {
       info.is_switch_stmt = true;
       info.arrow_before = left_part.value();
 
@@ -420,7 +467,7 @@ void preprocess(const std::string& input, std::string& output) {
       if (arr_pos.has_value()) {
         info.content_after = info.content.substr(*arr_pos + 2);
       }
-    } else if (is_func == 10) {
+    } else if (is_func == 1000) {
       info.is_switch_stmt = true;
       info.is_default = true;
       info.arrow_before = "default";
@@ -432,7 +479,7 @@ void preprocess(const std::string& input, std::string& output) {
     }
 
     if (is_arrow(info.content) && is_func != std::string::npos &&
-        is_func != 10) {
+        is_func != 1000) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
       info.content = remove_parens(info.content);
