@@ -1,6 +1,6 @@
 %define parse.error verbose
 %glr-parser
-%expect 254
+%expect 249
 
 %code requires {
 #include <stdio.h>
@@ -103,7 +103,6 @@ extern int func_cnt;
 %token <ival> number
 %token <sval> identifier string
 %type <sval> pine_type 
-%type <sval> pine_type_primitive
 
 %type <node> program statement   expr expr_atom  postfix_expr /*expr_list*/ block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
@@ -256,18 +255,6 @@ func_type:
    { $$ = new_array_func_type_dot_node($1,$3,$5,$7);}
   ; 
 
-pine_type_primitive:
-  int_type
-  { $$ = new_type_name(int_type);}
-  | bool_type
-  { $$ = new_type_name(bool_type);}
-  | string_as_type
-  { $$ = new_type_name(string_as_type);}
-  | float_type
-  { $$ = new_type_name(float_type);}
-  | color_type
-  { $$ = new_type_name(color_type);}
-
 pine_type:
   int_type
   { $$ = new_type_name(int_type);}
@@ -369,23 +356,35 @@ call_stmt:
 var_stmt:
     var identifier assign expr
     { $$ = new_var_node($2,$4); }
-    /*| var identifier dot_expr assign expr
-    { $$ = new_var_node($2,$5); }*/
+    | var pine_type identifier assign expr
+    { $$ = new_var_node($3,$5); }
+    | var dot_expr identifier assign expr
+    { $$ = new_var_node($3,$5); }
     ;
 
 varip_stmt:
    varip_statement identifier assign expr
    { $$ = new_varip_node($2,$4); }
+   | varip_statement pine_type identifier assign expr
+  { $$ = new_varip_node($3,$5); }
+   | varip_statement dot_expr identifier assign expr
+   { $$ = new_varip_node($3,$5); }
    ;
 
 const_stmt:
     const_statement pine_type identifier assign expr
     { $$ = new_const_node($3, $5); }
+    | const_statement dot_expr identifier assign expr
+    { $$ = new_const_node($3,$5); } 
     ;
 
 simple_stmt:
     simple identifier assign expr
     { $$ = new_simple_node($2,$4); }
+    | simple pine_type identifier assign expr
+   { $$ = new_simple_node($3,$5); } 
+   | simple dot_expr identifier assign expr
+  { $$ = new_simple_node($3,$5); }
     ;
 
 import_stmt:
@@ -396,9 +395,7 @@ import_stmt:
 assignment_stmt:
      expr assign expr
     { $$ = new_expr_assign_node($1,$3); }
-    | pine_type_primitive identifier assign expr
-    { $$ = new_assign_node($2,$4); }
-    ;
+   ;
 
 assignment_re_stmt:
      expr re_assign expr
@@ -409,7 +406,7 @@ assignment_re_stmt:
 expr_atom:
       number
       { $$ = new_number_node($1); }
-      | identifier
+      | pine_type
       { $$ = new_varn_node($1, 0); }
       | string
       { $$ = new_string_node($1); }

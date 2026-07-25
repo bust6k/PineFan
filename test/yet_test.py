@@ -41,45 +41,46 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
-foo = "fofof" + "fff" + "f"
+0x55dbbdd99a50("[RS]Splinter Analysis")
+strfoo = "fofof" + "fff" + "f"
 b = b + 1
 def f_highest(_source, _bars, _length):
-    _h_value = _source
-    _h_bar = _bars
+    float    _h_value = _source
+    int    _h_bar = _bars
     for _i in range(0, max + 1):
-        _isSourceOver = _source[_i] > _h_value
+        bool        _isSourceOver = _source[_i] > _h_value
         if _isSourceOver:
             _h_value = _source[_i]
             _h_bar = _bars[_i]
 
     return     _h_valuedef f_lowest(_source, _bars, _length):
-    _l_value = _source
-    _l_bar = _bars
-    for _i in range(0, 0x562545331500(5)
+    float    _l_value = _source
+    int    _l_bar = _bars
+    for _i in range(0, 0x55dbbdd9ede0(5)
  + 1):
-        _isSourceUnder = _source[_i] < _l_value
+        bool        _isSourceUnder = _source[_i] < _l_value
         if _isSourceUnder:
             _l_value = _source[_i]
             _l_bar = _bars[_i]
 
-    return     _l_valuelength = 0x562545332080(10)
+    return     _l_valuelength = 0x55dbbdd9fa20(10)
 
-offset = 0x56254532e0c0(0)
+offset = 0x55dbbdd9b0e0(0)
 
-hv = 0x56254532e200(offset
+hv = 0x55dbbdd9b220(offset
 )
 
-lv = 0x56254532e580(offset
+lv = 0x55dbbdd9b5a0(offset
 )
 
-0x56254532e800(hv)
-0x56254532e8c0(lv)
-0x56254532e980(1)
+0x55dbbdd9b820(hv)
+0x55dbbdd9b8e0(lv)
+0x55dbbdd9b9a0(1)
 def f_build_ohlc(_source, _source_high, _source_low, _totalbars):
-    _o = _source[_totalbars]
-    _h = _source_high
-    _l = _source_low
-    _c = _source
+    float    _o = _source[_totalbars]
+    float    _h = _source_high
+    float    _l = _source_low
+    float    _c = _source
     for _i in range(0, _totalbars + 1):
         if _source_high[_i] >= _h:
             _h = _source_high[_i]

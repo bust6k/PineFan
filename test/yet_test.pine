@@ -2,14 +2,14 @@
 // © RicardoSantos
 
 //@version=4
-//study(title="[RS]Splinter Analysis", shorttitle="SA", overlay=false)
+study(title="[RS]Splinter Analysis", shorttitle="SA", overlay=false)
 //  Initiate bar counter.
 
 string foo = 
 "fofof" + "fff"
 + "f"
 
-//var int  b = -1
+varip line  b = -1
 b := b + 1
 
 f_highest(_source, _bars, _length)=>
