@@ -71,7 +71,7 @@ extern int yydebug;
     case_statement = 269,          /* case_statement  */
     default_statement = 270,       /* default_statement  */
     var = 271,                     /* var  */
-    varip = 272,                   /* varip  */
+    varip_statement = 272,         /* varip_statement  */
     const_statement = 273,         /* const_statement  */
     simple = 274,                  /* simple  */
     logical_and = 275,             /* logical_and  */

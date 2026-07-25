@@ -1,6 +1,6 @@
 %define parse.error verbose
 %glr-parser
-%expect 262
+%expect 254
 
 %code requires {
 #include <stdio.h>
@@ -42,7 +42,7 @@ extern int func_cnt;
 %token case_statement
 %token default_statement
 %token var
-%token varip
+%token varip_statement
 %token const_statement
 %token simple
 %token logical_and
@@ -122,7 +122,7 @@ extern int func_cnt;
 %token PREC_FUNC PREC_CALL PREC_TERNARY_IDENT
 %nonassoc PREC_CALL
 %nonassoc PREC_FUNC
-%right PREC_TERNARY_IDENT
+%right PREC_TERNARY_IDENT question_sign
 
 %right assign re_assign
 %right bitwise_and_with_equals bitwise_or_with_equals bitwise_xor_with_equals bitwise_not_with_equals
@@ -167,7 +167,6 @@ statement:
     | simple_stmt
     | func_stmt
     | import_stmt
-    | assignment_stmt
     | assignment_re_stmt
     | expr %prec LOWEST_PREC
     ;
@@ -375,7 +374,7 @@ var_stmt:
     ;
 
 varip_stmt:
-   varip identifier assign expr
+   varip_statement identifier assign expr
    { $$ = new_varip_node($2,$4); }
    ;
 
@@ -422,19 +421,17 @@ expr_atom:
 
 postfix_expr:
        expr_atom call_paren call_list call_paren
-      {
-          $$ = new_call_node($1, $3);
-      }
+      { $$ = new_call_node($1, $3);}
       | expr_atom left_quad_brace expr right_quad_brace
-      {
-          $$ = new_index_node($1, $3);
-      }
+      {$$ = new_index_node($1, $3);}
       ;
 
 expr:
     expr_atom
    { $$ = $1;}
-    |  postfix_expr
+    | postfix_expr
+    { $$ = $1;}
+    | assignment_stmt
     { $$ = $1;}
     | expr plus_and_assign expr
     { $$ = new_binop_node("+=",$1,$3); }
@@ -490,8 +487,8 @@ expr:
     { $$ = new_unop_node("-", $2); }
     | plus  expr %prec multiply
     { $$ = new_unop_node("+", $2); }
-    | left_quad_brace expr right_quad_brace
-    { $$ = new_quad_brace_expr_node($2); }
+    /*| left_quad_brace expr right_quad_brace
+    { $$ = new_quad_brace_expr_node($2); } */
     | expr question_sign expr colon expr %prec PREC_TERNARY_IDENT
     { $$ = new_ternary_node($1,$3,$5); }
    /* | left_quad_brace expr_list right_quad_brace

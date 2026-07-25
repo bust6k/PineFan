@@ -899,7 +899,7 @@ YY_RULE_SETUP
 case 13:
 YY_RULE_SETUP
 #line 35 "lex_rules.l"
-{ col += 5;return varip;}
+{ col += 5;return varip_statement;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP

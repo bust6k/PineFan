@@ -20,25 +20,27 @@ f_highest(_source, _bars, _length)=>
         if _isSourceOver
             _h_value := _source[_i]
             _h_bar := _bars[_i]
-    [_h_value, _h_bar]
+    _h_value
 
 f_lowest(_source, _bars, _length)=>
     float _l_value = _source
     int _l_bar = _bars
-    for _i = 0 to max
+    for _i = 0 to max(5,5,foo,"foo")
         bool _isSourceUnder = _source[_i] < _l_value
         if _isSourceUnder
             _l_value := _source[_i]
             _l_bar := _bars[_i]
-    [_l_value, _l_bar]
+    _l_value
 
 length = input(10)
 offset = input(0)
-hv = f_highest(high[offset], b[offset], length)
+hv = f_highest(high[offset], b[offset], length,lofs=3)
 lv = f_highest(low[offset], b[offset], length)
 
 plot(hv)
 plot(lv)
+
+foo(time=1,foo=6)
 
 f_build_ohlc(_source, _source_high, _source_low, _totalbars)=>
     float _o = _source[_totalbars]
@@ -50,18 +52,7 @@ f_build_ohlc(_source, _source_high, _source_low, _totalbars)=>
             _h := _source_high[_i]
         if _source_low[_i] >= _l
             _l := _source_low[_i]
-    [_o, _h, _l, _c]
+    _o
 
 
 
-f_candle(_o, _h, _l, _c, _i, _length)=>
-    int _bar_position = bar_index - _length + _i
-    color _body_col = _c > _o ? color.green : color.maroon
-    var line _body = line.new(x1=_bar_position, y1=_o, x2=_bar_position, y2=_c, xloc=xloc.bar_index, extend=extend.none, colorr=_body_col, style=line.style_solid, width=5)
-    var line _wick = line.new(x1=_bar_position, y1=_l, x2=_bar_position, y2=_h, xloc=xloc.bar_index, extend=extend.none, colorr=_body_col, style=line.style_solid, width=1)
-    line.set_color(id=_body, color1=_body_col)
-    line.set_xy1(id=_body, x=_bar_position, y=_o)
-    line.set_xy2(id=_body, x=_bar_position, y=_c)
-    line.set_color(id=_wick, color3=_body_col)
-    line.set_xy1(id=_wick, x=_bar_position, y=_l)
-    line.set_xy2(id=_wick, x=_bar_position, y=_h)
