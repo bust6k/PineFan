@@ -11,6 +11,7 @@ override OBFUSCATE_FLAGS += -s -fno-ident \
 override CXXFLAGS += -std=c++20 -Wno-write-strings
 override CFLAGS += -Wno-write-strings
 override BFLAGS += -d -o
+override MSG += I made new commit 
 
 TARGET = pinefan
 

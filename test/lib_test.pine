@@ -1,3 +1,6 @@
+f() =>
+   f
+
 strategy("My (Strategy)")
 if close > close[1]
     strategy.entry("Long", strategy.long)  
@@ -13,3 +16,6 @@ slowMA = ta.sma(close, 21)
 
 if ta.crossover(fastMA, slowMA)
     strategy.entry('Long', strategy.long)
+
+foo(foo) =>
+   foo

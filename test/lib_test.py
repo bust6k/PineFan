@@ -41,22 +41,24 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
+def f():
 
-
-for bar in close:
-    0x56435b73a270("My (Strategy)")
-    if     close >     close[1]:
-        0x56435b73b200("Long")
-    if     close <     close[1]:
-        0x56435b73e710("Short")
-    0x56435b73e910("MA Cross")
-    fastMA =     0x56435b73b6d0(    close
+    return     f0x555d217d87d0("My (Strategy)")
+if close > close[1]:
+    0x555d217dba30("Long")
+if close < close[1]:
+    0x555d217dbdf0("Short")
+0x555d217dbff0("()))())MA Cross")
+fastMA = 0x555d217d8ad0(close
 )
 
-    slowMA =     0x56435b73b850(    close
+slowMA = 0x555d217d8c50(close
 )
 
-    if     0x56435b73b990(    fastMA
+if 0x555d217d8d90(fastMA
 )
 :
-        0x56435b73baf0("Long")
+    0x555d217d8ef0("Long")
+def foo(foo):
+
+    return     foo

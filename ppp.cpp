@@ -377,6 +377,21 @@ bool replace_call_parens(std::string& line) {
   return true;
 }
 
+bool replace_func_parens(std::string& line) {
+auto parens = find_call_parens(line);
+
+if(!parens.has_value()) return false;
+
+const auto [left,right] = *parens;
+
+if(!previous_ascii_letter(line,left)) return false;
+
+line[left] = '$';
+line[right] = '$';
+
+return true;
+}
+
 // Find keyword in line at specific position (considering boundaries)
 std::optional<std::string> find_keyword_at(const std::string& line,
                                            size_t start_pos) {
@@ -501,9 +516,13 @@ void preprocess(const std::string& input, std::string& output) {
 
     // TODO: there's must be check if in this line have no something but if in
     // other one is has arrow so then you should grab that line
+
+    //Just getting out the string of the line before arrow(=>)
+    
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = 0;
     size_t arrow_pos = 0;
+    size_t call_paren_pos = 0;
 
     if (left_part.has_value()) {
       auto parens = find_call_parens(left_part.value());
@@ -512,13 +531,12 @@ void preprocess(const std::string& input, std::string& output) {
     } else if (!info.content.empty()) {
       auto parens = find_call_parens(info.content);
 
-      if (parens.has_value()) {
-        is_func = true;
-        arrow_pos = parens->first;
-      }
+      if (parens.has_value()) {is_func = true;call_paren_pos = parens->first;} 
     }
+    
+    //XXX: we're replacing the parens for function invokations
     if (!is_arrow(info.content) && is_func &&
-        previous_ascii_letter(info.content, arrow_pos)) {
+        previous_ascii_letter(info.content, call_paren_pos)) {
       replace_call_parens(info.content);
     }
 
@@ -550,11 +568,11 @@ void preprocess(const std::string& input, std::string& output) {
       }
     }
 
-    if (is_arrow(info.content) && is_func != std::string::npos &&
-        is_func != 1000) {
+    if (is_arrow(info.content) && is_func && is_func != 1000) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
-      info.content = remove_parens(info.content);
+      replace_func_parens(info.content);
+      info.content = info.content;
       info.keyword = "";
     } else {
       auto kw = find_keyword_at(info.content, 0);
