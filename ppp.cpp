@@ -277,8 +277,7 @@ std::string remove_parens(std::string line) {
   return line;
 }
 
-
-
+/*
 std::string remove_call_parens(std::string line) {
   size_t pos = line.find("(");
   if (pos != std::string::npos) {
@@ -291,25 +290,91 @@ std::string remove_call_parens(std::string line) {
 
   return line;
 }
+*/
+std::optional<std::pair<std::size_t, std::size_t>> find_call_parens(
+    const std::string& line) {
+  bool in_string = false;
+  bool escape = false;
+  int paren_depth = 0;
 
-bool previous_ascii_letter(const std::string& s, std::size_t pos)
-{
-    while (pos > 0)
-    {
-        --pos;
+  std::size_t open_pos = std::string::npos;
 
-        unsigned char ch = static_cast<unsigned char>(s[pos]);
+  for (std::size_t i = 0; i < line.size(); ++i) {
+    const char ch = line[i];
 
-        if (std::isspace(ch) || ch == '\\')
-            continue;
+    // Inside a string literal.
+    if (in_string) {
+      if (escape) {
+        escape = false;
+        continue;
+      }
 
-        if (ch >= 128)          // start of UTF-8 sequence
-            return false;
+      if (ch == '\\') {
+        escape = true;
+        continue;
+      }
 
-        return std::isalpha(ch) != 0;
+      if (ch == '"') in_string = false;
+
+      continue;
     }
 
-    return false;
+    // Outside a string.
+    if (ch == '"') {
+      in_string = true;
+      continue;
+    }
+
+    if (ch == '(') {
+      if (paren_depth == 0) open_pos = i;
+
+      ++paren_depth;
+      continue;
+    }
+
+    if (ch == ')') {
+      if (paren_depth == 0) continue;
+
+      --paren_depth;
+
+      if (paren_depth == 0 && open_pos != std::string::npos)
+        return std::make_pair(open_pos, i);
+    }
+  }
+
+  return std::nullopt;
+}
+
+bool previous_ascii_letter(const std::string& s, std::size_t pos) {
+  while (pos > 0) {
+    --pos;
+
+    unsigned char ch = static_cast<unsigned char>(s[pos]);
+
+    if (std::isspace(ch) || ch == '\\') continue;
+
+    if (ch >= 128)  // start of UTF-8 sequence
+      return false;
+
+    return std::isalpha(ch) != 0;
+  }
+
+  return false;
+}
+
+bool replace_call_parens(std::string& line) {
+  auto parens = find_call_parens(line);
+
+  if (!parens.has_value()) return false;
+
+  const auto [left, right] = *parens;
+
+  if (!previous_ascii_letter(line, left)) return false;
+
+  line[left] = '@';
+  line[right] = '@';
+
+  return true;
 }
 
 // Find keyword in line at specific position (considering boundaries)
@@ -428,8 +493,8 @@ void preprocess(const std::string& input, std::string& output) {
         info.indent++;
       else if (c == '\t')
         info.indent += 4;
-      else if( c == '\"')
-	info.is_in_text = 1;
+      else if (c == '\"')
+        info.is_in_text = 1;
       else
         break;
     }
@@ -441,25 +506,30 @@ void preprocess(const std::string& input, std::string& output) {
     size_t arrow_pos = 0;
 
     if (left_part.has_value()) {
-      is_func = left_part->find("(");
-      is_func = left_part->find(")");
+      auto parens = find_call_parens(left_part.value());
+
+      if (parens.has_value()) is_func = true;
+    } else if (!info.content.empty()) {
+      auto parens = find_call_parens(info.content);
+
+      if (parens.has_value()) {
+        is_func = true;
+        arrow_pos = parens->first;
+      }
+    }
+    if (!is_arrow(info.content) && is_func &&
+        previous_ascii_letter(info.content, arrow_pos)) {
+      replace_call_parens(info.content);
     }
 
-    if(!info.content.empty() && !left_part.has_value()) {
-
+    if (!info.content.empty() && !left_part.has_value()) {
       is_func = info.content.find("(");
-      if(is_func != std::string::npos) arrow_pos = is_func;
+      if (is_func != std::string::npos) arrow_pos = is_func;
       is_func = info.content.find(")");
     }
 
     if (!left_part.has_value() && find_arrow_pos(info.content, 0).has_value())
       is_func = 1000;
-
-
-    if (!is_arrow(info.content) && is_func != std::string::npos &&
-        is_func != 1000 && previous_ascii_letter(info.content,arrow_pos))  {
-    info.content = remove_call_parens(info.content);
-    }
 
     if (is_func == std::string::npos && left_part.has_value()) {
       info.is_switch_stmt = true;
@@ -640,7 +710,7 @@ int preprocess_files(int argc, char* argv[]) {
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
-   std::cout << f->get_content();
+    std::cout << f->get_content();
 #endif
     // delete file;
   }

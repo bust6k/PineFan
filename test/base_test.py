@@ -41,11 +41,20 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
-0x55a56dc489e0(foo)
-c = ( 5 + 5 )
-5 if foo else 2
-foo.foo = 1
-ccc5 if foo else 2
-y = 5
-foo.foo = 5
+
+
+for bar in close:
+    0x55a50757ba80(    foo)
+    float    c = ( 5 + 5 )
+    5 if     foo else 2
+    foo.foo = 1
+    ccc    5 if     foo else 2
+    y = 5
+    foo.foo = 5
 # a constant variable!
+    MAX_COUNT = 100
+# a constant variable!
+    THRESHOLD = 50
+# a constant variable!
+    FOL = 30
+    5 if     foo else 4
