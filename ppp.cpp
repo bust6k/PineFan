@@ -521,7 +521,6 @@ void preprocess(const std::string& input, std::string& output) {
     
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = std::string::npos;
-    size_t arrow_pos = 0;
     size_t call_paren_pos = 0;
 
     if (left_part.has_value()) {
@@ -539,13 +538,6 @@ void preprocess(const std::string& input, std::string& output) {
         previous_ascii_letter(info.content, call_paren_pos)) {
       replace_call_parens(info.content);
     }
-    /*
-    if (!info.content.empty() && !left_part.has_value()) {
-      is_func = info.content.find("(");
-      if (is_func != std::string::npos) arrow_pos = is_func;
-      is_func = info.content.find(")");
-    }
-    */
     if (!left_part.has_value() && find_arrow_pos(info.content, 0).has_value())
       is_func = 1000;
 
@@ -568,7 +560,7 @@ void preprocess(const std::string& input, std::string& output) {
       }
     }
 
-    if (is_arrow(info.content) && is_func && is_func != 1000) {
+    if (is_arrow(info.content) && is_func != std::string::npos && is_func != 1000) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
       replace_func_parens(info.content);
@@ -722,14 +714,14 @@ int preprocess_files(int argc, char* argv[]) {
 
     file->Pinefan::File::Prp_file::add_preprocessed_file(file);
 
-#ifdef _IS_MAIN
+//#ifdef _IS_MAIN
     auto* f = file->Pinefan::File::Prp_file::get_preprocessed_file(i - 1);
 
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
     std::cout << f->get_content();
-#endif
+//#endif
     // delete file;
   }
 

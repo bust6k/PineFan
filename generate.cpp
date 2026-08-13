@@ -981,6 +981,7 @@ extern "C" {
 #endif
 
 int main(int argc, char* argv[]) {
+/*
 #ifdef __linux__
   if (ptrace(PTRACE_TRACEME, 0, 1, 0) < 0) {
     exit(0);
@@ -992,7 +993,7 @@ int main(int argc, char* argv[]) {
     ExitProcess(0);
   }
 #endif
-
+*/
   if (argc > 1 && strcmp(argv[1], "--install") == 0) {
     if (Pinefan::File::install_pinefan()) {
       std::cout << "PineFan installed successfully." << std::endl;

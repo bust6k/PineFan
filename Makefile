@@ -4,7 +4,7 @@
 TARGET_ARCH = x86_64
 CXX ?= g++
 CC ?= gcc
-override OBFUSCATE_FLAGS += -s -fno-ident \
+#override OBFUSCATE_FLAGS += -s -fno-ident \
                   -fmerge-all-constants -ffunction-sections -fdata-sections \
                   -Wl,--gc-sections -Wl,--strip-all
 
