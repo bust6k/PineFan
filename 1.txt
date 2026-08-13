@@ -1,0 +1,31 @@
+[92mtest/primitive.pine[0m
+
+
+{
+10{
+ f};
+   10 f }
+switch (f) {
+10{
+ f};
+   10 f }
+const int foo = 5
+
+foo_fo    $ff$ {
+   ff
+   fff
+if (foo) {
+      ffff
+      fff
+
+
+
+
+
+
+      else{
+       foo
+switch (foo) {
+10{
+ foo};
+          10 foo }}}}

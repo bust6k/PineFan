@@ -1,6 +1,6 @@
 %define parse.error verbose
 %glr-parser
-%expect 249
+%expect 250
 
 %code requires {
 #include <stdio.h>
@@ -484,8 +484,8 @@ expr:
     { $$ = new_unop_node("-", $2); }
     | plus  expr %prec multiply
     { $$ = new_unop_node("+", $2); }
-    /*| left_quad_brace expr right_quad_brace
-    { $$ = new_quad_brace_expr_node($2); } */
+    | left_quad_brace expr right_quad_brace
+    { $$ = new_quad_brace_expr_node($2); } 
     | expr question_sign expr colon expr %prec PREC_TERNARY_IDENT
     { $$ = new_ternary_node($1,$3,$5); }
    /* | left_quad_brace expr_list right_quad_brace

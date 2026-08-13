@@ -520,7 +520,7 @@ void preprocess(const std::string& input, std::string& output) {
     //Just getting out the string of the line before arrow(=>)
     
     auto left_part = find_expr_at_switch(info.content, 0);
-    size_t is_func = 0;
+    size_t is_func = std::string::npos;
     size_t arrow_pos = 0;
     size_t call_paren_pos = 0;
 
@@ -539,13 +539,13 @@ void preprocess(const std::string& input, std::string& output) {
         previous_ascii_letter(info.content, call_paren_pos)) {
       replace_call_parens(info.content);
     }
-
+    /*
     if (!info.content.empty() && !left_part.has_value()) {
       is_func = info.content.find("(");
       if (is_func != std::string::npos) arrow_pos = is_func;
       is_func = info.content.find(")");
     }
-
+    */
     if (!left_part.has_value() && find_arrow_pos(info.content, 0).has_value())
       is_func = 1000;
 

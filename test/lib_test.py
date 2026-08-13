@@ -43,22 +43,22 @@ with open(csv_path, 'r') as f:
 print(f"Loaded {len(close)} bars from {csv_path}\n")
 def f():
 
-    return     f0x555d217d87d0("My (Strategy)")
+    return     f0x5619fc8d07d0("My (Strategy)")
 if close > close[1]:
-    0x555d217dba30("Long")
+    0x5619fc8d3a30("Long")
 if close < close[1]:
-    0x555d217dbdf0("Short")
-0x555d217dbff0("()))())MA Cross")
-fastMA = 0x555d217d8ad0(close
+    0x5619fc8d3df0("Short")
+0x5619fc8d3ff0("()))())MA Cross")
+fastMA = 0x5619fc8d0ad0(close
 )
 
-slowMA = 0x555d217d8c50(close
+slowMA = 0x5619fc8d0c50(close
 )
 
-if 0x555d217d8d90(fastMA
+if 0x5619fc8d0d90(fastMA
 )
 :
-    0x555d217d8ef0("Long")
+    0x5619fc8d0ef0("Long")
 def foo(foo):
 
     return     foo
