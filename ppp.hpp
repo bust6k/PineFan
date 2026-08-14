@@ -43,6 +43,7 @@ enum KeywordState {
 class KeywordDFA {
  private:
   KeywordState state = KW_START;
+  KeywordState prev_state = KW_START;
   std::string current_word;
 
  public:

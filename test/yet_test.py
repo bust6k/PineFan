@@ -41,16 +41,3 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
-
-
-for bar in close:
-    i_max_bars_back = 300
-    0x5632188a73d0("ICT Equal Highs and Lows")
-    g_phl_eq = "███████████████ Equal High Low ███████████████"
-    int    i_phl_1_left =     0x5632188ab280(60)
-
-    int    i_phl_1_right =     0x5632188a5a40(30)
-
-    tt_eq = "Lower values mean highs and lows are closer."
-    float    i_phl_eq_percent =     0x5632188ae430(411755472)
-

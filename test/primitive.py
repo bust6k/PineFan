@@ -41,8 +41,20 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
 
+if f == 10:
+    f# a constant variable!
+FOO = 5
+def foo_fo(ff):
+    ff    fff    if FOO:
+        ffff        fff    FOO    # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+    # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+    # elif is all the other conditions
+    # and else - it's an optional last condition like default in switch-statement
 
-for bar in close:
-# a constant variable!
-    FOO = 5
+    if FOO == 10:
+        FOO

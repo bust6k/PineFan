@@ -1,4 +1,4 @@
-   10 => f
+
 switch f
    10 => f
 
@@ -12,12 +12,12 @@ foo_fo    (ff)    =>
       ffff 
       fff    
      
-
-
-
-
-
-      else
+   
+   
+    
+    
+    
+   else
        foo
        switch foo
           10 => foo

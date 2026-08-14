@@ -38,6 +38,7 @@ namespace Ppp {
 
 void KeywordDFA::reset() {
   state = KW_START;
+  prev_state = KW_START;
   current_word.clear();
 }
 
@@ -62,64 +63,77 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_T;
       else if (c == 'e')
         state = KW_E;
-      else
-        return std::nullopt;
-      break;
-
-    case KW_I:
+          
+      case KW_I:
       if (c == 'f')
         state = KW_ACCEPT_IF;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_F:
       if (c == 'o')
         state = KW_FO;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_S:
       if (c == 'w')
         state = KW_SW;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_T:
       if (c == 'y')
         state = KW_TY;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_E:
       if (c == 'l')
         state = KW_EL;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_EL:
       if (c == 's')
         state = KW_ELS;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_ELS:
       if (c == 'e')
         state = KW_ELSE;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_ELSE:
       if (c == 'i')
         state = KW_ELSE_I;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_ELSE_I:
@@ -132,57 +146,73 @@ std::optional<std::string> KeywordDFA::feed(char c) {
     case KW_FO:
       if (c == 'r')
         state = KW_ACCEPT_FOR;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_W:
       if (c == 'h')
         state = KW_WH;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_WH:
       if (c == 'i')
         state = KW_WHI;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_SW:
       if (c == 'i')
         state = KW_SWI;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_WHI:
       if (c == 'l')
         state = KW_WHIL;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_WHIL:
       if (c == 'e')
         state = KW_ACCEPT_WHILE;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_SWI:
       if (c == 't')
         state = KW_SWIT;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_SWIT:
       if (c == 'c')
         state = KW_SWITC;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_SWITC:
@@ -195,32 +225,39 @@ std::optional<std::string> KeywordDFA::feed(char c) {
     case KW_TY:
       if (c == 'p')
         state = KW_TYP;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_TYP:
       if (c == 'e')
         state = KW_ACCEPT_TYPE;
-      else
+      else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
-    default:
-      return std::nullopt;
+    default: {
+      prev_state = KW_START;
+      return std::nullopt; 
+}
   }
 
   // Check if we reached accepting state
-  if (state == KW_ACCEPT_IF) return "if";
-  if (state == KW_ACCEPT_FOR) return "for";
-  if (state == KW_ACCEPT_WHILE) return "while";
-  if (state == KW_ACCEPT_SWITCH) return "switch";
-  if (state == KW_ACCEPT_TYPE) return "type";
-  if (state == KW_ACCEPT_ELSE_IF) return "else if";
-  if (state == KW_ACCEPT_ELSE) return "else";
+  if (state == KW_ACCEPT_IF && prev_state != KW_START) return "if";
+  if (state == KW_ACCEPT_FOR && prev_state != KW_START) return "for";
+  if (state == KW_ACCEPT_WHILE && prev_state != KW_START) return "while";
+  if (state == KW_ACCEPT_SWITCH && prev_state != KW_START) return "switch";
+  if (state == KW_ACCEPT_TYPE && prev_state != KW_START) return "type";
+  if (state == KW_ACCEPT_ELSE_IF && prev_state != KW_START) return "else if";
+  if (state == KW_ACCEPT_ELSE && prev_state != KW_START) return "else";
 
-  return std::nullopt;
-}
+  prev_state = KW_START;
+  return std::nullopt;    
+  }
 
 // Helper functions
 inline bool is_whitespace(char c) { return c == ' ' || c == '\t'; }

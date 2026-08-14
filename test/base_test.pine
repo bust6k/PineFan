@@ -1,9 +1,9 @@
 s(foo)
 float c = (5 + 5)
-foo?5:2
+//foo?5:2
 foo.foo=1
 ccc
-foo ? 5 : 2
+//foo ? 5 : 2
 var ll = 5
 var foo = 10 
 var lifterfoo = "ss"
@@ -12,10 +12,10 @@ y = 5
 
 foo.foo = 5
 
-const int MAX_COUNT = 100
-const int THRESHOLD = 50
+//const int MAX_COUNT = 100
+//const int THRESHOLD = 50
 const int fol = 30
-foo ? 5 : 4
+//foo ? 5 : 4
 
 
 complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string name) =>     
@@ -23,7 +23,7 @@ complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string nam
    n = 4
    indicator("Function started")
    foo(5,5,5)
-   timeframe.isintraday ? color.red : timeframe.isdaily ? string.green : int.ismonthly ? colorr.blue : na
+   //timeframe.isintraday ? color.red : timeframe.isdaily ? string.green : int.ismonthly ? colorr.blue : na
    varip lifter =   [MAX_COUNT][5]
    foo /= ((((5 + 5)))) 
    if flag == true
