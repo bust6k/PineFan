@@ -66,10 +66,10 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_I: {
       if (c == 'f') {
-        prev_state = state;
+        if(prev_state != KW_PREV) prev_state = state;
         state = KW_ACCEPT_IF;
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;

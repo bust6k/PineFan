@@ -9,6 +9,7 @@ namespace Ppp {
 
 // DFA states for keyword recognition
 enum KeywordState {
+  KW_PREV,
   KW_START,
   KW_I,
   KW_F,
