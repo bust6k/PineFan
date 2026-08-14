@@ -63,178 +63,201 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_T;
       else if (c == 'e')
         state = KW_E;
-          
-      case KW_I:
-      if (c == 'f')
+    case KW_I:
+      if (c == 'f') {
+        prev_state = state;
         state = KW_ACCEPT_IF;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_F:
-      if (c == 'o')
+      if (c == 'o') {
+        prev_state = state;
         state = KW_FO;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_S:
-      if (c == 'w')
+      if (c == 'w') {
+        prev_state = state;
         state = KW_SW;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_T:
-      if (c == 'y')
+      if (c == 'y') {
+        prev_state = state;
         state = KW_TY;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_E:
-      if (c == 'l')
+      if (c == 'l') {
+        prev_state = state;
         state = KW_EL;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_EL:
-      if (c == 's')
+      if (c == 's') {
+        prev_state = state;
         state = KW_ELS;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_ELS:
-      if (c == 'e')
+      if (c == 'e') {
+        prev_state = state;
         state = KW_ELSE;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_ELSE:
-      if (c == 'i')
+      if (c == 'i') {
+        prev_state = state;
         state = KW_ELSE_I;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_ELSE_I:
-      if (c == 'f')
+      if (c == 'f') {
+        prev_state = state;
         state = KW_ACCEPT_ELSE_IF;
-      else
+      } else {
+        prev_state = state;
         state = KW_ACCEPT_ELSE;
+      }
       break;
 
     case KW_FO:
-      if (c == 'r')
+      if (c == 'r') {
+        prev_state = state;
         state = KW_ACCEPT_FOR;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_W:
-      if (c == 'h')
+      if (c == 'h') {
+        prev_state = state;
         state = KW_WH;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_WH:
-      if (c == 'i')
+      if (c == 'i') {
+        prev_state = state;
         state = KW_WHI;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_SW:
-      if (c == 'i')
+      if (c == 'i') {
+        prev_state = state;
         state = KW_SWI;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_WHI:
-      if (c == 'l')
+      if (c == 'l') {
+        prev_state = state;
         state = KW_WHIL;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_WHIL:
-      if (c == 'e')
+      if (c == 'e') {
+        prev_state = state;
         state = KW_ACCEPT_WHILE;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_SWI:
-      if (c == 't')
+      if (c == 't') {
+        prev_state = state;
         state = KW_SWIT;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_SWIT:
-      if (c == 'c')
+      if (c == 'c') {
+        prev_state = state;
         state = KW_SWITC;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_SWITC:
-      if (c == 'h')
+      if (c == 'h') {
+        prev_state = state;
         state = KW_ACCEPT_SWITCH;
-      else
+      } else {
+        prev_state = KW_START;
         return std::nullopt;
+      }
       break;
 
     case KW_TY:
-      if (c == 'p')
+      if (c == 'p') {
+        prev_state = state;
         state = KW_TYP;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
       break;
 
     case KW_TYP:
-      if (c == 'e')
+      if (c == 'e') {
+        prev_state = state;
         state = KW_ACCEPT_TYPE;
-      else {
+      } else {
         prev_state = KW_START;
         return std::nullopt;
       }
@@ -242,10 +265,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     default: {
       prev_state = KW_START;
-      return std::nullopt; 
-}
+      return std::nullopt;
+    }
   }
-
   // Check if we reached accepting state
   if (state == KW_ACCEPT_IF && prev_state != KW_START) return "if";
   if (state == KW_ACCEPT_FOR && prev_state != KW_START) return "for";
@@ -256,8 +278,8 @@ std::optional<std::string> KeywordDFA::feed(char c) {
   if (state == KW_ACCEPT_ELSE && prev_state != KW_START) return "else";
 
   prev_state = KW_START;
-  return std::nullopt;    
-  }
+  return std::nullopt;
+}
 
 // Helper functions
 inline bool is_whitespace(char c) { return c == ' ' || c == '\t'; }
@@ -415,18 +437,18 @@ bool replace_call_parens(std::string& line) {
 }
 
 bool replace_func_parens(std::string& line) {
-auto parens = find_call_parens(line);
+  auto parens = find_call_parens(line);
 
-if(!parens.has_value()) return false;
+  if (!parens.has_value()) return false;
 
-const auto [left,right] = *parens;
+  const auto [left, right] = *parens;
 
-if(!previous_ascii_letter(line,left)) return false;
+  if (!previous_ascii_letter(line, left)) return false;
 
-line[left] = '$';
-line[right] = '$';
+  line[left] = '$';
+  line[right] = '$';
 
-return true;
+  return true;
 }
 
 // Find keyword in line at specific position (considering boundaries)
@@ -554,8 +576,8 @@ void preprocess(const std::string& input, std::string& output) {
     // TODO: there's must be check if in this line have no something but if in
     // other one is has arrow so then you should grab that line
 
-    //Just getting out the string of the line before arrow(=>)
-    
+    // Just getting out the string of the line before arrow(=>)
+
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = std::string::npos;
     size_t call_paren_pos = 0;
@@ -567,10 +589,13 @@ void preprocess(const std::string& input, std::string& output) {
     } else if (!info.content.empty()) {
       auto parens = find_call_parens(info.content);
 
-      if (parens.has_value()) {is_func = true;call_paren_pos = parens->first;} 
+      if (parens.has_value()) {
+        is_func = true;
+        call_paren_pos = parens->first;
+      }
     }
-    
-    //XXX: we're replacing the parens for function invokations
+
+    // XXX: we're replacing the parens for function invokations
     if (!is_arrow(info.content) && is_func &&
         previous_ascii_letter(info.content, call_paren_pos)) {
       replace_call_parens(info.content);
@@ -597,7 +622,8 @@ void preprocess(const std::string& input, std::string& output) {
       }
     }
 
-    if (is_arrow(info.content) && is_func != std::string::npos && is_func != 1000) {
+    if (is_arrow(info.content) && is_func != std::string::npos &&
+        is_func != 1000) {
       info.type = LineInfo::FUNCTION;
       info.content = remove_arrow(info.content);
       replace_func_parens(info.content);
@@ -751,15 +777,15 @@ int preprocess_files(int argc, char* argv[]) {
 
     file->Pinefan::File::Prp_file::add_preprocessed_file(file);
 
-//#ifdef _IS_MAIN
+    // #ifdef _IS_MAIN
     auto* f = file->Pinefan::File::Prp_file::get_preprocessed_file(i - 1);
 
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
     std::cout << f->get_content();
-//#endif
-    // delete file;
+    // #endif
+    //  delete file;
   }
 
   return 0;
