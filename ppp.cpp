@@ -63,7 +63,8 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_T;
       else if (c == 'e')
         state = KW_E;
-    case KW_I:
+
+    case KW_I: {
       if (c == 'f') {
         prev_state = state;
         state = KW_ACCEPT_IF;
@@ -72,8 +73,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_F:
+    case KW_F: {
       if (c == 'o') {
         prev_state = state;
         state = KW_FO;
@@ -82,8 +84,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_S:
+    case KW_S: {
       if (c == 'w') {
         prev_state = state;
         state = KW_SW;
@@ -92,8 +95,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_T:
+    case KW_T: {
       if (c == 'y') {
         prev_state = state;
         state = KW_TY;
@@ -102,8 +106,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_E:
+    case KW_E: {
       if (c == 'l') {
         prev_state = state;
         state = KW_EL;
@@ -112,8 +117,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_EL:
+    case KW_EL: {
       if (c == 's') {
         prev_state = state;
         state = KW_ELS;
@@ -122,8 +128,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_ELS:
+    case KW_ELS: {
       if (c == 'e') {
         prev_state = state;
         state = KW_ELSE;
@@ -132,8 +139,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_ELSE:
+    case KW_ELSE: {
       if (c == 'i') {
         prev_state = state;
         state = KW_ELSE_I;
@@ -142,8 +150,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_ELSE_I:
+    case KW_ELSE_I: {
       if (c == 'f') {
         prev_state = state;
         state = KW_ACCEPT_ELSE_IF;
@@ -152,8 +161,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_ACCEPT_ELSE;
       }
       break;
+    }
 
-    case KW_FO:
+    case KW_FO: {
       if (c == 'r') {
         prev_state = state;
         state = KW_ACCEPT_FOR;
@@ -162,8 +172,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_W:
+    case KW_W: {
       if (c == 'h') {
         prev_state = state;
         state = KW_WH;
@@ -172,8 +183,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_WH:
+    case KW_WH: {
       if (c == 'i') {
         prev_state = state;
         state = KW_WHI;
@@ -182,8 +194,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_SW:
+    case KW_SW: {
       if (c == 'i') {
         prev_state = state;
         state = KW_SWI;
@@ -192,8 +205,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_WHI:
+    case KW_WHI: {
       if (c == 'l') {
         prev_state = state;
         state = KW_WHIL;
@@ -202,8 +216,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_WHIL:
+    case KW_WHIL: {
       if (c == 'e') {
         prev_state = state;
         state = KW_ACCEPT_WHILE;
@@ -212,8 +227,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_SWI:
+    case KW_SWI: {
       if (c == 't') {
         prev_state = state;
         state = KW_SWIT;
@@ -222,8 +238,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_SWIT:
+    case KW_SWIT: {
       if (c == 'c') {
         prev_state = state;
         state = KW_SWITC;
@@ -232,8 +249,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_SWITC:
+    case KW_SWITC: {
       if (c == 'h') {
         prev_state = state;
         state = KW_ACCEPT_SWITCH;
@@ -242,8 +260,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_TY:
+    case KW_TY: {
       if (c == 'p') {
         prev_state = state;
         state = KW_TYP;
@@ -252,8 +271,9 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
-    case KW_TYP:
+    case KW_TYP: {
       if (c == 'e') {
         prev_state = state;
         state = KW_ACCEPT_TYPE;
@@ -262,6 +282,7 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         return std::nullopt;
       }
       break;
+    }
 
     default: {
       prev_state = KW_START;
