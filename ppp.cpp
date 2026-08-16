@@ -63,11 +63,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_T;
       else if (c == 'e')
         state = KW_E;
-
     case KW_I: {
       if (c == 'f') {
-        if(prev_state != KW_PREV) prev_state = state;
-        state = KW_ACCEPT_IF;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ACCEPT_IF;
+        }
       } else {
         prev_state = KW_PREV;
         return std::nullopt;
@@ -77,10 +78,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_F: {
       if (c == 'o') {
-        prev_state = state;
-        state = KW_FO;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_FO;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -88,10 +91,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_S: {
       if (c == 'w') {
-        prev_state = state;
-        state = KW_SW;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_SW;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -99,10 +104,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_T: {
       if (c == 'y') {
-        prev_state = state;
-        state = KW_TY;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_TY;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -110,10 +117,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_E: {
       if (c == 'l') {
-        prev_state = state;
-        state = KW_EL;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_EL;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -121,10 +130,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_EL: {
       if (c == 's') {
-        prev_state = state;
-        state = KW_ELS;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ELS;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -132,10 +143,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_ELS: {
       if (c == 'e') {
-        prev_state = state;
-        state = KW_ELSE;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ELSE;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -143,10 +156,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_ELSE: {
       if (c == 'i') {
-        prev_state = state;
-        state = KW_ELSE_I;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ELSE_I;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -154,21 +169,27 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_ELSE_I: {
       if (c == 'f') {
-        prev_state = state;
-        state = KW_ACCEPT_ELSE_IF;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ACCEPT_ELSE_IF;
+        }
       } else {
-        prev_state = state;
-        state = KW_ACCEPT_ELSE;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ACCEPT_ELSE;
+        }
       }
       break;
     }
 
     case KW_FO: {
       if (c == 'r') {
-        prev_state = state;
-        state = KW_ACCEPT_FOR;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ACCEPT_FOR;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -176,10 +197,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_W: {
       if (c == 'h') {
-        prev_state = state;
-        state = KW_WH;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_WH;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -187,10 +210,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_WH: {
       if (c == 'i') {
-        prev_state = state;
-        state = KW_WHI;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_WHI;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -198,10 +223,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_SW: {
       if (c == 'i') {
-        prev_state = state;
-        state = KW_SWI;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_SWI;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -209,10 +236,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_WHI: {
       if (c == 'l') {
-        prev_state = state;
-        state = KW_WHIL;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_WHIL;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -220,10 +249,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_WHIL: {
       if (c == 'e') {
-        prev_state = state;
-        state = KW_ACCEPT_WHILE;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ACCEPT_WHILE;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -231,10 +262,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_SWI: {
       if (c == 't') {
-        prev_state = state;
-        state = KW_SWIT;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_SWIT;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -242,10 +275,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_SWIT: {
       if (c == 'c') {
-        prev_state = state;
-        state = KW_SWITC;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_SWITC;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -253,10 +288,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_SWITC: {
       if (c == 'h') {
-        prev_state = state;
-        state = KW_ACCEPT_SWITCH;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ACCEPT_SWITCH;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -264,10 +301,12 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_TY: {
       if (c == 'p') {
-        prev_state = state;
-        state = KW_TYP;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_TYP;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
@@ -275,17 +314,19 @@ std::optional<std::string> KeywordDFA::feed(char c) {
 
     case KW_TYP: {
       if (c == 'e') {
-        prev_state = state;
-        state = KW_ACCEPT_TYPE;
+        if (prev_state != KW_PREV) {
+          prev_state = state;
+          state = KW_ACCEPT_TYPE;
+        }
       } else {
-        prev_state = KW_START;
+        prev_state = KW_PREV;
         return std::nullopt;
       }
       break;
     }
 
     default: {
-      prev_state = KW_START;
+      prev_state = KW_PREV;
       return std::nullopt;
     }
   }
@@ -298,7 +339,7 @@ std::optional<std::string> KeywordDFA::feed(char c) {
   if (state == KW_ACCEPT_ELSE_IF && prev_state != KW_START) return "else if";
   if (state == KW_ACCEPT_ELSE && prev_state != KW_START) return "else";
 
-  prev_state = KW_START;
+  prev_state = KW_PREV;
   return std::nullopt;
 }
 
