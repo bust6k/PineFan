@@ -1,3 +1,6 @@
+if f
+   ff
+
 string i_phl_1_source= input.string(defval='High/Low', title='Source', options=['High/Low', 'Open/Close'], group=g_phl_eq)
 // This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
 // © Arun_K_Bhaskar
@@ -99,7 +102,8 @@ if ph_condition
 if pl_condition
     pl_box = box.new(left=pl_bi_1 - i_phl_1_right, top=pl_price_1, right=pl_bi_0 - i_phl_1_right, bottom=pl_price_0, border_color=color.new(i_phl_1_l_ln_color, i_phl_eq_transp), bgcolor=color.new(i_phl_1_l_ln_color, i_phl_eq_transp))
     array.push(levelBoxes_equal, pl_box)
-
+if ff
+   ff
 // Plot Equal Labels
 plotshape(ph_condition ? high[i_phl_1_right] : na, style=shape.xcross, location=location.absolute, offset=-i_phl_1_right, color=color.new(i_phl_1_h_ln_color, i_phl_eq_transp), size=size.small)
 plotshape(pl_condition ? low[i_phl_1_right] : na, style=shape.xcross, location=location.absolute, offset=-i_phl_1_right, color=color.new(i_phl_1_l_ln_color, i_phl_eq_transp), size=size.small)

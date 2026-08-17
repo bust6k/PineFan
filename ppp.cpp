@@ -63,6 +63,8 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_T;
       else if (c == 'e')
         state = KW_E;
+    break; 
+    
     case KW_I: {
       if (c == 'f') {
         if (prev_state != KW_PREV) {
@@ -331,15 +333,15 @@ std::optional<std::string> KeywordDFA::feed(char c) {
     }
   }
   // Check if we reached accepting state
-  if (state == KW_ACCEPT_IF && prev_state != KW_START) return "if";
-  if (state == KW_ACCEPT_FOR && prev_state != KW_START) return "for";
-  if (state == KW_ACCEPT_WHILE && prev_state != KW_START) return "while";
-  if (state == KW_ACCEPT_SWITCH && prev_state != KW_START) return "switch";
-  if (state == KW_ACCEPT_TYPE && prev_state != KW_START) return "type";
-  if (state == KW_ACCEPT_ELSE_IF && prev_state != KW_START) return "else if";
-  if (state == KW_ACCEPT_ELSE && prev_state != KW_START) return "else";
+  if (state == KW_ACCEPT_IF && prev_state != KW_PREV) return "if";
+  if (state == KW_ACCEPT_FOR && prev_state != KW_PREV) return "for";
+  if (state == KW_ACCEPT_WHILE && prev_state != KW_PREV) return "while";
+  if (state == KW_ACCEPT_SWITCH && prev_state != KW_PREV) return "switch";
+  if (state == KW_ACCEPT_TYPE && prev_state != KW_PREV) return "type";
+  if (state == KW_ACCEPT_ELSE_IF && prev_state != KW_PREV) return "else if";
+  if (state == KW_ACCEPT_ELSE && prev_state != KW_PREV) return "else";
 
-  prev_state = KW_PREV;
+  
   return std::nullopt;
 }
 
