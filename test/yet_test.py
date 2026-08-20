@@ -41,3 +41,35 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
+
+
+for bar in close:
+    if     f:
+        ff0    str    i_phl_1_source =     0x558ab8e80b10("High/Low")
+
+    i_max_bars_back = 300
+    0x558ab8e87de0("ICT Equal Highs and Lows")
+    g_phl_eq = "███████████████ Equal High Low ███████████████"
+    int    i_phl_1_left =     0x558ab8e8dcf0(60)
+
+    int    i_phl_1_right =     0x558ab8e8e170(30)
+
+    tt_eq = "Lower values mean highs and lows are closer."
+    float    i_phl_eq_percent =     0x558ab8e8e710(-1192696144)
+
+    str    i_phl_1_source =     0x558ab8e8ee90("High/Low")
+
+    color    i_phl_1_h_ln_color =     0x558ab8e8f4d0(0)
+
+    color    i_phl_1_l_ln_color =     0x558ab8e8f950(0)
+
+    int    i_phl_eq_transp =     0x558ab8e8fdd0(25)
+
+    float        0x558ab8e90490(    open
+)
+ if     _high =     i_phl_1_source == "Open/Close"
+ else     high
+    float        0x558ab8e908b0(    open
+)
+ if     _low =     i_phl_1_source == "Open/Close"
+ else     low
