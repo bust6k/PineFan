@@ -1,3 +1,4 @@
+int prev_ph_bi = na,int prev_pl_bi = na
 #1F7525F
 color i_phl_1_h_ln_color = input.color(defval=#F7525F, title='Bearish Color', group=g_phl_eq)
 idf

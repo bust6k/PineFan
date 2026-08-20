@@ -37,7 +37,7 @@ const float[] pl_arr = array.new_float(2)
 simple int[] pl_bi_arr = array.new_int(2)
 
 // Pivot calculations
-int prev_ph_bi = na, int prev_pl_bi = na
+int prev_ph_bi = na,int prev_pl_bi = na
 bool ph = false, bool pl = false
 
 phl_1_ph = ta.pivothigh(_high, i_phl_1_left, i_phl_1_right)
