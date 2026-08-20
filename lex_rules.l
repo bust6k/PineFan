@@ -80,7 +80,7 @@ and { col += 3; return logical_and; }
 "~=" { col += 2; return bitwise_not_with_equals; }
 "," { col++; return comma; }
 "." { col++; return dot; }
-"!" { col++; return logical_not; }
+"not" { col++; return logical_not; }
 "&&" { col += 2; return logical_and; }
 "!=" { col += 2; return dont_equal; }
 ";" { col++; return semicolon; }

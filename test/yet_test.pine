@@ -1,4 +1,4 @@
-if f
+if not 5
    ff
   #144
 
@@ -44,13 +44,13 @@ phl_1_ph = ta.pivothigh(_high, i_phl_1_left, i_phl_1_right)
 phl_1_pl = ta.pivotlow(_low, i_phl_1_left, i_phl_1_right)
 
 // Update the arrays with the last 2 pivot highs and lows
-if not na(phl_1_ph)
+if not  na(phl_1_ph) and 1 == 1
     ph := true
     prev_ph_bi := bar_index - i_phl_1_right
     array.unshift(ph_bi_arr, bar_index)
     array.pop(ph_bi_arr)
 
-if not na(phl_1_pl)
+if  not na(phl_1_pl)
     pl := true
     prev_pl_bi := bar_index - i_phl_1_right
     array.unshift(pl_bi_arr, bar_index)

@@ -41,36 +41,33 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
+if !5:
+    ff0stri_phl_1_source = 0x5559e52349b0("High/Low")
 
+i_max_bars_back = 300
+0x5559e523bd90("ICT Equal Highs and Lows")
+g_phl_eq = "███████████████ Equal High Low ███████████████"
+inti_phl_1_left = 0x5559e5241ab0(60)
 
-for bar in close:
-    if     f:
-        ff0    str    i_phl_1_source =     0x562c21910af0("High/Low")
+inti_phl_1_right = 0x5559e5241f30(30)
 
-    i_max_bars_back = 300
-    0x562c21917dc0("ICT Equal Highs and Lows")
-    g_phl_eq = "███████████████ Equal High Low ███████████████"
-    int    i_phl_1_left =     0x562c2191dce0(60)
+tt_eq = "Lower values mean highs and lows are closer."
+floati_phl_eq_percent = 0x5559e52424d0(-450616208)
 
-    int    i_phl_1_right =     0x562c2191e160(30)
+stri_phl_1_source = 0x5559e5242c50("High/Low")
 
-    tt_eq = "Lower values mean highs and lows are closer."
-    float    i_phl_eq_percent =     0x562c2191e700(563209888)
+colori_phl_1_h_ln_color = 0x5559e5243290(0)
 
-    str    i_phl_1_source =     0x562c2191ee80("High/Low")
+colori_phl_1_l_ln_color = 0x5559e5243710(0)
 
-    color    i_phl_1_h_ln_color =     0x562c2191f4c0(0)
+inti_phl_eq_transp = 0x5559e5243b90(25)
 
-    color    i_phl_1_l_ln_color =     0x562c2191f940(0)
-
-    int    i_phl_eq_transp =     0x562c2191fdc0(25)
-
-    float        0x562c21920480(    open
+float0x5559e5244250(open
 )
- if     _high =     i_phl_1_source == "Open/Close"
- else     high
-    float        0x562c219208a0(    open
+ if _high = i_phl_1_source == "Open/Close"
+ else high
+float0x5559e5244670(open
 )
- if     _low =     i_phl_1_source == "Open/Close"
- else     low
+ if _low = i_phl_1_source == "Open/Close"
+ else low
 # a constant variable!
