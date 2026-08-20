@@ -41,7 +41,7 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
-0colori_phl_1_h_ln_color = 0x55aeed9bcc60(0)
+0colori_phl_1_h_ln_color = 0x562b2aefad90(0)
 
 idfif f:
     fff0# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan

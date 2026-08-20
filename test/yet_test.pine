@@ -31,10 +31,10 @@ float _high = i_phl_1_source == 'Open/Close' ? math.max(open, close) : high
 float _low = i_phl_1_source == 'Open/Close' ? math.min(open, close) : low
 
 // Arrays to store the last 2 pivot highs and lows
-var float[] ph_arr = array.new_float(2)
+varip float[] ph_arr = array.new_float(2)
 var int[] ph_bi_arr = array.new_int(2)
-var float[] pl_arr = array.new_float(2)
-var int[] pl_bi_arr = array.new_int(2)
+const float[] pl_arr = array.new_float(2)
+simple int[] pl_bi_arr = array.new_int(2)
 
 // Pivot calculations
 int prev_ph_bi = na, int prev_pl_bi = na

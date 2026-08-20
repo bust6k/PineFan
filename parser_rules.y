@@ -335,7 +335,7 @@ dot_expr:
     pine_type dot pine_type %prec PREC_TERNARY_IDENT
     { $$ = new_var_dot_node($1, $3); }
     ;
-
+    
 call_list:
    expr
    { $$ = $1; }
@@ -358,8 +358,12 @@ var_stmt:
     { $$ = new_var_node($2,$4); }
     | var pine_type identifier assign expr
     { $$ = new_var_node($3,$5); }
+    | var pine_type left_quad_brace right_quad_brace identifier assign expr
+    { $$ = new_var_node($5,$7); }
     | var dot_expr identifier assign expr
     { $$ = new_var_node($3,$5); }
+    | var dot_expr left_quad_brace right_quad_brace identifier assign expr
+    { $$ = new_var_node($5,$7); }
     ;
 
 varip_stmt:
@@ -367,24 +371,38 @@ varip_stmt:
    { $$ = new_varip_node($2,$4); }
    | varip_statement pine_type identifier assign expr
   { $$ = new_varip_node($3,$5); }
+   | varip_statement pine_type left_quad_brace right_quad_brace identifier assign expr
+   { $$ = new_varip_node($5,$7); }
    | varip_statement dot_expr identifier assign expr
    { $$ = new_varip_node($3,$5); }
+   | varip_statement dot_expr left_quad_brace right_quad_brace identifier assign expr
+   { $$ = new_varip_node($5,$7); }
    ;
 
 const_stmt:
     const_statement pine_type identifier assign expr
     { $$ = new_const_node($3, $5); }
+    | const_statement pine_type left_quad_brace right_quad_brace identifier assign expr
+    { $$ = new_const_node($5, $7); }
     | const_statement dot_expr identifier assign expr
     { $$ = new_const_node($3,$5); } 
+    | const_statement dot_expr left_quad_brace right_quad_brace identifier assign expr
+    { $$ = new_const_node($5,$7); } 
+    
     ;
 
 simple_stmt:
     simple identifier assign expr
     { $$ = new_simple_node($2,$4); }
     | simple pine_type identifier assign expr
-   { $$ = new_simple_node($3,$5); } 
-   | simple dot_expr identifier assign expr
-  { $$ = new_simple_node($3,$5); }
+    { $$ = new_simple_node($3,$5); } 
+    | simple pine_type left_quad_brace right_quad_brace identifier assign expr
+    { $$ = new_simple_node($5,$7); }  
+    | simple dot_expr identifier assign expr
+    { $$ = new_simple_node($3,$5); }
+    | simple dot_expr left_quad_brace right_quad_brace identifier assign expr
+    { $$ = new_simple_node($5,$7); }
+    
     ;
 
 import_stmt:
