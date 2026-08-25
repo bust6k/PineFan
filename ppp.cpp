@@ -29,12 +29,14 @@
 #include <sstream>
 #include <stack>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "file.hpp"
 
 namespace Pinefan {
 namespace Ppp {
+typedef std::pair<std::size_t, std::size_t> spass;
 
 void KeywordDFA::reset() {
   state = KW_START;
@@ -63,8 +65,8 @@ std::optional<std::string> KeywordDFA::feed(char c) {
         state = KW_T;
       else if (c == 'e')
         state = KW_E;
-    break; 
-    
+      break;
+
     case KW_I: {
       if (c == 'f') {
         if (prev_state != KW_PREV) {
@@ -341,7 +343,6 @@ std::optional<std::string> KeywordDFA::feed(char c) {
   if (state == KW_ACCEPT_ELSE_IF && prev_state != KW_PREV) return "else if";
   if (state == KW_ACCEPT_ELSE && prev_state != KW_PREV) return "else";
 
-  
   return std::nullopt;
 }
 
@@ -414,14 +415,14 @@ std::string remove_call_parens(std::string line) {
   return line;
 }
 */
-std::optional<std::pair<std::size_t, std::size_t>> find_call_parens(
-    const std::string& line) {
+std::vector<spass> find_call_parens(const std::string& line) {
   bool in_string = false;
   bool escape = false;
   int paren_depth = 0;
 
   std::size_t open_pos = std::string::npos;
 
+  std::vector<spass> paren_arr;
   for (std::size_t i = 0; i < line.size(); ++i) {
     const char ch = line[i];
 
@@ -461,11 +462,11 @@ std::optional<std::pair<std::size_t, std::size_t>> find_call_parens(
       --paren_depth;
 
       if (paren_depth == 0 && open_pos != std::string::npos)
-        return std::make_pair(open_pos, i);
+        paren_arr.push_back(std::make_pair(open_pos, i));
     }
   }
 
-  return std::nullopt;
+  return paren_arr;
 }
 
 bool previous_ascii_letter(const std::string& s, std::size_t pos) {
@@ -488,14 +489,15 @@ bool previous_ascii_letter(const std::string& s, std::size_t pos) {
 bool replace_call_parens(std::string& line) {
   auto parens = find_call_parens(line);
 
-  if (!parens.has_value()) return false;
+  if (parens.empty()) return false;
 
-  const auto [left, right] = *parens;
-
-  if (!previous_ascii_letter(line, left)) return false;
-
-  line[left] = '@';
-  line[right] = '@';
+  for (int i = 0; i < parens.size(); i++) {
+    if (i % 2 != 0) {
+      if (!previous_ascii_letter(line, parens[i].first)) return false;
+    }
+    line[parens[i].first] = '@';
+    line[parens[i].second] = '@';
+  }
 
   return true;
 }
@@ -503,14 +505,14 @@ bool replace_call_parens(std::string& line) {
 bool replace_func_parens(std::string& line) {
   auto parens = find_call_parens(line);
 
-  if (!parens.has_value()) return false;
-
-  const auto [left, right] = *parens;
-
-  if (!previous_ascii_letter(line, left)) return false;
-
-  line[left] = '$';
-  line[right] = '$';
+  if (parens.empty()) return false;
+  for (int i = 0; i < parens.size(); i++) {
+    if (i % 2 != 0) {
+      if (!previous_ascii_letter(line, parens[i].first)) return false;
+    }
+    line[parens[i].first] = '$';
+    line[parens[i].second] = '$';
+  }
 
   return true;
 }
@@ -649,13 +651,13 @@ void preprocess(const std::string& input, std::string& output) {
     if (left_part.has_value()) {
       auto parens = find_call_parens(left_part.value());
 
-      if (parens.has_value()) is_func = true;
+      if (!parens.empty()) is_func = true;
     } else if (!info.content.empty()) {
       auto parens = find_call_parens(info.content);
 
-      if (parens.has_value()) {
+      if (!parens.empty()) {
         is_func = true;
-        call_paren_pos = parens->first;
+        call_paren_pos = parens[0].first;
       }
     }
 

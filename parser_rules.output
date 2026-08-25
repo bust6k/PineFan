@@ -19,33 +19,34 @@ State 68 conflicts: 5 shift/reduce
 State 71 conflicts: 1 shift/reduce
 State 73 conflicts: 5 shift/reduce
 State 74 conflicts: 5 shift/reduce
-State 109 conflicts: 1 shift/reduce
-State 144 conflicts: 5 shift/reduce
+State 110 conflicts: 1 shift/reduce
 State 145 conflicts: 5 shift/reduce
 State 146 conflicts: 5 shift/reduce
-State 148 conflicts: 5 shift/reduce
+State 147 conflicts: 5 shift/reduce
 State 149 conflicts: 5 shift/reduce
 State 150 conflicts: 5 shift/reduce
 State 151 conflicts: 5 shift/reduce
 State 152 conflicts: 5 shift/reduce
 State 153 conflicts: 5 shift/reduce
-State 155 conflicts: 5 shift/reduce
+State 154 conflicts: 5 shift/reduce
 State 156 conflicts: 5 shift/reduce
 State 157 conflicts: 5 shift/reduce
-State 158 conflicts: 25 shift/reduce
+State 158 conflicts: 5 shift/reduce
 State 159 conflicts: 25 shift/reduce
 State 160 conflicts: 25 shift/reduce
 State 161 conflicts: 25 shift/reduce
 State 162 conflicts: 25 shift/reduce
-State 163 conflicts: 5 shift/reduce
+State 163 conflicts: 25 shift/reduce
 State 164 conflicts: 5 shift/reduce
 State 165 conflicts: 5 shift/reduce
 State 166 conflicts: 5 shift/reduce
 State 167 conflicts: 5 shift/reduce
 State 168 conflicts: 5 shift/reduce
 State 169 conflicts: 5 shift/reduce
-State 170 conflicts: 2 shift/reduce
-State 234 conflicts: 5 shift/reduce
+State 170 conflicts: 5 shift/reduce
+State 171 conflicts: 2 shift/reduce
+State 173 conflicts: 1 shift/reduce
+State 237 conflicts: 5 shift/reduce
 
 
 Grammar
@@ -60,8 +61,8 @@ Grammar
     5          | while_stmt
     6          | return_stmt_expr
     7          | break_stmt
-    8          | comma_stmt
-    9          | continue_stmt
+    8          | continue_stmt
+    9          | comma_stmt
    10          | switch_stmt
    11          | varip_stmt
    12          | var_stmt
@@ -216,6 +217,7 @@ Grammar
   127          | expr_list comma expr
 
   128 comma_stmt: expr comma expr
+  129           | comma_stmt comma comma_stmt
 
 
 Terminals, with rules where they appear
@@ -290,7 +292,7 @@ Terminals, with rules where they appear
     bitwise_not_with_equals (323)
     bitwise_shift_right_with_equals (324)
     bitwise_shift_left_with_equals (325)
-    comma (326) 34 62 127 128
+    comma (326) 34 62 127 128 129
     dot (327) 38 39 41 60
     colon (328) 124
     number <ival> (329) 86
@@ -357,7 +359,7 @@ Nonterminals, with rules where they appear
         on right: 7
     continue_stmt <node> (99)
         on left: 50
-        on right: 9
+        on right: 8
     switch_stmt <node> (100)
         on left: 51
         on right: 10
@@ -416,8 +418,8 @@ Nonterminals, with rules where they appear
         on left: 126 127
         on right: 125 127
     comma_stmt <node> (119)
-        on left: 128
-        on right: 8
+        on left: 128 129
+        on right: 9 129
 
 
 State 0
@@ -971,9 +973,9 @@ State 35
 
 State 36
 
-    9 statement: continue_stmt •
+    8 statement: continue_stmt •
 
-    $default  reduce using rule 9 (statement)
+    $default  reduce using rule 8 (statement)
 
 
 State 37
@@ -1124,9 +1126,12 @@ State 48
 
 State 49
 
-    8 statement: comma_stmt •
+    9 statement: comma_stmt •
+  129 comma_stmt: comma_stmt • comma comma_stmt
 
-    $default  reduce using rule 8 (statement)
+    comma  shift, and go to state 108
+
+    $default  reduce using rule 9 (statement)
 
 
 State 50
@@ -1154,7 +1159,7 @@ State 50
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 108
+    expr             go to state 109
 
 
 State 51
@@ -1175,7 +1180,7 @@ State 51
     plus             shift, and go to state 22
     minus            shift, and go to state 23
     number           shift, and go to state 24
-    identifier       shift, and go to state 109
+    identifier       shift, and go to state 110
     string           shift, and go to state 26
 
     pine_type        go to state 33
@@ -1183,7 +1188,7 @@ State 51
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 110
+    expr             go to state 111
 
 
 State 52
@@ -1277,7 +1282,7 @@ State 54
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 111
+    expr             go to state 112
 
 
 State 55
@@ -1304,7 +1309,7 @@ State 55
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 112
+    expr             go to state 113
 
 
 State 56
@@ -1312,7 +1317,7 @@ State 56
    47 pine_type: identifier •
    64 var_stmt: var identifier • assign expr
 
-    assign  shift, and go to state 113
+    assign  shift, and go to state 114
 
     $default  reduce using rule 47 (pine_type)
 
@@ -1323,9 +1328,9 @@ State 57
    65 var_stmt: var pine_type • identifier assign expr
    66         | var pine_type • left_quad_brace right_quad_brace identifier assign expr
 
-    left_quad_brace  shift, and go to state 114
+    left_quad_brace  shift, and go to state 115
     dot              shift, and go to state 78
-    identifier       shift, and go to state 115
+    identifier       shift, and go to state 116
 
 
 State 58
@@ -1333,8 +1338,8 @@ State 58
    67 var_stmt: var dot_expr • identifier assign expr
    68         | var dot_expr • left_quad_brace right_quad_brace identifier assign expr
 
-    left_quad_brace  shift, and go to state 116
-    identifier       shift, and go to state 117
+    left_quad_brace  shift, and go to state 117
+    identifier       shift, and go to state 118
 
 
 State 59
@@ -1342,7 +1347,7 @@ State 59
    47 pine_type: identifier •
    69 varip_stmt: varip_statement identifier • assign expr
 
-    assign  shift, and go to state 118
+    assign  shift, and go to state 119
 
     $default  reduce using rule 47 (pine_type)
 
@@ -1353,9 +1358,9 @@ State 60
    70 varip_stmt: varip_statement pine_type • identifier assign expr
    71           | varip_statement pine_type • left_quad_brace right_quad_brace identifier assign expr
 
-    left_quad_brace  shift, and go to state 119
+    left_quad_brace  shift, and go to state 120
     dot              shift, and go to state 78
-    identifier       shift, and go to state 120
+    identifier       shift, and go to state 121
 
 
 State 61
@@ -1363,8 +1368,8 @@ State 61
    72 varip_stmt: varip_statement dot_expr • identifier assign expr
    73           | varip_statement dot_expr • left_quad_brace right_quad_brace identifier assign expr
 
-    left_quad_brace  shift, and go to state 121
-    identifier       shift, and go to state 122
+    left_quad_brace  shift, and go to state 122
+    identifier       shift, and go to state 123
 
 
 State 62
@@ -1373,9 +1378,9 @@ State 62
    74 const_stmt: const_statement pine_type • identifier assign expr
    75           | const_statement pine_type • left_quad_brace right_quad_brace identifier assign expr
 
-    left_quad_brace  shift, and go to state 123
+    left_quad_brace  shift, and go to state 124
     dot              shift, and go to state 78
-    identifier       shift, and go to state 124
+    identifier       shift, and go to state 125
 
 
 State 63
@@ -1383,8 +1388,8 @@ State 63
    76 const_stmt: const_statement dot_expr • identifier assign expr
    77           | const_statement dot_expr • left_quad_brace right_quad_brace identifier assign expr
 
-    left_quad_brace  shift, and go to state 125
-    identifier       shift, and go to state 126
+    left_quad_brace  shift, and go to state 126
+    identifier       shift, and go to state 127
 
 
 State 64
@@ -1392,7 +1397,7 @@ State 64
    47 pine_type: identifier •
    78 simple_stmt: simple identifier • assign expr
 
-    assign  shift, and go to state 127
+    assign  shift, and go to state 128
 
     $default  reduce using rule 47 (pine_type)
 
@@ -1403,9 +1408,9 @@ State 65
    79 simple_stmt: simple pine_type • identifier assign expr
    80            | simple pine_type • left_quad_brace right_quad_brace identifier assign expr
 
-    left_quad_brace  shift, and go to state 128
+    left_quad_brace  shift, and go to state 129
     dot              shift, and go to state 78
-    identifier       shift, and go to state 129
+    identifier       shift, and go to state 130
 
 
 State 66
@@ -1413,8 +1418,8 @@ State 66
    81 simple_stmt: simple dot_expr • identifier assign expr
    82            | simple dot_expr • left_quad_brace right_quad_brace identifier assign expr
 
-    left_quad_brace  shift, and go to state 130
-    identifier       shift, and go to state 131
+    left_quad_brace  shift, and go to state 131
+    identifier       shift, and go to state 132
 
 
 State 67
@@ -1548,7 +1553,7 @@ State 70
     bitwise_xor             shift, and go to state 87
     bitwise_shift_to_left   shift, and go to state 88
     bitwise_shift_to_right  shift, and go to state 89
-    right_paren             shift, and go to state 132
+    right_paren             shift, and go to state 133
     assign                  shift, and go to state 90
     equals                  shift, and go to state 92
     greater_than            shift, and go to state 93
@@ -1606,7 +1611,7 @@ State 71
     bitwise_xor             shift, and go to state 87
     bitwise_shift_to_left   shift, and go to state 88
     bitwise_shift_to_right  shift, and go to state 89
-    right_quad_brace        shift, and go to state 133
+    right_quad_brace        shift, and go to state 134
     assign                  shift, and go to state 90
     equals                  shift, and go to state 92
     greater_than            shift, and go to state 93
@@ -1633,8 +1638,8 @@ State 72
   125 expr: left_quad_brace expr_list • right_quad_brace
   127 expr_list: expr_list • comma expr
 
-    right_quad_brace  shift, and go to state 134
-    comma             shift, and go to state 135
+    right_quad_brace  shift, and go to state 135
+    comma             shift, and go to state 136
 
 
 State 73
@@ -1736,10 +1741,10 @@ State 75
 
     $default  reduce using rule 33 (opt_arg_list)
 
-    opt_arg_list  go to state 136
-    arg_list      go to state 137
-    func_type     go to state 138
-    pine_type     go to state 139
+    opt_arg_list  go to state 137
+    arg_list      go to state 138
+    func_type     go to state 139
+    pine_type     go to state 140
 
 
 State 76
@@ -1767,7 +1772,7 @@ State 78
     string_as_type  shift, and go to state 19
     identifier      shift, and go to state 52
 
-    pine_type  go to state 140
+    pine_type  go to state 141
 
 
 State 79
@@ -1793,11 +1798,11 @@ State 79
 
     pine_type        go to state 33
     dot_expr         go to state 38
-    call_list        go to state 141
+    call_list        go to state 142
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 142
+    expr             go to state 143
 
 
 State 80
@@ -1824,7 +1829,7 @@ State 80
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 143
+    expr             go to state 144
 
 
 State 81
@@ -1851,7 +1856,7 @@ State 81
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 144
+    expr             go to state 145
 
 
 State 82
@@ -1878,7 +1883,7 @@ State 82
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 145
+    expr             go to state 146
 
 
 State 83
@@ -1905,7 +1910,7 @@ State 83
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 146
+    expr             go to state 147
 
 
 State 84
@@ -1932,7 +1937,7 @@ State 84
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 147
+    expr             go to state 148
 
 
 State 85
@@ -1959,7 +1964,7 @@ State 85
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 148
+    expr             go to state 149
 
 
 State 86
@@ -1986,7 +1991,7 @@ State 86
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 149
+    expr             go to state 150
 
 
 State 87
@@ -2013,7 +2018,7 @@ State 87
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 150
+    expr             go to state 151
 
 
 State 88
@@ -2040,7 +2045,7 @@ State 88
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 151
+    expr             go to state 152
 
 
 State 89
@@ -2067,7 +2072,7 @@ State 89
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 152
+    expr             go to state 153
 
 
 State 90
@@ -2094,7 +2099,7 @@ State 90
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 153
+    expr             go to state 154
 
 
 State 91
@@ -2121,7 +2126,7 @@ State 91
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 154
+    expr             go to state 155
 
 
 State 92
@@ -2148,7 +2153,7 @@ State 92
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 155
+    expr             go to state 156
 
 
 State 93
@@ -2175,7 +2180,7 @@ State 93
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 156
+    expr             go to state 157
 
 
 State 94
@@ -2202,7 +2207,7 @@ State 94
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 157
+    expr             go to state 158
 
 
 State 95
@@ -2229,7 +2234,7 @@ State 95
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 158
+    expr             go to state 159
 
 
 State 96
@@ -2256,7 +2261,7 @@ State 96
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 159
+    expr             go to state 160
 
 
 State 97
@@ -2283,7 +2288,7 @@ State 97
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 160
+    expr             go to state 161
 
 
 State 98
@@ -2310,7 +2315,7 @@ State 98
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 161
+    expr             go to state 162
 
 
 State 99
@@ -2337,7 +2342,7 @@ State 99
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 162
+    expr             go to state 163
 
 
 State 100
@@ -2364,7 +2369,7 @@ State 100
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 163
+    expr             go to state 164
 
 
 State 101
@@ -2391,7 +2396,7 @@ State 101
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 164
+    expr             go to state 165
 
 
 State 102
@@ -2418,7 +2423,7 @@ State 102
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 165
+    expr             go to state 166
 
 
 State 103
@@ -2445,7 +2450,7 @@ State 103
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 166
+    expr             go to state 167
 
 
 State 104
@@ -2472,7 +2477,7 @@ State 104
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 167
+    expr             go to state 168
 
 
 State 105
@@ -2499,7 +2504,7 @@ State 105
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 168
+    expr             go to state 169
 
 
 State 106
@@ -2526,7 +2531,7 @@ State 106
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 169
+    expr             go to state 170
 
 
 State 107
@@ -2553,139 +2558,41 @@ State 107
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 170
+    expr             go to state 171
 
 
 State 108
 
-   25 if_stmt: if_statement left_paren expr • right_paren if_body
-   26        | if_statement left_paren expr • right_paren if_body else_statement if_body
-   84 assignment_stmt: expr • assign expr
-   96 expr: expr • plus_and_assign expr
-   97     | expr • minus_and_assign expr
-   98     | expr • multiply_and_assign expr
-   99     | expr • divide_and_assign expr
-  100     | expr • remind_and_assign expr
-  101     | expr • plus expr
-  102     | expr • minus expr
-  103     | expr • multiply expr
-  104     | expr • divide expr
-  105     | expr • divide_with_remind expr
-  106     | expr • logical_and expr
-  107     | expr • logical_or expr
-  108     | expr • equals expr
-  109     | expr • dont_equal expr
-  110     | expr • greater_than expr
-  111     | expr • lesser_than expr
-  112     | expr • greater_than_or_equals expr
-  113     | expr • lesser_than_or_equals expr
-  114     | expr • bitwise_and expr
-  115     | expr • bitwise_or expr
-  116     | expr • bitwise_xor expr
-  117     | expr • bitwise_shift_to_left expr
-  118     | expr • bitwise_shift_to_right expr
-  124     | expr • question_sign expr colon expr
+  129 comma_stmt: comma_stmt comma • comma_stmt
 
-    logical_and             shift, and go to state 81
-    logical_or              shift, and go to state 82
-    dont_equal              shift, and go to state 83
-    question_sign           shift, and go to state 84
-    bitwise_and             shift, and go to state 85
-    bitwise_or              shift, and go to state 86
-    bitwise_xor             shift, and go to state 87
-    bitwise_shift_to_left   shift, and go to state 88
-    bitwise_shift_to_right  shift, and go to state 89
-    right_paren             shift, and go to state 171
-    assign                  shift, and go to state 90
-    equals                  shift, and go to state 92
-    greater_than            shift, and go to state 93
-    lesser_than             shift, and go to state 94
-    plus_and_assign         shift, and go to state 95
-    minus_and_assign        shift, and go to state 96
-    multiply_and_assign     shift, and go to state 97
-    divide_and_assign       shift, and go to state 98
-    remind_and_assign       shift, and go to state 99
-    plus                    shift, and go to state 100
-    minus                   shift, and go to state 101
-    multiply                shift, and go to state 102
-    divide                  shift, and go to state 103
-    divide_with_remind      shift, and go to state 104
-    greater_than_or_equals  shift, and go to state 105
-    lesser_than_or_equals   shift, and go to state 106
+    logical_not      shift, and go to state 12
+    bitwise_not      shift, and go to state 13
+    int_type         shift, and go to state 15
+    bool_type        shift, and go to state 16
+    float_type       shift, and go to state 17
+    color_type       shift, and go to state 18
+    string_as_type   shift, and go to state 19
+    left_paren       shift, and go to state 20
+    left_quad_brace  shift, and go to state 21
+    plus             shift, and go to state 22
+    minus            shift, and go to state 23
+    number           shift, and go to state 24
+    identifier       shift, and go to state 52
+    string           shift, and go to state 26
+
+    pine_type        go to state 33
+    dot_expr         go to state 38
+    assignment_stmt  go to state 44
+    expr_atom        go to state 46
+    postfix_expr     go to state 47
+    expr             go to state 172
+    comma_stmt       go to state 173
 
 
 State 109
 
-   27 for_stmt: for_statement left_paren identifier • assign expr to expr right_paren block
-   28         | for_statement left_paren identifier • assign expr to expr step expr right_paren block
-   47 pine_type: identifier •
-
-    assign  shift, and go to state 172
-
-    assign    [reduce using rule 47 (pine_type)]
-    $default  reduce using rule 47 (pine_type)
-
-
-State 110
-
-   29 for_stmt: for_statement left_paren expr • right_paren block
-   84 assignment_stmt: expr • assign expr
-   96 expr: expr • plus_and_assign expr
-   97     | expr • minus_and_assign expr
-   98     | expr • multiply_and_assign expr
-   99     | expr • divide_and_assign expr
-  100     | expr • remind_and_assign expr
-  101     | expr • plus expr
-  102     | expr • minus expr
-  103     | expr • multiply expr
-  104     | expr • divide expr
-  105     | expr • divide_with_remind expr
-  106     | expr • logical_and expr
-  107     | expr • logical_or expr
-  108     | expr • equals expr
-  109     | expr • dont_equal expr
-  110     | expr • greater_than expr
-  111     | expr • lesser_than expr
-  112     | expr • greater_than_or_equals expr
-  113     | expr • lesser_than_or_equals expr
-  114     | expr • bitwise_and expr
-  115     | expr • bitwise_or expr
-  116     | expr • bitwise_xor expr
-  117     | expr • bitwise_shift_to_left expr
-  118     | expr • bitwise_shift_to_right expr
-  124     | expr • question_sign expr colon expr
-
-    logical_and             shift, and go to state 81
-    logical_or              shift, and go to state 82
-    dont_equal              shift, and go to state 83
-    question_sign           shift, and go to state 84
-    bitwise_and             shift, and go to state 85
-    bitwise_or              shift, and go to state 86
-    bitwise_xor             shift, and go to state 87
-    bitwise_shift_to_left   shift, and go to state 88
-    bitwise_shift_to_right  shift, and go to state 89
-    right_paren             shift, and go to state 173
-    assign                  shift, and go to state 90
-    equals                  shift, and go to state 92
-    greater_than            shift, and go to state 93
-    lesser_than             shift, and go to state 94
-    plus_and_assign         shift, and go to state 95
-    minus_and_assign        shift, and go to state 96
-    multiply_and_assign     shift, and go to state 97
-    divide_and_assign       shift, and go to state 98
-    remind_and_assign       shift, and go to state 99
-    plus                    shift, and go to state 100
-    minus                   shift, and go to state 101
-    multiply                shift, and go to state 102
-    divide                  shift, and go to state 103
-    divide_with_remind      shift, and go to state 104
-    greater_than_or_equals  shift, and go to state 105
-    lesser_than_or_equals   shift, and go to state 106
-
-
-State 111
-
-   30 while_stmt: while_statement left_paren expr • right_paren block
+   25 if_stmt: if_statement left_paren expr • right_paren if_body
+   26        | if_statement left_paren expr • right_paren if_body else_statement if_body
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
    97     | expr • minus_and_assign expr
@@ -2740,7 +2647,133 @@ State 111
     lesser_than_or_equals   shift, and go to state 106
 
 
+State 110
+
+   27 for_stmt: for_statement left_paren identifier • assign expr to expr right_paren block
+   28         | for_statement left_paren identifier • assign expr to expr step expr right_paren block
+   47 pine_type: identifier •
+
+    assign  shift, and go to state 175
+
+    assign    [reduce using rule 47 (pine_type)]
+    $default  reduce using rule 47 (pine_type)
+
+
+State 111
+
+   29 for_stmt: for_statement left_paren expr • right_paren block
+   84 assignment_stmt: expr • assign expr
+   96 expr: expr • plus_and_assign expr
+   97     | expr • minus_and_assign expr
+   98     | expr • multiply_and_assign expr
+   99     | expr • divide_and_assign expr
+  100     | expr • remind_and_assign expr
+  101     | expr • plus expr
+  102     | expr • minus expr
+  103     | expr • multiply expr
+  104     | expr • divide expr
+  105     | expr • divide_with_remind expr
+  106     | expr • logical_and expr
+  107     | expr • logical_or expr
+  108     | expr • equals expr
+  109     | expr • dont_equal expr
+  110     | expr • greater_than expr
+  111     | expr • lesser_than expr
+  112     | expr • greater_than_or_equals expr
+  113     | expr • lesser_than_or_equals expr
+  114     | expr • bitwise_and expr
+  115     | expr • bitwise_or expr
+  116     | expr • bitwise_xor expr
+  117     | expr • bitwise_shift_to_left expr
+  118     | expr • bitwise_shift_to_right expr
+  124     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 81
+    logical_or              shift, and go to state 82
+    dont_equal              shift, and go to state 83
+    question_sign           shift, and go to state 84
+    bitwise_and             shift, and go to state 85
+    bitwise_or              shift, and go to state 86
+    bitwise_xor             shift, and go to state 87
+    bitwise_shift_to_left   shift, and go to state 88
+    bitwise_shift_to_right  shift, and go to state 89
+    right_paren             shift, and go to state 176
+    assign                  shift, and go to state 90
+    equals                  shift, and go to state 92
+    greater_than            shift, and go to state 93
+    lesser_than             shift, and go to state 94
+    plus_and_assign         shift, and go to state 95
+    minus_and_assign        shift, and go to state 96
+    multiply_and_assign     shift, and go to state 97
+    divide_and_assign       shift, and go to state 98
+    remind_and_assign       shift, and go to state 99
+    plus                    shift, and go to state 100
+    minus                   shift, and go to state 101
+    multiply                shift, and go to state 102
+    divide                  shift, and go to state 103
+    divide_with_remind      shift, and go to state 104
+    greater_than_or_equals  shift, and go to state 105
+    lesser_than_or_equals   shift, and go to state 106
+
+
 State 112
+
+   30 while_stmt: while_statement left_paren expr • right_paren block
+   84 assignment_stmt: expr • assign expr
+   96 expr: expr • plus_and_assign expr
+   97     | expr • minus_and_assign expr
+   98     | expr • multiply_and_assign expr
+   99     | expr • divide_and_assign expr
+  100     | expr • remind_and_assign expr
+  101     | expr • plus expr
+  102     | expr • minus expr
+  103     | expr • multiply expr
+  104     | expr • divide expr
+  105     | expr • divide_with_remind expr
+  106     | expr • logical_and expr
+  107     | expr • logical_or expr
+  108     | expr • equals expr
+  109     | expr • dont_equal expr
+  110     | expr • greater_than expr
+  111     | expr • lesser_than expr
+  112     | expr • greater_than_or_equals expr
+  113     | expr • lesser_than_or_equals expr
+  114     | expr • bitwise_and expr
+  115     | expr • bitwise_or expr
+  116     | expr • bitwise_xor expr
+  117     | expr • bitwise_shift_to_left expr
+  118     | expr • bitwise_shift_to_right expr
+  124     | expr • question_sign expr colon expr
+
+    logical_and             shift, and go to state 81
+    logical_or              shift, and go to state 82
+    dont_equal              shift, and go to state 83
+    question_sign           shift, and go to state 84
+    bitwise_and             shift, and go to state 85
+    bitwise_or              shift, and go to state 86
+    bitwise_xor             shift, and go to state 87
+    bitwise_shift_to_left   shift, and go to state 88
+    bitwise_shift_to_right  shift, and go to state 89
+    right_paren             shift, and go to state 177
+    assign                  shift, and go to state 90
+    equals                  shift, and go to state 92
+    greater_than            shift, and go to state 93
+    lesser_than             shift, and go to state 94
+    plus_and_assign         shift, and go to state 95
+    minus_and_assign        shift, and go to state 96
+    multiply_and_assign     shift, and go to state 97
+    divide_and_assign       shift, and go to state 98
+    remind_and_assign       shift, and go to state 99
+    plus                    shift, and go to state 100
+    minus                   shift, and go to state 101
+    multiply                shift, and go to state 102
+    divide                  shift, and go to state 103
+    divide_with_remind      shift, and go to state 104
+    greater_than_or_equals  shift, and go to state 105
+    lesser_than_or_equals   shift, and go to state 106
+
+
+State 113
 
    51 switch_stmt: switch_statement left_paren expr • right_paren left_brace case_list default_case right_brace
    84 assignment_stmt: expr • assign expr
@@ -2778,7 +2811,7 @@ State 112
     bitwise_xor             shift, and go to state 87
     bitwise_shift_to_left   shift, and go to state 88
     bitwise_shift_to_right  shift, and go to state 89
-    right_paren             shift, and go to state 175
+    right_paren             shift, and go to state 178
     assign                  shift, and go to state 90
     equals                  shift, and go to state 92
     greater_than            shift, and go to state 93
@@ -2797,7 +2830,7 @@ State 112
     lesser_than_or_equals   shift, and go to state 106
 
 
-State 113
+State 114
 
    64 var_stmt: var identifier assign • expr
 
@@ -2821,38 +2854,38 @@ State 113
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 176
-
-
-State 114
-
-   66 var_stmt: var pine_type left_quad_brace • right_quad_brace identifier assign expr
-
-    right_quad_brace  shift, and go to state 177
+    expr             go to state 179
 
 
 State 115
 
-   65 var_stmt: var pine_type identifier • assign expr
+   66 var_stmt: var pine_type left_quad_brace • right_quad_brace identifier assign expr
 
-    assign  shift, and go to state 178
+    right_quad_brace  shift, and go to state 180
 
 
 State 116
 
-   68 var_stmt: var dot_expr left_quad_brace • right_quad_brace identifier assign expr
+   65 var_stmt: var pine_type identifier • assign expr
 
-    right_quad_brace  shift, and go to state 179
+    assign  shift, and go to state 181
 
 
 State 117
 
-   67 var_stmt: var dot_expr identifier • assign expr
+   68 var_stmt: var dot_expr left_quad_brace • right_quad_brace identifier assign expr
 
-    assign  shift, and go to state 180
+    right_quad_brace  shift, and go to state 182
 
 
 State 118
+
+   67 var_stmt: var dot_expr identifier • assign expr
+
+    assign  shift, and go to state 183
+
+
+State 119
 
    69 varip_stmt: varip_statement identifier assign • expr
 
@@ -2876,66 +2909,66 @@ State 118
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 181
-
-
-State 119
-
-   71 varip_stmt: varip_statement pine_type left_quad_brace • right_quad_brace identifier assign expr
-
-    right_quad_brace  shift, and go to state 182
+    expr             go to state 184
 
 
 State 120
 
-   70 varip_stmt: varip_statement pine_type identifier • assign expr
+   71 varip_stmt: varip_statement pine_type left_quad_brace • right_quad_brace identifier assign expr
 
-    assign  shift, and go to state 183
+    right_quad_brace  shift, and go to state 185
 
 
 State 121
 
-   73 varip_stmt: varip_statement dot_expr left_quad_brace • right_quad_brace identifier assign expr
+   70 varip_stmt: varip_statement pine_type identifier • assign expr
 
-    right_quad_brace  shift, and go to state 184
+    assign  shift, and go to state 186
 
 
 State 122
 
-   72 varip_stmt: varip_statement dot_expr identifier • assign expr
+   73 varip_stmt: varip_statement dot_expr left_quad_brace • right_quad_brace identifier assign expr
 
-    assign  shift, and go to state 185
+    right_quad_brace  shift, and go to state 187
 
 
 State 123
 
-   75 const_stmt: const_statement pine_type left_quad_brace • right_quad_brace identifier assign expr
+   72 varip_stmt: varip_statement dot_expr identifier • assign expr
 
-    right_quad_brace  shift, and go to state 186
+    assign  shift, and go to state 188
 
 
 State 124
 
-   74 const_stmt: const_statement pine_type identifier • assign expr
+   75 const_stmt: const_statement pine_type left_quad_brace • right_quad_brace identifier assign expr
 
-    assign  shift, and go to state 187
+    right_quad_brace  shift, and go to state 189
 
 
 State 125
 
-   77 const_stmt: const_statement dot_expr left_quad_brace • right_quad_brace identifier assign expr
+   74 const_stmt: const_statement pine_type identifier • assign expr
 
-    right_quad_brace  shift, and go to state 188
+    assign  shift, and go to state 190
 
 
 State 126
 
-   76 const_stmt: const_statement dot_expr identifier • assign expr
+   77 const_stmt: const_statement dot_expr left_quad_brace • right_quad_brace identifier assign expr
 
-    assign  shift, and go to state 189
+    right_quad_brace  shift, and go to state 191
 
 
 State 127
+
+   76 const_stmt: const_statement dot_expr identifier • assign expr
+
+    assign  shift, and go to state 192
+
+
+State 128
 
    78 simple_stmt: simple identifier assign • expr
 
@@ -2959,59 +2992,59 @@ State 127
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 190
-
-
-State 128
-
-   80 simple_stmt: simple pine_type left_quad_brace • right_quad_brace identifier assign expr
-
-    right_quad_brace  shift, and go to state 191
+    expr             go to state 193
 
 
 State 129
 
-   79 simple_stmt: simple pine_type identifier • assign expr
+   80 simple_stmt: simple pine_type left_quad_brace • right_quad_brace identifier assign expr
 
-    assign  shift, and go to state 192
+    right_quad_brace  shift, and go to state 194
 
 
 State 130
 
-   82 simple_stmt: simple dot_expr left_quad_brace • right_quad_brace identifier assign expr
+   79 simple_stmt: simple pine_type identifier • assign expr
 
-    right_quad_brace  shift, and go to state 193
+    assign  shift, and go to state 195
 
 
 State 131
 
-   81 simple_stmt: simple dot_expr identifier • assign expr
+   82 simple_stmt: simple dot_expr left_quad_brace • right_quad_brace identifier assign expr
 
-    assign  shift, and go to state 194
+    right_quad_brace  shift, and go to state 196
 
 
 State 132
+
+   81 simple_stmt: simple dot_expr identifier • assign expr
+
+    assign  shift, and go to state 197
+
+
+State 133
 
    90 expr_atom: left_paren expr right_paren •
 
     $default  reduce using rule 90 (expr_atom)
 
 
-State 133
+State 134
 
   123 expr: left_quad_brace expr right_quad_brace •
 
     $default  reduce using rule 123 (expr)
 
 
-State 134
+State 135
 
   125 expr: left_quad_brace expr_list right_quad_brace •
 
     $default  reduce using rule 125 (expr)
 
 
-State 135
+State 136
 
   127 expr_list: expr_list comma • expr
 
@@ -3035,34 +3068,34 @@ State 135
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 195
-
-
-State 136
-
-   31 func_stmt: identifier func_paren opt_arg_list • func_paren block
-
-    func_paren  shift, and go to state 196
+    expr             go to state 198
 
 
 State 137
 
+   31 func_stmt: identifier func_paren opt_arg_list • func_paren block
+
+    func_paren  shift, and go to state 199
+
+
+State 138
+
    32 opt_arg_list: arg_list •
    34 arg_list: arg_list • comma func_type
 
-    comma  shift, and go to state 197
+    comma  shift, and go to state 200
 
     $default  reduce using rule 32 (opt_arg_list)
 
 
-State 138
+State 139
 
    35 arg_list: func_type •
 
     $default  reduce using rule 35 (arg_list)
 
 
-State 139
+State 140
 
    36 func_type: pine_type • identifier
    37          | pine_type •
@@ -3071,30 +3104,30 @@ State 139
    40          | pine_type • lesser_than func_type greater_than identifier
    41          | pine_type • dot pine_type lesser_than func_type greater_than identifier
 
-    lesser_than  shift, and go to state 198
-    dot          shift, and go to state 199
-    identifier   shift, and go to state 200
+    lesser_than  shift, and go to state 201
+    dot          shift, and go to state 202
+    identifier   shift, and go to state 203
 
     $default  reduce using rule 37 (func_type)
 
 
-State 140
+State 141
 
    60 dot_expr: pine_type dot pine_type •
 
     $default  reduce using rule 60 (dot_expr)
 
 
-State 141
+State 142
 
    62 call_list: call_list • comma expr
    91 postfix_expr: expr_atom call_paren call_list • call_paren
 
-    call_paren  shift, and go to state 201
-    comma       shift, and go to state 202
+    call_paren  shift, and go to state 204
+    comma       shift, and go to state 205
 
 
-State 142
+State 143
 
    61 call_list: expr •
    84 assignment_stmt: expr • assign expr
@@ -3152,7 +3185,7 @@ State 142
     $default  reduce using rule 61 (call_list)
 
 
-State 143
+State 144
 
    84 assignment_stmt: expr • assign expr
    92 postfix_expr: expr_atom left_quad_brace expr • right_quad_brace
@@ -3190,7 +3223,7 @@ State 143
     bitwise_xor             shift, and go to state 87
     bitwise_shift_to_left   shift, and go to state 88
     bitwise_shift_to_right  shift, and go to state 89
-    right_quad_brace        shift, and go to state 203
+    right_quad_brace        shift, and go to state 206
     assign                  shift, and go to state 90
     equals                  shift, and go to state 92
     greater_than            shift, and go to state 93
@@ -3209,7 +3242,7 @@ State 143
     lesser_than_or_equals   shift, and go to state 106
 
 
-State 144
+State 145
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3268,7 +3301,7 @@ State 144
     $default             reduce using rule 106 (expr)
 
 
-State 145
+State 146
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3328,7 +3361,7 @@ State 145
     $default             reduce using rule 107 (expr)
 
 
-State 146
+State 147
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3381,7 +3414,7 @@ State 146
     $default             reduce using rule 109 (expr)
 
 
-State 147
+State 148
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3435,10 +3468,10 @@ State 147
     divide_with_remind      shift, and go to state 104
     greater_than_or_equals  shift, and go to state 105
     lesser_than_or_equals   shift, and go to state 106
-    colon                   shift, and go to state 204
+    colon                   shift, and go to state 207
 
 
-State 148
+State 149
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3488,7 +3521,7 @@ State 148
     $default             reduce using rule 114 (expr)
 
 
-State 149
+State 150
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3540,7 +3573,7 @@ State 149
     $default             reduce using rule 115 (expr)
 
 
-State 150
+State 151
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3591,7 +3624,7 @@ State 150
     $default             reduce using rule 116 (expr)
 
 
-State 151
+State 152
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3639,7 +3672,7 @@ State 151
     $default             reduce using rule 117 (expr)
 
 
-State 152
+State 153
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3687,7 +3720,7 @@ State 152
     $default             reduce using rule 118 (expr)
 
 
-State 153
+State 154
 
    84 assignment_stmt: expr • assign expr
    84                | expr assign expr •
@@ -3749,7 +3782,7 @@ State 153
     $default             reduce using rule 84 (assignment_stmt)
 
 
-State 154
+State 155
 
    84 assignment_stmt: expr • assign expr
    85 assignment_re_stmt: expr re_assign expr •
@@ -3807,7 +3840,7 @@ State 154
     $default  reduce using rule 85 (assignment_re_stmt)
 
 
-State 155
+State 156
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3860,7 +3893,7 @@ State 155
     $default             reduce using rule 108 (expr)
 
 
-State 156
+State 157
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3913,7 +3946,7 @@ State 156
     $default             reduce using rule 110 (expr)
 
 
-State 157
+State 158
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -3966,7 +3999,7 @@ State 157
     $default             reduce using rule 111 (expr)
 
 
-State 158
+State 159
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4049,7 +4082,7 @@ State 158
     $default                reduce using rule 96 (expr)
 
 
-State 159
+State 160
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4132,7 +4165,7 @@ State 159
     $default                reduce using rule 97 (expr)
 
 
-State 160
+State 161
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4215,7 +4248,7 @@ State 160
     $default                reduce using rule 98 (expr)
 
 
-State 161
+State 162
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4298,7 +4331,7 @@ State 161
     $default                reduce using rule 99 (expr)
 
 
-State 162
+State 163
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4381,7 +4414,7 @@ State 162
     $default                reduce using rule 100 (expr)
 
 
-State 163
+State 164
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4427,7 +4460,7 @@ State 163
     $default             reduce using rule 101 (expr)
 
 
-State 164
+State 165
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4473,7 +4506,7 @@ State 164
     $default             reduce using rule 102 (expr)
 
 
-State 165
+State 166
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4516,7 +4549,7 @@ State 165
     $default             reduce using rule 103 (expr)
 
 
-State 166
+State 167
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4559,7 +4592,7 @@ State 166
     $default             reduce using rule 104 (expr)
 
 
-State 167
+State 168
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4602,7 +4635,7 @@ State 167
     $default             reduce using rule 105 (expr)
 
 
-State 168
+State 169
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4655,7 +4688,7 @@ State 168
     $default             reduce using rule 112 (expr)
 
 
-State 169
+State 170
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4708,7 +4741,7 @@ State 169
     $default             reduce using rule 113 (expr)
 
 
-State 170
+State 171
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -4768,7 +4801,75 @@ State 170
     $default  reduce using rule 128 (comma_stmt)
 
 
-State 171
+State 172
+
+   84 assignment_stmt: expr • assign expr
+   96 expr: expr • plus_and_assign expr
+   97     | expr • minus_and_assign expr
+   98     | expr • multiply_and_assign expr
+   99     | expr • divide_and_assign expr
+  100     | expr • remind_and_assign expr
+  101     | expr • plus expr
+  102     | expr • minus expr
+  103     | expr • multiply expr
+  104     | expr • divide expr
+  105     | expr • divide_with_remind expr
+  106     | expr • logical_and expr
+  107     | expr • logical_or expr
+  108     | expr • equals expr
+  109     | expr • dont_equal expr
+  110     | expr • greater_than expr
+  111     | expr • lesser_than expr
+  112     | expr • greater_than_or_equals expr
+  113     | expr • lesser_than_or_equals expr
+  114     | expr • bitwise_and expr
+  115     | expr • bitwise_or expr
+  116     | expr • bitwise_xor expr
+  117     | expr • bitwise_shift_to_left expr
+  118     | expr • bitwise_shift_to_right expr
+  124     | expr • question_sign expr colon expr
+  128 comma_stmt: expr • comma expr
+
+    logical_and             shift, and go to state 81
+    logical_or              shift, and go to state 82
+    dont_equal              shift, and go to state 83
+    question_sign           shift, and go to state 84
+    bitwise_and             shift, and go to state 85
+    bitwise_or              shift, and go to state 86
+    bitwise_xor             shift, and go to state 87
+    bitwise_shift_to_left   shift, and go to state 88
+    bitwise_shift_to_right  shift, and go to state 89
+    assign                  shift, and go to state 90
+    equals                  shift, and go to state 92
+    greater_than            shift, and go to state 93
+    lesser_than             shift, and go to state 94
+    plus_and_assign         shift, and go to state 95
+    minus_and_assign        shift, and go to state 96
+    multiply_and_assign     shift, and go to state 97
+    divide_and_assign       shift, and go to state 98
+    remind_and_assign       shift, and go to state 99
+    plus                    shift, and go to state 100
+    minus                   shift, and go to state 101
+    multiply                shift, and go to state 102
+    divide                  shift, and go to state 103
+    divide_with_remind      shift, and go to state 104
+    greater_than_or_equals  shift, and go to state 105
+    lesser_than_or_equals   shift, and go to state 106
+    comma                   shift, and go to state 107
+
+
+State 173
+
+  129 comma_stmt: comma_stmt • comma comma_stmt
+  129           | comma_stmt comma comma_stmt •
+
+    comma  shift, and go to state 108
+
+    comma     [reduce using rule 129 (comma_stmt)]
+    $default  reduce using rule 129 (comma_stmt)
+
+
+State 174
 
    25 if_stmt: if_statement left_paren expr right_paren • if_body
    26        | if_statement left_paren expr right_paren • if_body else_statement if_body
@@ -4794,16 +4895,16 @@ State 171
     string_as_type      shift, and go to state 19
     left_paren          shift, and go to state 20
     left_quad_brace     shift, and go to state 21
-    left_brace          shift, and go to state 205
+    left_brace          shift, and go to state 208
     plus                shift, and go to state 22
     minus               shift, and go to state 23
     number              shift, and go to state 24
     identifier          shift, and go to state 25
     string              shift, and go to state 26
 
-    statement           go to state 206
-    block               go to state 207
-    if_body             go to state 208
+    statement           go to state 209
+    block               go to state 210
+    if_body             go to state 211
     if_stmt             go to state 29
     for_stmt            go to state 30
     while_stmt          go to state 31
@@ -4827,7 +4928,7 @@ State 171
     comma_stmt          go to state 49
 
 
-State 172
+State 175
 
    27 for_stmt: for_statement left_paren identifier assign • expr to expr right_paren block
    28         | for_statement left_paren identifier assign • expr to expr step expr right_paren block
@@ -4852,35 +4953,35 @@ State 172
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 209
-
-
-State 173
-
-   29 for_stmt: for_statement left_paren expr right_paren • block
-
-    left_brace  shift, and go to state 205
-
-    block  go to state 210
-
-
-State 174
-
-   30 while_stmt: while_statement left_paren expr right_paren • block
-
-    left_brace  shift, and go to state 205
-
-    block  go to state 211
-
-
-State 175
-
-   51 switch_stmt: switch_statement left_paren expr right_paren • left_brace case_list default_case right_brace
-
-    left_brace  shift, and go to state 212
+    expr             go to state 212
 
 
 State 176
+
+   29 for_stmt: for_statement left_paren expr right_paren • block
+
+    left_brace  shift, and go to state 208
+
+    block  go to state 213
+
+
+State 177
+
+   30 while_stmt: while_statement left_paren expr right_paren • block
+
+    left_brace  shift, and go to state 208
+
+    block  go to state 214
+
+
+State 178
+
+   51 switch_stmt: switch_statement left_paren expr right_paren • left_brace case_list default_case right_brace
+
+    left_brace  shift, and go to state 215
+
+
+State 179
 
    64 var_stmt: var identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -4938,14 +5039,14 @@ State 176
     $default  reduce using rule 64 (var_stmt)
 
 
-State 177
+State 180
 
    66 var_stmt: var pine_type left_quad_brace right_quad_brace • identifier assign expr
 
-    identifier  shift, and go to state 213
+    identifier  shift, and go to state 216
 
 
-State 178
+State 181
 
    65 var_stmt: var pine_type identifier assign • expr
 
@@ -4969,17 +5070,17 @@ State 178
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 214
+    expr             go to state 217
 
 
-State 179
+State 182
 
    68 var_stmt: var dot_expr left_quad_brace right_quad_brace • identifier assign expr
 
-    identifier  shift, and go to state 215
+    identifier  shift, and go to state 218
 
 
-State 180
+State 183
 
    67 var_stmt: var dot_expr identifier assign • expr
 
@@ -5003,10 +5104,10 @@ State 180
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 216
+    expr             go to state 219
 
 
-State 181
+State 184
 
    69 varip_stmt: varip_statement identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -5064,14 +5165,14 @@ State 181
     $default  reduce using rule 69 (varip_stmt)
 
 
-State 182
+State 185
 
    71 varip_stmt: varip_statement pine_type left_quad_brace right_quad_brace • identifier assign expr
 
-    identifier  shift, and go to state 217
+    identifier  shift, and go to state 220
 
 
-State 183
+State 186
 
    70 varip_stmt: varip_statement pine_type identifier assign • expr
 
@@ -5095,17 +5196,17 @@ State 183
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 218
+    expr             go to state 221
 
 
-State 184
+State 187
 
    73 varip_stmt: varip_statement dot_expr left_quad_brace right_quad_brace • identifier assign expr
 
-    identifier  shift, and go to state 219
+    identifier  shift, and go to state 222
 
 
-State 185
+State 188
 
    72 varip_stmt: varip_statement dot_expr identifier assign • expr
 
@@ -5129,17 +5230,17 @@ State 185
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 220
+    expr             go to state 223
 
 
-State 186
+State 189
 
    75 const_stmt: const_statement pine_type left_quad_brace right_quad_brace • identifier assign expr
 
-    identifier  shift, and go to state 221
+    identifier  shift, and go to state 224
 
 
-State 187
+State 190
 
    74 const_stmt: const_statement pine_type identifier assign • expr
 
@@ -5163,17 +5264,17 @@ State 187
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 222
+    expr             go to state 225
 
 
-State 188
+State 191
 
    77 const_stmt: const_statement dot_expr left_quad_brace right_quad_brace • identifier assign expr
 
-    identifier  shift, and go to state 223
+    identifier  shift, and go to state 226
 
 
-State 189
+State 192
 
    76 const_stmt: const_statement dot_expr identifier assign • expr
 
@@ -5197,10 +5298,10 @@ State 189
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 224
+    expr             go to state 227
 
 
-State 190
+State 193
 
    78 simple_stmt: simple identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -5258,14 +5359,14 @@ State 190
     $default  reduce using rule 78 (simple_stmt)
 
 
-State 191
+State 194
 
    80 simple_stmt: simple pine_type left_quad_brace right_quad_brace • identifier assign expr
 
-    identifier  shift, and go to state 225
+    identifier  shift, and go to state 228
 
 
-State 192
+State 195
 
    79 simple_stmt: simple pine_type identifier assign • expr
 
@@ -5289,17 +5390,17 @@ State 192
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 226
+    expr             go to state 229
 
 
-State 193
+State 196
 
    82 simple_stmt: simple dot_expr left_quad_brace right_quad_brace • identifier assign expr
 
-    identifier  shift, and go to state 227
+    identifier  shift, and go to state 230
 
 
-State 194
+State 197
 
    81 simple_stmt: simple dot_expr identifier assign • expr
 
@@ -5323,10 +5424,10 @@ State 194
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 228
+    expr             go to state 231
 
 
-State 195
+State 198
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -5384,16 +5485,16 @@ State 195
     $default  reduce using rule 127 (expr_list)
 
 
-State 196
+State 199
 
    31 func_stmt: identifier func_paren opt_arg_list func_paren • block
 
-    left_brace  shift, and go to state 205
+    left_brace  shift, and go to state 208
 
-    block  go to state 229
+    block  go to state 232
 
 
-State 197
+State 200
 
    34 arg_list: arg_list comma • func_type
 
@@ -5404,11 +5505,11 @@ State 197
     string_as_type  shift, and go to state 19
     identifier      shift, and go to state 52
 
-    func_type  go to state 230
-    pine_type  go to state 139
+    func_type  go to state 233
+    pine_type  go to state 140
 
 
-State 198
+State 201
 
    40 func_type: pine_type lesser_than • func_type greater_than identifier
 
@@ -5419,11 +5520,11 @@ State 198
     string_as_type  shift, and go to state 19
     identifier      shift, and go to state 52
 
-    func_type  go to state 231
-    pine_type  go to state 139
+    func_type  go to state 234
+    pine_type  go to state 140
 
 
-State 199
+State 202
 
    38 func_type: pine_type dot • pine_type identifier
    39          | pine_type dot • pine_type
@@ -5436,24 +5537,24 @@ State 199
     string_as_type  shift, and go to state 19
     identifier      shift, and go to state 52
 
-    pine_type  go to state 232
+    pine_type  go to state 235
 
 
-State 200
+State 203
 
    36 func_type: pine_type identifier •
 
     $default  reduce using rule 36 (func_type)
 
 
-State 201
+State 204
 
    91 postfix_expr: expr_atom call_paren call_list call_paren •
 
     $default  reduce using rule 91 (postfix_expr)
 
 
-State 202
+State 205
 
    62 call_list: call_list comma • expr
 
@@ -5477,17 +5578,17 @@ State 202
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 233
+    expr             go to state 236
 
 
-State 203
+State 206
 
    92 postfix_expr: expr_atom left_quad_brace expr right_quad_brace •
 
     $default  reduce using rule 92 (postfix_expr)
 
 
-State 204
+State 207
 
   124 expr: expr question_sign expr colon • expr
 
@@ -5511,10 +5612,10 @@ State 204
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 234
+    expr             go to state 237
 
 
-State 205
+State 208
 
    19 block: left_brace • stmt_list right_brace
 
@@ -5545,9 +5646,9 @@ State 205
     identifier          shift, and go to state 25
     string              shift, and go to state 26
 
-    statement           go to state 235
-    stmt_list           go to state 236
-    stmt_block          go to state 237
+    statement           go to state 238
+    stmt_list           go to state 239
+    stmt_block          go to state 240
     if_stmt             go to state 29
     for_stmt            go to state 30
     while_stmt          go to state 31
@@ -5571,31 +5672,31 @@ State 205
     comma_stmt          go to state 49
 
 
-State 206
+State 209
 
    24 if_body: statement •
 
     $default  reduce using rule 24 (if_body)
 
 
-State 207
+State 210
 
    23 if_body: block •
 
     $default  reduce using rule 23 (if_body)
 
 
-State 208
+State 211
 
    25 if_stmt: if_statement left_paren expr right_paren if_body •
    26        | if_statement left_paren expr right_paren if_body • else_statement if_body
 
-    else_statement  shift, and go to state 238
+    else_statement  shift, and go to state 241
 
     $default  reduce using rule 25 (if_stmt)
 
 
-State 209
+State 212
 
    27 for_stmt: for_statement left_paren identifier assign expr • to expr right_paren block
    28         | for_statement left_paren identifier assign expr • to expr step expr right_paren block
@@ -5625,7 +5726,7 @@ State 209
   118     | expr • bitwise_shift_to_right expr
   124     | expr • question_sign expr colon expr
 
-    to                      shift, and go to state 239
+    to                      shift, and go to state 242
     logical_and             shift, and go to state 81
     logical_or              shift, and go to state 82
     dont_equal              shift, and go to state 83
@@ -5653,37 +5754,37 @@ State 209
     lesser_than_or_equals   shift, and go to state 106
 
 
-State 210
+State 213
 
    29 for_stmt: for_statement left_paren expr right_paren block •
 
     $default  reduce using rule 29 (for_stmt)
 
 
-State 211
+State 214
 
    30 while_stmt: while_statement left_paren expr right_paren block •
 
     $default  reduce using rule 30 (while_stmt)
 
 
-State 212
+State 215
 
    51 switch_stmt: switch_statement left_paren expr right_paren left_brace • case_list default_case right_brace
 
     $default  reduce using rule 53 (case_list)
 
-    case_list  go to state 240
+    case_list  go to state 243
 
 
-State 213
+State 216
 
    66 var_stmt: var pine_type left_quad_brace right_quad_brace identifier • assign expr
 
-    assign  shift, and go to state 241
+    assign  shift, and go to state 244
 
 
-State 214
+State 217
 
    65 var_stmt: var pine_type identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -5741,14 +5842,14 @@ State 214
     $default  reduce using rule 65 (var_stmt)
 
 
-State 215
+State 218
 
    68 var_stmt: var dot_expr left_quad_brace right_quad_brace identifier • assign expr
 
-    assign  shift, and go to state 242
+    assign  shift, and go to state 245
 
 
-State 216
+State 219
 
    67 var_stmt: var dot_expr identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -5806,14 +5907,14 @@ State 216
     $default  reduce using rule 67 (var_stmt)
 
 
-State 217
+State 220
 
    71 varip_stmt: varip_statement pine_type left_quad_brace right_quad_brace identifier • assign expr
 
-    assign  shift, and go to state 243
+    assign  shift, and go to state 246
 
 
-State 218
+State 221
 
    70 varip_stmt: varip_statement pine_type identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -5871,14 +5972,14 @@ State 218
     $default  reduce using rule 70 (varip_stmt)
 
 
-State 219
+State 222
 
    73 varip_stmt: varip_statement dot_expr left_quad_brace right_quad_brace identifier • assign expr
 
-    assign  shift, and go to state 244
+    assign  shift, and go to state 247
 
 
-State 220
+State 223
 
    72 varip_stmt: varip_statement dot_expr identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -5936,14 +6037,14 @@ State 220
     $default  reduce using rule 72 (varip_stmt)
 
 
-State 221
+State 224
 
    75 const_stmt: const_statement pine_type left_quad_brace right_quad_brace identifier • assign expr
 
-    assign  shift, and go to state 245
+    assign  shift, and go to state 248
 
 
-State 222
+State 225
 
    74 const_stmt: const_statement pine_type identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -6001,14 +6102,14 @@ State 222
     $default  reduce using rule 74 (const_stmt)
 
 
-State 223
+State 226
 
    77 const_stmt: const_statement dot_expr left_quad_brace right_quad_brace identifier • assign expr
 
-    assign  shift, and go to state 246
+    assign  shift, and go to state 249
 
 
-State 224
+State 227
 
    76 const_stmt: const_statement dot_expr identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -6066,14 +6167,14 @@ State 224
     $default  reduce using rule 76 (const_stmt)
 
 
-State 225
+State 228
 
    80 simple_stmt: simple pine_type left_quad_brace right_quad_brace identifier • assign expr
 
-    assign  shift, and go to state 247
+    assign  shift, and go to state 250
 
 
-State 226
+State 229
 
    79 simple_stmt: simple pine_type identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -6131,14 +6232,14 @@ State 226
     $default  reduce using rule 79 (simple_stmt)
 
 
-State 227
+State 230
 
    82 simple_stmt: simple dot_expr left_quad_brace right_quad_brace identifier • assign expr
 
-    assign  shift, and go to state 248
+    assign  shift, and go to state 251
 
 
-State 228
+State 231
 
    81 simple_stmt: simple dot_expr identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -6196,40 +6297,40 @@ State 228
     $default  reduce using rule 81 (simple_stmt)
 
 
-State 229
+State 232
 
    31 func_stmt: identifier func_paren opt_arg_list func_paren block •
 
     $default  reduce using rule 31 (func_stmt)
 
 
-State 230
+State 233
 
    34 arg_list: arg_list comma func_type •
 
     $default  reduce using rule 34 (arg_list)
 
 
-State 231
+State 234
 
    40 func_type: pine_type lesser_than func_type • greater_than identifier
 
-    greater_than  shift, and go to state 249
+    greater_than  shift, and go to state 252
 
 
-State 232
+State 235
 
    38 func_type: pine_type dot pine_type • identifier
    39          | pine_type dot pine_type •
    41          | pine_type dot pine_type • lesser_than func_type greater_than identifier
 
-    lesser_than  shift, and go to state 250
-    identifier   shift, and go to state 251
+    lesser_than  shift, and go to state 253
+    identifier   shift, and go to state 254
 
     $default  reduce using rule 39 (func_type)
 
 
-State 233
+State 236
 
    62 call_list: call_list comma expr •
    84 assignment_stmt: expr • assign expr
@@ -6287,7 +6388,7 @@ State 233
     $default  reduce using rule 62 (call_list)
 
 
-State 234
+State 237
 
    84 assignment_stmt: expr • assign expr
    96 expr: expr • plus_and_assign expr
@@ -6350,14 +6451,14 @@ State 234
     $default             reduce using rule 124 (expr)
 
 
-State 235
+State 238
 
    22 stmt_block: statement •
 
     $default  reduce using rule 22 (stmt_block)
 
 
-State 236
+State 239
 
    19 block: left_brace stmt_list • right_brace
    20 stmt_list: stmt_list • stmt_block
@@ -6383,15 +6484,15 @@ State 236
     string_as_type      shift, and go to state 19
     left_paren          shift, and go to state 20
     left_quad_brace     shift, and go to state 21
-    right_brace         shift, and go to state 252
+    right_brace         shift, and go to state 255
     plus                shift, and go to state 22
     minus               shift, and go to state 23
     number              shift, and go to state 24
     identifier          shift, and go to state 25
     string              shift, and go to state 26
 
-    statement           go to state 235
-    stmt_block          go to state 253
+    statement           go to state 238
+    stmt_block          go to state 256
     if_stmt             go to state 29
     for_stmt            go to state 30
     while_stmt          go to state 31
@@ -6415,14 +6516,14 @@ State 236
     comma_stmt          go to state 49
 
 
-State 237
+State 240
 
    21 stmt_list: stmt_block •
 
     $default  reduce using rule 21 (stmt_list)
 
 
-State 238
+State 241
 
    26 if_stmt: if_statement left_paren expr right_paren if_body else_statement • if_body
 
@@ -6447,16 +6548,16 @@ State 238
     string_as_type      shift, and go to state 19
     left_paren          shift, and go to state 20
     left_quad_brace     shift, and go to state 21
-    left_brace          shift, and go to state 205
+    left_brace          shift, and go to state 208
     plus                shift, and go to state 22
     minus               shift, and go to state 23
     number              shift, and go to state 24
     identifier          shift, and go to state 25
     string              shift, and go to state 26
 
-    statement           go to state 206
-    block               go to state 207
-    if_body             go to state 254
+    statement           go to state 209
+    block               go to state 210
+    if_body             go to state 257
     if_stmt             go to state 29
     for_stmt            go to state 30
     while_stmt          go to state 31
@@ -6480,7 +6581,7 @@ State 238
     comma_stmt          go to state 49
 
 
-State 239
+State 242
 
    27 for_stmt: for_statement left_paren identifier assign expr to • expr right_paren block
    28         | for_statement left_paren identifier assign expr to • expr step expr right_paren block
@@ -6505,15 +6606,15 @@ State 239
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 255
+    expr             go to state 258
 
 
-State 240
+State 243
 
    51 switch_stmt: switch_statement left_paren expr right_paren left_brace case_list • default_case right_brace
    52 case_list: case_list • case_stmt
 
-    default_statement  shift, and go to state 256
+    default_statement  shift, and go to state 259
     logical_not        shift, and go to state 12
     bitwise_not        shift, and go to state 13
     int_type           shift, and go to state 15
@@ -6532,89 +6633,8 @@ State 240
     $default  reduce using rule 56 (default_case)
 
     pine_type        go to state 33
-    case_stmt        go to state 257
-    default_case     go to state 258
-    dot_expr         go to state 38
-    assignment_stmt  go to state 44
-    expr_atom        go to state 46
-    postfix_expr     go to state 47
-    expr             go to state 259
-
-
-State 241
-
-   66 var_stmt: var pine_type left_quad_brace right_quad_brace identifier assign • expr
-
-    logical_not      shift, and go to state 12
-    bitwise_not      shift, and go to state 13
-    int_type         shift, and go to state 15
-    bool_type        shift, and go to state 16
-    float_type       shift, and go to state 17
-    color_type       shift, and go to state 18
-    string_as_type   shift, and go to state 19
-    left_paren       shift, and go to state 20
-    left_quad_brace  shift, and go to state 21
-    plus             shift, and go to state 22
-    minus            shift, and go to state 23
-    number           shift, and go to state 24
-    identifier       shift, and go to state 52
-    string           shift, and go to state 26
-
-    pine_type        go to state 33
-    dot_expr         go to state 38
-    assignment_stmt  go to state 44
-    expr_atom        go to state 46
-    postfix_expr     go to state 47
-    expr             go to state 260
-
-
-State 242
-
-   68 var_stmt: var dot_expr left_quad_brace right_quad_brace identifier assign • expr
-
-    logical_not      shift, and go to state 12
-    bitwise_not      shift, and go to state 13
-    int_type         shift, and go to state 15
-    bool_type        shift, and go to state 16
-    float_type       shift, and go to state 17
-    color_type       shift, and go to state 18
-    string_as_type   shift, and go to state 19
-    left_paren       shift, and go to state 20
-    left_quad_brace  shift, and go to state 21
-    plus             shift, and go to state 22
-    minus            shift, and go to state 23
-    number           shift, and go to state 24
-    identifier       shift, and go to state 52
-    string           shift, and go to state 26
-
-    pine_type        go to state 33
-    dot_expr         go to state 38
-    assignment_stmt  go to state 44
-    expr_atom        go to state 46
-    postfix_expr     go to state 47
-    expr             go to state 261
-
-
-State 243
-
-   71 varip_stmt: varip_statement pine_type left_quad_brace right_quad_brace identifier assign • expr
-
-    logical_not      shift, and go to state 12
-    bitwise_not      shift, and go to state 13
-    int_type         shift, and go to state 15
-    bool_type        shift, and go to state 16
-    float_type       shift, and go to state 17
-    color_type       shift, and go to state 18
-    string_as_type   shift, and go to state 19
-    left_paren       shift, and go to state 20
-    left_quad_brace  shift, and go to state 21
-    plus             shift, and go to state 22
-    minus            shift, and go to state 23
-    number           shift, and go to state 24
-    identifier       shift, and go to state 52
-    string           shift, and go to state 26
-
-    pine_type        go to state 33
+    case_stmt        go to state 260
+    default_case     go to state 261
     dot_expr         go to state 38
     assignment_stmt  go to state 44
     expr_atom        go to state 46
@@ -6624,7 +6644,7 @@ State 243
 
 State 244
 
-   73 varip_stmt: varip_statement dot_expr left_quad_brace right_quad_brace identifier assign • expr
+   66 var_stmt: var pine_type left_quad_brace right_quad_brace identifier assign • expr
 
     logical_not      shift, and go to state 12
     bitwise_not      shift, and go to state 13
@@ -6651,7 +6671,7 @@ State 244
 
 State 245
 
-   75 const_stmt: const_statement pine_type left_quad_brace right_quad_brace identifier assign • expr
+   68 var_stmt: var dot_expr left_quad_brace right_quad_brace identifier assign • expr
 
     logical_not      shift, and go to state 12
     bitwise_not      shift, and go to state 13
@@ -6678,7 +6698,7 @@ State 245
 
 State 246
 
-   77 const_stmt: const_statement dot_expr left_quad_brace right_quad_brace identifier assign • expr
+   71 varip_stmt: varip_statement pine_type left_quad_brace right_quad_brace identifier assign • expr
 
     logical_not      shift, and go to state 12
     bitwise_not      shift, and go to state 13
@@ -6705,7 +6725,7 @@ State 246
 
 State 247
 
-   80 simple_stmt: simple pine_type left_quad_brace right_quad_brace identifier assign • expr
+   73 varip_stmt: varip_statement dot_expr left_quad_brace right_quad_brace identifier assign • expr
 
     logical_not      shift, and go to state 12
     bitwise_not      shift, and go to state 13
@@ -6732,7 +6752,7 @@ State 247
 
 State 248
 
-   82 simple_stmt: simple dot_expr left_quad_brace right_quad_brace identifier assign • expr
+   75 const_stmt: const_statement pine_type left_quad_brace right_quad_brace identifier assign • expr
 
     logical_not      shift, and go to state 12
     bitwise_not      shift, and go to state 13
@@ -6759,12 +6779,93 @@ State 248
 
 State 249
 
-   40 func_type: pine_type lesser_than func_type greater_than • identifier
+   77 const_stmt: const_statement dot_expr left_quad_brace right_quad_brace identifier assign • expr
 
-    identifier  shift, and go to state 268
+    logical_not      shift, and go to state 12
+    bitwise_not      shift, and go to state 13
+    int_type         shift, and go to state 15
+    bool_type        shift, and go to state 16
+    float_type       shift, and go to state 17
+    color_type       shift, and go to state 18
+    string_as_type   shift, and go to state 19
+    left_paren       shift, and go to state 20
+    left_quad_brace  shift, and go to state 21
+    plus             shift, and go to state 22
+    minus            shift, and go to state 23
+    number           shift, and go to state 24
+    identifier       shift, and go to state 52
+    string           shift, and go to state 26
+
+    pine_type        go to state 33
+    dot_expr         go to state 38
+    assignment_stmt  go to state 44
+    expr_atom        go to state 46
+    postfix_expr     go to state 47
+    expr             go to state 268
 
 
 State 250
+
+   80 simple_stmt: simple pine_type left_quad_brace right_quad_brace identifier assign • expr
+
+    logical_not      shift, and go to state 12
+    bitwise_not      shift, and go to state 13
+    int_type         shift, and go to state 15
+    bool_type        shift, and go to state 16
+    float_type       shift, and go to state 17
+    color_type       shift, and go to state 18
+    string_as_type   shift, and go to state 19
+    left_paren       shift, and go to state 20
+    left_quad_brace  shift, and go to state 21
+    plus             shift, and go to state 22
+    minus            shift, and go to state 23
+    number           shift, and go to state 24
+    identifier       shift, and go to state 52
+    string           shift, and go to state 26
+
+    pine_type        go to state 33
+    dot_expr         go to state 38
+    assignment_stmt  go to state 44
+    expr_atom        go to state 46
+    postfix_expr     go to state 47
+    expr             go to state 269
+
+
+State 251
+
+   82 simple_stmt: simple dot_expr left_quad_brace right_quad_brace identifier assign • expr
+
+    logical_not      shift, and go to state 12
+    bitwise_not      shift, and go to state 13
+    int_type         shift, and go to state 15
+    bool_type        shift, and go to state 16
+    float_type       shift, and go to state 17
+    color_type       shift, and go to state 18
+    string_as_type   shift, and go to state 19
+    left_paren       shift, and go to state 20
+    left_quad_brace  shift, and go to state 21
+    plus             shift, and go to state 22
+    minus            shift, and go to state 23
+    number           shift, and go to state 24
+    identifier       shift, and go to state 52
+    string           shift, and go to state 26
+
+    pine_type        go to state 33
+    dot_expr         go to state 38
+    assignment_stmt  go to state 44
+    expr_atom        go to state 46
+    postfix_expr     go to state 47
+    expr             go to state 270
+
+
+State 252
+
+   40 func_type: pine_type lesser_than func_type greater_than • identifier
+
+    identifier  shift, and go to state 271
+
+
+State 253
 
    41 func_type: pine_type dot pine_type lesser_than • func_type greater_than identifier
 
@@ -6775,39 +6876,39 @@ State 250
     string_as_type  shift, and go to state 19
     identifier      shift, and go to state 52
 
-    func_type  go to state 269
-    pine_type  go to state 139
+    func_type  go to state 272
+    pine_type  go to state 140
 
 
-State 251
+State 254
 
    38 func_type: pine_type dot pine_type identifier •
 
     $default  reduce using rule 38 (func_type)
 
 
-State 252
+State 255
 
    19 block: left_brace stmt_list right_brace •
 
     $default  reduce using rule 19 (block)
 
 
-State 253
+State 256
 
    20 stmt_list: stmt_list stmt_block •
 
     $default  reduce using rule 20 (stmt_list)
 
 
-State 254
+State 257
 
    26 if_stmt: if_statement left_paren expr right_paren if_body else_statement if_body •
 
     $default  reduce using rule 26 (if_stmt)
 
 
-State 255
+State 258
 
    27 for_stmt: for_statement left_paren identifier assign expr to expr • right_paren block
    28         | for_statement left_paren identifier assign expr to expr • step expr right_paren block
@@ -6837,7 +6938,7 @@ State 255
   118     | expr • bitwise_shift_to_right expr
   124     | expr • question_sign expr colon expr
 
-    step                    shift, and go to state 270
+    step                    shift, and go to state 273
     logical_and             shift, and go to state 81
     logical_or              shift, and go to state 82
     dont_equal              shift, and go to state 83
@@ -6847,7 +6948,7 @@ State 255
     bitwise_xor             shift, and go to state 87
     bitwise_shift_to_left   shift, and go to state 88
     bitwise_shift_to_right  shift, and go to state 89
-    right_paren             shift, and go to state 271
+    right_paren             shift, and go to state 274
     assign                  shift, and go to state 90
     equals                  shift, and go to state 92
     greater_than            shift, and go to state 93
@@ -6866,28 +6967,28 @@ State 255
     lesser_than_or_equals   shift, and go to state 106
 
 
-State 256
+State 259
 
    55 default_case: default_statement • left_brace switch_block_stmts right_brace semicolon
 
-    left_brace  shift, and go to state 272
+    left_brace  shift, and go to state 275
 
 
-State 257
+State 260
 
    52 case_list: case_list case_stmt •
 
     $default  reduce using rule 52 (case_list)
 
 
-State 258
+State 261
 
    51 switch_stmt: switch_statement left_paren expr right_paren left_brace case_list default_case • right_brace
 
-    right_brace  shift, and go to state 273
+    right_brace  shift, and go to state 276
 
 
-State 259
+State 262
 
    54 case_stmt: expr • left_brace switch_block_stmts right_brace semicolon
    84 assignment_stmt: expr • assign expr
@@ -6925,7 +7026,7 @@ State 259
     bitwise_xor             shift, and go to state 87
     bitwise_shift_to_left   shift, and go to state 88
     bitwise_shift_to_right  shift, and go to state 89
-    left_brace              shift, and go to state 274
+    left_brace              shift, and go to state 277
     assign                  shift, and go to state 90
     equals                  shift, and go to state 92
     greater_than            shift, and go to state 93
@@ -6944,7 +7045,7 @@ State 259
     lesser_than_or_equals   shift, and go to state 106
 
 
-State 260
+State 263
 
    66 var_stmt: var pine_type left_quad_brace right_quad_brace identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -7002,7 +7103,7 @@ State 260
     $default  reduce using rule 66 (var_stmt)
 
 
-State 261
+State 264
 
    68 var_stmt: var dot_expr left_quad_brace right_quad_brace identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -7060,7 +7161,7 @@ State 261
     $default  reduce using rule 68 (var_stmt)
 
 
-State 262
+State 265
 
    71 varip_stmt: varip_statement pine_type left_quad_brace right_quad_brace identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -7118,7 +7219,7 @@ State 262
     $default  reduce using rule 71 (varip_stmt)
 
 
-State 263
+State 266
 
    73 varip_stmt: varip_statement dot_expr left_quad_brace right_quad_brace identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -7176,7 +7277,7 @@ State 263
     $default  reduce using rule 73 (varip_stmt)
 
 
-State 264
+State 267
 
    75 const_stmt: const_statement pine_type left_quad_brace right_quad_brace identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -7234,7 +7335,7 @@ State 264
     $default  reduce using rule 75 (const_stmt)
 
 
-State 265
+State 268
 
    77 const_stmt: const_statement dot_expr left_quad_brace right_quad_brace identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -7292,7 +7393,7 @@ State 265
     $default  reduce using rule 77 (const_stmt)
 
 
-State 266
+State 269
 
    80 simple_stmt: simple pine_type left_quad_brace right_quad_brace identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -7350,7 +7451,7 @@ State 266
     $default  reduce using rule 80 (simple_stmt)
 
 
-State 267
+State 270
 
    82 simple_stmt: simple dot_expr left_quad_brace right_quad_brace identifier assign expr •
    84 assignment_stmt: expr • assign expr
@@ -7408,21 +7509,21 @@ State 267
     $default  reduce using rule 82 (simple_stmt)
 
 
-State 268
+State 271
 
    40 func_type: pine_type lesser_than func_type greater_than identifier •
 
     $default  reduce using rule 40 (func_type)
 
 
-State 269
+State 272
 
    41 func_type: pine_type dot pine_type lesser_than func_type • greater_than identifier
 
-    greater_than  shift, and go to state 275
+    greater_than  shift, and go to state 278
 
 
-State 270
+State 273
 
    28 for_stmt: for_statement left_paren identifier assign expr to expr step • expr right_paren block
 
@@ -7446,19 +7547,19 @@ State 270
     assignment_stmt  go to state 44
     expr_atom        go to state 46
     postfix_expr     go to state 47
-    expr             go to state 276
+    expr             go to state 279
 
 
-State 271
+State 274
 
    27 for_stmt: for_statement left_paren identifier assign expr to expr right_paren • block
 
-    left_brace  shift, and go to state 205
+    left_brace  shift, and go to state 208
 
-    block  go to state 277
+    block  go to state 280
 
 
-State 272
+State 275
 
    55 default_case: default_statement left_brace • switch_block_stmts right_brace semicolon
 
@@ -7489,7 +7590,7 @@ State 272
     identifier          shift, and go to state 25
     string              shift, and go to state 26
 
-    statement           go to state 278
+    statement           go to state 281
     if_stmt             go to state 29
     for_stmt            go to state 30
     while_stmt          go to state 31
@@ -7499,8 +7600,8 @@ State 272
     break_stmt          go to state 35
     continue_stmt       go to state 36
     switch_stmt         go to state 37
-    switch_block_stmt   go to state 279
-    switch_block_stmts  go to state 280
+    switch_block_stmt   go to state 282
+    switch_block_stmts  go to state 283
     dot_expr            go to state 38
     var_stmt            go to state 39
     varip_stmt          go to state 40
@@ -7515,14 +7616,14 @@ State 272
     comma_stmt          go to state 49
 
 
-State 273
+State 276
 
    51 switch_stmt: switch_statement left_paren expr right_paren left_brace case_list default_case right_brace •
 
     $default  reduce using rule 51 (switch_stmt)
 
 
-State 274
+State 277
 
    54 case_stmt: expr left_brace • switch_block_stmts right_brace semicolon
 
@@ -7553,7 +7654,7 @@ State 274
     identifier          shift, and go to state 25
     string              shift, and go to state 26
 
-    statement           go to state 278
+    statement           go to state 281
     if_stmt             go to state 29
     for_stmt            go to state 30
     while_stmt          go to state 31
@@ -7563,8 +7664,8 @@ State 274
     break_stmt          go to state 35
     continue_stmt       go to state 36
     switch_stmt         go to state 37
-    switch_block_stmt   go to state 279
-    switch_block_stmts  go to state 281
+    switch_block_stmt   go to state 282
+    switch_block_stmts  go to state 284
     dot_expr            go to state 38
     var_stmt            go to state 39
     varip_stmt          go to state 40
@@ -7579,14 +7680,14 @@ State 274
     comma_stmt          go to state 49
 
 
-State 275
+State 278
 
    41 func_type: pine_type dot pine_type lesser_than func_type greater_than • identifier
 
-    identifier  shift, and go to state 282
+    identifier  shift, and go to state 285
 
 
-State 276
+State 279
 
    28 for_stmt: for_statement left_paren identifier assign expr to expr step expr • right_paren block
    84 assignment_stmt: expr • assign expr
@@ -7624,7 +7725,7 @@ State 276
     bitwise_xor             shift, and go to state 87
     bitwise_shift_to_left   shift, and go to state 88
     bitwise_shift_to_right  shift, and go to state 89
-    right_paren             shift, and go to state 283
+    right_paren             shift, and go to state 286
     assign                  shift, and go to state 90
     equals                  shift, and go to state 92
     greater_than            shift, and go to state 93
@@ -7643,28 +7744,28 @@ State 276
     lesser_than_or_equals   shift, and go to state 106
 
 
-State 277
+State 280
 
    27 for_stmt: for_statement left_paren identifier assign expr to expr right_paren block •
 
     $default  reduce using rule 27 (for_stmt)
 
 
-State 278
+State 281
 
    57 switch_block_stmt: statement •
 
     $default  reduce using rule 57 (switch_block_stmt)
 
 
-State 279
+State 282
 
    58 switch_block_stmts: switch_block_stmt •
 
     $default  reduce using rule 58 (switch_block_stmts)
 
 
-State 280
+State 283
 
    55 default_case: default_statement left_brace switch_block_stmts • right_brace semicolon
    59 switch_block_stmts: switch_block_stmts • switch_block_stmt
@@ -7690,14 +7791,14 @@ State 280
     string_as_type      shift, and go to state 19
     left_paren          shift, and go to state 20
     left_quad_brace     shift, and go to state 21
-    right_brace         shift, and go to state 284
+    right_brace         shift, and go to state 287
     plus                shift, and go to state 22
     minus               shift, and go to state 23
     number              shift, and go to state 24
     identifier          shift, and go to state 25
     string              shift, and go to state 26
 
-    statement           go to state 278
+    statement           go to state 281
     if_stmt             go to state 29
     for_stmt            go to state 30
     while_stmt          go to state 31
@@ -7707,7 +7808,7 @@ State 280
     break_stmt          go to state 35
     continue_stmt       go to state 36
     switch_stmt         go to state 37
-    switch_block_stmt   go to state 285
+    switch_block_stmt   go to state 288
     dot_expr            go to state 38
     var_stmt            go to state 39
     varip_stmt          go to state 40
@@ -7722,7 +7823,7 @@ State 280
     comma_stmt          go to state 49
 
 
-State 281
+State 284
 
    54 case_stmt: expr left_brace switch_block_stmts • right_brace semicolon
    59 switch_block_stmts: switch_block_stmts • switch_block_stmt
@@ -7748,14 +7849,14 @@ State 281
     string_as_type      shift, and go to state 19
     left_paren          shift, and go to state 20
     left_quad_brace     shift, and go to state 21
-    right_brace         shift, and go to state 286
+    right_brace         shift, and go to state 289
     plus                shift, and go to state 22
     minus               shift, and go to state 23
     number              shift, and go to state 24
     identifier          shift, and go to state 25
     string              shift, and go to state 26
 
-    statement           go to state 278
+    statement           go to state 281
     if_stmt             go to state 29
     for_stmt            go to state 30
     while_stmt          go to state 31
@@ -7765,7 +7866,7 @@ State 281
     break_stmt          go to state 35
     continue_stmt       go to state 36
     switch_stmt         go to state 37
-    switch_block_stmt   go to state 285
+    switch_block_stmt   go to state 288
     dot_expr            go to state 38
     var_stmt            go to state 39
     varip_stmt          go to state 40
@@ -7780,58 +7881,58 @@ State 281
     comma_stmt          go to state 49
 
 
-State 282
+State 285
 
    41 func_type: pine_type dot pine_type lesser_than func_type greater_than identifier •
 
     $default  reduce using rule 41 (func_type)
 
 
-State 283
+State 286
 
    28 for_stmt: for_statement left_paren identifier assign expr to expr step expr right_paren • block
 
-    left_brace  shift, and go to state 205
+    left_brace  shift, and go to state 208
 
-    block  go to state 287
+    block  go to state 290
 
 
-State 284
+State 287
 
    55 default_case: default_statement left_brace switch_block_stmts right_brace • semicolon
 
-    semicolon  shift, and go to state 288
+    semicolon  shift, and go to state 291
 
 
-State 285
+State 288
 
    59 switch_block_stmts: switch_block_stmts switch_block_stmt •
 
     $default  reduce using rule 59 (switch_block_stmts)
 
 
-State 286
+State 289
 
    54 case_stmt: expr left_brace switch_block_stmts right_brace • semicolon
 
-    semicolon  shift, and go to state 289
+    semicolon  shift, and go to state 292
 
 
-State 287
+State 290
 
    28 for_stmt: for_statement left_paren identifier assign expr to expr step expr right_paren block •
 
     $default  reduce using rule 28 (for_stmt)
 
 
-State 288
+State 291
 
    55 default_case: default_statement left_brace switch_block_stmts right_brace semicolon •
 
     $default  reduce using rule 55 (default_case)
 
 
-State 289
+State 292
 
    54 case_stmt: expr left_brace switch_block_stmts right_brace semicolon •
 

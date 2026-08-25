@@ -1,3 +1,7 @@
+e_0 = arr(5), f = a(5)
+ph_price_0 = arr(5), ph_price_1 = array.get(ph_arr,1)
+c
+//ph_price_0 = array.get(ph_arr, 0), ph_price_1 = 3
 int prev_ph_bi = na,int prev_pl_bi = na
 #1F7525F
 color i_phl_1_h_ln_color = input.color(defval=#F7525F, title='Bearish Color', group=g_phl_eq)
