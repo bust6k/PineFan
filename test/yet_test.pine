@@ -86,9 +86,11 @@ var float pl_pchg = na
 
 if array.size(ph_arr) >= 2
     ph_pchg := pchg(array.get(ph_arr, 0), array.get(ph_arr, 1))
+    ff
 
 if array.size(pl_arr) >= 2
     pl_pchg := pchg(array.get(pl_arr, 0), array.get(pl_arr, 1))
+    f
 
 // Draw Equals Box
 var levelBoxes_equal = array.new_box()

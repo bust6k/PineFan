@@ -415,58 +415,62 @@ std::string remove_call_parens(std::string line) {
   return line;
 }
 */
+typedef std::pair<std::size_t, std::size_t> spass;
+
 std::vector<spass> find_call_parens(const std::string& line) {
-  bool in_string = false;
-  bool escape = false;
-  int paren_depth = 0;
+    bool in_string = false;
+    bool escape = false;
 
-  std::size_t open_pos = std::string::npos;
+    std::vector<std::size_t> open_parens;
+    std::vector<spass> paren_arr;
 
-  std::vector<spass> paren_arr;
-  for (std::size_t i = 0; i < line.size(); ++i) {
-    const char ch = line[i];
+    for (std::size_t i = 0; i < line.size(); ++i) {
+        const char ch = line[i];
 
-    // Inside a string literal.
-    if (in_string) {
-      if (escape) {
-        escape = false;
-        continue;
-      }
+        // Inside string literal.
+        if (in_string) {
+            if (escape) {
+                escape = false;
+                continue;
+            }
 
-      if (ch == '\\') {
-        escape = true;
-        continue;
-      }
+            if (ch == '\\') {
+                escape = true;
+                continue;
+            }
 
-      if (ch == '"') in_string = false;
+            if (ch == '"')
+                in_string = false;
 
-      continue;
+            continue;
+        }
+
+        // Start of string literal.
+        if (ch == '"') {
+            in_string = true;
+            continue;
+        }
+
+        // Opening parenthesis.
+        if (ch == '(') {
+            open_parens.push_back(i);
+            continue;
+        }
+
+        // Closing parenthesis.
+        if (ch == ')') {
+            if (open_parens.empty())
+                continue;
+
+            // The most recently opened '(' belongs to this ')'.
+            const std::size_t open_pos = open_parens.back();
+            open_parens.pop_back();
+
+            paren_arr.emplace_back(open_pos, i);
+        }
     }
 
-    // Outside a string.
-    if (ch == '"') {
-      in_string = true;
-      continue;
-    }
-
-    if (ch == '(') {
-      if (paren_depth == 0) open_pos = i;
-
-      ++paren_depth;
-      continue;
-    }
-
-    if (ch == ')') {
-      if (paren_depth == 0) continue;
-
-      --paren_depth;
-
-      if (paren_depth == 0 && open_pos != std::string::npos)
-        paren_arr.push_back(std::make_pair(open_pos, i));
-    }
-  }
-
-  return paren_arr;
+    return paren_arr;
 }
 
 bool previous_ascii_letter(const std::string& s, std::size_t pos) {
