@@ -64,7 +64,7 @@ complex_func(array<int> arr, array.ta<string.ta> map_name, bool flag, string nam
    
    result = (arr0 * 2 + (THRESHOLD - 10))
 
-   nested_call(complex_func, arr0 + arr, !flag)
+   nested_call(complex_func, arr0 + arr, not flag)
    
    switch result
       0 => indicator("Zero result")

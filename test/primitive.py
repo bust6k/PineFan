@@ -44,8 +44,4 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 
 
 for bar in close:
-    0x5650c240f570(    0x5650c2412b40()
-)
-    ph =     0x5650c2413c90(    0x5650c2413cf0()
-)
-
+    
