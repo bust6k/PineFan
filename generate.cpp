@@ -1034,7 +1034,7 @@ int main(int argc, char* argv[]) {
 
     error_read_source_file(prped_file->get_name().c_str());
    
-    yy_scan_string(prped_file->get_content().c_str());
+    yy_scan_string(prped_file->get_content(0).c_str());
 
     read_source_file(prped_file->get_name());
 

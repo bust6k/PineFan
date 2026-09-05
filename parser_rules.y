@@ -1,7 +1,6 @@
 %define parse.error verbose
 %glr-parser
-%expect 253
-
+%expect 254
 
 %code requires {
 #include <stdio.h>
@@ -106,7 +105,7 @@ extern int func_cnt;
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr expr_atom  postfix_expr expr_list block stmt_list stmt_block if_body  if_stmt comma_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node>  expr_list program statement   expr expr_atom  postfix_expr block stmt_list stmt_block if_body  if_stmt comma_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -161,7 +160,6 @@ statement:
     | return_stmt_expr
     | break_stmt
     | continue_stmt
-    | comma_stmt
     | switch_stmt
     | varip_stmt
     | var_stmt
@@ -170,7 +168,7 @@ statement:
     | func_stmt
     | import_stmt
     | assignment_re_stmt
-    | expr %prec LOWEST_PREC
+    | expr_list %prec LOWEST_PREC
     ;
 
 block:
@@ -520,8 +518,9 @@ expr_list:
     | expr_list comma expr
     ;
 
+
 comma_stmt:
-  expr comma expr
+   assignment_stmt comma assignment_stmt
   { $$ = $1;}
   |comma_stmt comma comma_stmt
   { $$ = $3;}

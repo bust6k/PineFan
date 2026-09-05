@@ -1,4 +1,4 @@
-// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+//his Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
 // © Arun_K_Bhaskar
 
 //@version=5
@@ -196,8 +196,7 @@ phl_2_pl_offset = f_offsetToP(_low, phl_2_pl_htf, math.min(i_max_bars_back, math
 
 // Draw
 if i_phl_2_show and phl_2_bars_offset <= i_max_bars_back
-    f_addLines(i_phl_2_lbl_show, phl_2_ph_htf, phl_2_pl_htf, phl_2_ph_offset, phl_2_pl_offset, phl_2_ph_new, phl_2_pl_new, i_phl_2_h_ln_color, i_phl_2_l_ln_color, i_phl_2_showlast, 
-    i_phl_2_n_width, i_phl_2_ln_stye, phl_2_ln_arr, phl_2_lbl_arr)   
+    f_addLines(i_phl_2_lbl_show, phl_2_ph_htf, phl_2_pl_htf, phl_2_ph_offset, phl_2_pl_offset, phl_2_ph_new, phl_2_pl_new, i_phl_2_h_ln_color, i_phl_2_l_ln_color, i_phl_2_showlast, i_phl_2_n_width, i_phl_2_ln_stye, phl_2_ln_arr, phl_2_lbl_arr)   
 
 if i_phl_2_show
     f_extendArray(phl_2_ln_arr, phl_2_lbl_arr, i_phl_2_ln_extend)

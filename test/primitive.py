@@ -44,4 +44,7 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 
 
 for bar in close:
+    if     i_phl_2_show &&     phl_2_bars_offset <=     i_max_bars_back:
+        0x5590965564e0(    i_phl_2_lbl_show
+)
     

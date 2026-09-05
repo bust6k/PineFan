@@ -52,8 +52,10 @@ class Prp_file {
 
   while (std::getline(icontent, line)) {
   //if(is_debug) lines.push_back(std::to_string(++i));  
-  lines.push_back("\e[92m" + std::to_string(++i) + "\e[0m" + ' ' +  line + '\n');   
+  if(is_debug) lines.push_back("\e[92m" + std::to_string(++i) + "\e[0m" + ' ' +  line + '\n');   
+  else  lines.push_back(line + '\n');   
    
+ 
   }
   return vector_str_convert(&lines);
   }
