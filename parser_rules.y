@@ -35,6 +35,7 @@ extern int func_cnt;
 %token for_statement
 %token step
 %token to
+%token by
 %token return_statement
 %token while_statement
 %token break_statement
@@ -209,6 +210,8 @@ for_stmt:
     { $$ = new_for_node($3, $5, $7, $9, $11); }
     | for_statement  left_paren expr right_paren block
     { $$ = new_for_node(NULL, $3, NULL, NULL, $5); }
+    | for_statement left_paren identifier assign expr to expr by expr right_paren block
+    { $$ = new_for_node($3,$5,$7,NULL,$9); }
     ;
 
 while_stmt:

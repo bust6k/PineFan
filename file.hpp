@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include<sstream>
 
 extern int open_prp_files_count;
 
@@ -25,10 +26,39 @@ class Prp_file {
     this->name = normalize_path(name);
     this->content = content;
   }
+  
+  std::string vector_str_convert(std::vector<std::string>* vec) {
+    if (vec->empty()) {
+        return "";  
+    }
+    
+    std::string result;
+    for (size_t i = 0; i < vec->size(); ++i) {
+        result += vec->at(i);
+        if (i != vec->size() - 1) {
+            result += '\n';
+        }
+    }
+    return result;
+  }
 
   std::string get_name() { return this->name; }
-  std::string get_content() { return this->content; }
+ /* 
+  std::string get_content(int is_debug = 1) { 
+  std::string line;
+  std::vector<std::string> lines;
+  std::istringstream icontent(this->content);
+  int i = 0;
 
+  while (std::getline(icontent, line)) {
+  //if(is_debug) lines.push_back(std::to_string(++i));  
+  lines.push_back(std::to_string(++i) + line + '\n');   
+   
+  }
+  return vector_str_convert(&lines);
+  }
+*/
+  std::string get_content(int is_debug = 1) { return this->content; }
   bool check_suffix(std::string file_name);
   std::string* replace_suffix(std::string file_name);
   static void add_preprocessed_file(Prp_file* file);

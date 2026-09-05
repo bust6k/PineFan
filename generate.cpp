@@ -1026,15 +1026,15 @@ int main(int argc, char* argv[]) {
 
   Pinefan::Ppp::preprocess_files(argc, argv);
 
-  yydebug = 1;
+  //yydebug = 1;
 
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
 
     error_read_source_file(prped_file->get_name().c_str());
-
-    yy_scan_string(prped_file->get_content().c_str());
+   
+    yy_scan_string(prped_file->get_content(0).c_str());
 
     read_source_file(prped_file->get_name());
 

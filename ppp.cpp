@@ -818,6 +818,7 @@ void preprocess(const std::string& input, std::string& output) {
     }
     output += "}\n";
   }
+   output += '\n';
 }
 
 int preprocess_files(int argc, char* argv[]) {
@@ -847,15 +848,14 @@ int preprocess_files(int argc, char* argv[]) {
 
     file->Pinefan::File::Prp_file::add_preprocessed_file(file);
 
-    // #ifdef _IS_MAIN
     auto* f = file->Pinefan::File::Prp_file::get_preprocessed_file(i - 1);
 
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
-    std::cout << f->get_content();
-    // #endif
-    //  delete file;
+    std::cout << f->get_content(1);
+   
+    delete file;
   }
 
   return 0;

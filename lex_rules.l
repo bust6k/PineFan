@@ -28,6 +28,7 @@ for { col += 3; return for_statement; }
 return { col += 6; return return_statement; }
 continue { col += 8; return continue_statement; }
 to { col += 2; return to; }
+by { col += 2; return by; }
 switch { col += 6; return switch_statement; }
 break { col += 5; return break_statement; }
 default { col += 7; return default_statement; }
