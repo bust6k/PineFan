@@ -853,9 +853,9 @@ int preprocess_files(int argc, char* argv[]) {
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
-    std::cout << f->get_content(1);
+    std::cout << f->get_content();
    
-    delete file;
+    //delete file;
   }
 
   return 0;

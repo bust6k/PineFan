@@ -43,7 +43,7 @@ class Prp_file {
   }
 
   std::string get_name() { return this->name; }
- /* 
+ 
   std::string get_content(int is_debug = 1) { 
   std::string line;
   std::vector<std::string> lines;
@@ -52,13 +52,12 @@ class Prp_file {
 
   while (std::getline(icontent, line)) {
   //if(is_debug) lines.push_back(std::to_string(++i));  
-  lines.push_back(std::to_string(++i) + line + '\n');   
+  lines.push_back("\e[92m" + std::to_string(++i) + "\e[0m" + ' ' +  line + '\n');   
    
   }
   return vector_str_convert(&lines);
   }
-*/
-  std::string get_content(int is_debug = 1) { return this->content; }
+
   bool check_suffix(std::string file_name);
   std::string* replace_suffix(std::string file_name);
   static void add_preprocessed_file(Prp_file* file);
@@ -91,3 +90,4 @@ std::string get_current_directory();
 bool file_exists(const std::string& path);
 }  // namespace File
 }  // namespace Pinefan
+
