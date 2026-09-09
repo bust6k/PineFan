@@ -191,8 +191,8 @@ void transform_constants(ast_node* node) {
       transform_constants(node->paren_expr.expr);
       break;
 
-    case AST_QUAD_BRACE_OP:
-      transform_constants(node->quad_expr.expr);
+    case AST_ARRAY:
+      transform_constants(node->array_node.expr_list);
       break;
 
     case AST_INDEX:
@@ -656,9 +656,9 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       break;
     }
 
-    case AST_QUAD_BRACE_OP: {
+    case AST_ARRAY: {
       output << "[";
-      generate_code(node->quad_expr.expr, output, indent, NULL, 1);
+      generate_code(node->array_node.expr_list, output, indent, NULL, 1);
       output << "]";
       break;
     }
@@ -1026,7 +1026,7 @@ int main(int argc, char* argv[]) {
 
   Pinefan::Ppp::preprocess_files(argc, argv);
 
-  //yydebug = 1;
+  yydebug = 1;
 
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =

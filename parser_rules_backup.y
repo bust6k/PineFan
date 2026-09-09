@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include "ast.h"
 #include<string.h>
-//static struct ast_node* merge_call_list(YYSTYPE x0,YYSTYPE x1);
 }
 
 %code {
@@ -14,15 +13,6 @@
 extern int yylex(void);
 extern void yyerror(const char* s);
 extern Vector* program_root;
-
-static struct ast_node* merge_call_list(YYSTYPE x0,YYSTYPE x1){
-printf("MERGE CALLED!\n");
-if(!x0.node && x1.node) return x1.node;
-if(!x1.node && x0.node) return x0.node;
-
-return x0.node;
-}
-
 }
 
 %{
@@ -38,9 +28,6 @@ extern int func_cnt;
 
 %token LOWEST_PREC
 %right LOWEST_PREC
-
-%left COMMA_PREC
-%nonassoc COMMA_LIST_CALL
 
 %token if_statement
 %token else_statement
@@ -118,7 +105,7 @@ extern int func_cnt;
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr expr_atom  postfix_expr expr_list block stmt_list stmt_block if_body  if_stmt comma_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node>  expr_list program statement   expr expr_atom  postfix_expr block stmt_list stmt_block if_body  if_stmt comma_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -165,13 +152,6 @@ program:
     | program statement
       {vec_push(program_root, $2);}
     ;
-/*statement_list:
-    statement
-    { vec_push(program_root, $1); }
-    | statement comma statement
-    { vec_push(program_root, $3); }
-    ;
-*/
 
 statement:
      if_stmt
@@ -228,6 +208,8 @@ for_stmt:
     { $$ = new_for_node($3, $5, $7, $9, $11); }
     | for_statement  left_paren expr right_paren block
     { $$ = new_for_node(NULL, $3, NULL, NULL, $5); }
+    | for_statement left_paren identifier assign expr to expr by expr right_paren block
+    { $$ = new_for_node($3,$5,$7,NULL,$9); }
     ;
 
 while_stmt:
@@ -358,9 +340,9 @@ dot_expr:
     ;
     
 call_list:
-   expr %prec COMMA_LIST_CALL %merge <merge_call_list>
+   expr
    { $$ = $1; }
-   | call_list comma expr %prec COMMA_LIST_CALL %merge <merge_call_list>
+   | call_list comma expr
    { $3->call_arg.next = $1; $$ = $3; }
    | /*empty*/
    { $$ = NULL;}
@@ -456,7 +438,7 @@ expr_atom:
       ;
 
 postfix_expr:
-       expr_atom call_paren call_list call_paren  /* TODO: you should understand if it's root of problem(bison can determine expr as it*/
+       expr_atom call_paren call_list call_paren
       { $$ = new_call_node($1, $3);}
       | expr_atom left_quad_brace expr right_quad_brace
       {$$ = new_index_node($1, $3);}
@@ -536,10 +518,15 @@ expr_list:
     | expr_list comma expr
     ;
 
+
 comma_stmt:
-	  expr comma expr %merge <merge_call_list>
-   { $$ = $1; } 
-| comma_stmt comma expr %merge <merge_call_list>
-{ $$ = $3;} 
+   assignment_stmt comma assignment_stmt
+  { $$ = $1;}
+  |comma_stmt comma comma_stmt
+  { $$ = $3;}
+  ;
+
 %%
+
+
 

@@ -1,22 +1,16 @@
-if i_phl_2_show and phl_2_bars_offset <= i_max_bars_back
-    f_addLines(i_phl_2_lbl_show, phl_2_ph_htf, phl_2_pl_htf, phl_2_ph_offset, phl_2_pl_offset, phl_2_ph_new, phl_2_pl_new, i_phl_2_h_ln_color, i_phl_2_l_ln_color, i_phl_2_showlast, i_phl_2_n_width, i_phl_2_ln_stye, phl_2_ln_arr, phl_2_lbl_arr)   
-
-
 varip lifter =   [MAX_COUNT][5]
 p(f())
 ph := pchg(ar(), a(),a())
-ph_pchg := pchg(array.get(ph_arr, 0), array.get(ph_arr, 1))
+ph_pchg := pchg(array.get(ph_arr, 0),array.get(ph_arr, 1))
 e_0 = arr(5), f = a(5)
 ph_price_0 = arr(5), ph_price_1 = array.get(ph_arr,1)
 c
-//ph_price_0 = array.get(ph_arr, 0), ph_price_1 = 3
-int prev_ph_bi = na,int prev_pl_bi = na
+ph_price_0 = array.get(ph_arr, 0), ph_price_1 = 3
 #1F7525F
+
 color i_phl_1_h_ln_color = input.color(defval=#F7525F, title='Bearish Color', group=g_phl_eq)
+
 idf
-if f
-   fff
-   #1F4
 
 switch f
    10 => f

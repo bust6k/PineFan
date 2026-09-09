@@ -484,8 +484,9 @@ ast_node* new_stmt_node(ast_node* stmts) {
 }
 
 ast_node* new_array_node(ast_node* expr_list) {
-  // stub
   ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_ARRAY;
+  node->array_node.expr_list = expr_list;
   return node;
 }
 

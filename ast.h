@@ -119,6 +119,9 @@ typedef struct ast_node {
     struct {
       struct ast_node* stmt;
     } stmt_node;
+    struct {
+    struct ast_node* expr_list;
+    } array_node;
   };
 } ast_node;
 
@@ -159,7 +162,8 @@ typedef enum ast_node_kind {
   AST_INDICATOR,
   AST_STRATEGY,
   AST_STMT,
-  AST_STMTS
+  AST_STMTS,
+  AST_ARRAY
 } ast_node_kind;
 
 ast_node* new_assign_node(char* name, ast_node* value);
