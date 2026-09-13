@@ -1,0 +1,10 @@
+ph_price_0 = array.get(ph_arr, 0),foo = 4
+color i_phl_1_h_ln_color = input.color(defval=#F7525F, title='Bearish Color', group=g_phl_eq)
+int a = 5
+color i_phl_1_h_ln_color = input.color(defval=#F7525F, title='Bearish Color', group=g_phl_eq)
+
+idf
+switch f
+   10 => gpro
+
+

@@ -44,5 +44,5 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 
 
 for bar in close:
-    ph_pchg =     0x558dd9d3f370(0)
+    ph_pchg =     0x55c8e0f07370(0)
 

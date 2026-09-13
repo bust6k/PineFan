@@ -1,19 +1,21 @@
-varip lifter =   [MAX_COUNT][5]
-p(f())
-ph := pchg(ar(), a(),a())
-ph_pchg := pchg(array.get(ph_arr, 0),array.get(ph_arr, 1))
-e_0 = arr(5), f = a(5)
-ph_price_0 = arr(5), ph_price_1 = array.get(ph_arr,1)
-c
+//varip lifter =   [MAX_COUNT][5]
+//p(f())
+//ph := pchg(ar(), a(),a())
+//ph_pchg := pchg(array.get(ph_arr, 0),array.get(ph_arr, 1))
+//e_0 = arr(5), f = a(5)
+//ph_price_0 = arr(5), ph_price_1 = array.get(ph_arr,1)
+//c
 ph_price_0 = array.get(ph_arr, 0), ph_price_1 = 3
-#1F7525F
+//#1F7525F
 
 color i_phl_1_h_ln_color = input.color(defval=#F7525F, title='Bearish Color', group=g_phl_eq)
 
-idf
 
+idf
+s
 switch f
-   10 => f
+    10 => f
+
 
 const int foo = 5
 

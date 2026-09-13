@@ -572,7 +572,7 @@ static const yytype_int16 yyrline[] =
      454,   459,   461,   466,   468,   470,   472,   474,   476,   478,
      480,   482,   484,   486,   488,   490,   492,   494,   496,   498,
      500,   502,   504,   506,   508,   510,   512,   514,   516,   518,
-     520,   522,   524,   528,   530,   535,   536
+     520,   522,   524,   528,   530,   535,   537
 };
 #endif
 
@@ -2530,8 +2530,20 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 #line 2531 "parser_rules.tab.c"
     break;
 
+  case 125: /* expr_list: expr  */
+#line 536 "parser_rules.y"
+    { ((*yyvalp).node) = (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node); }
+#line 2537 "parser_rules.tab.c"
+    break;
 
-#line 2535 "parser_rules.tab.c"
+  case 126: /* expr_list: expr_list comma expr  */
+#line 538 "parser_rules.y"
+    { ((*yyvalp).node) = (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node);}
+#line 2543 "parser_rules.tab.c"
+    break;
+
+
+#line 2547 "parser_rules.tab.c"
 
       default: break;
     }
@@ -2559,7 +2571,7 @@ yyuserMerge (int yyn, YYSTYPE* yy0, YYSTYPE* yy1)
     {
   case 1:
     yy0->node = merge_call_list (*yy0, *yy1);
-#line 2563 "parser_rules.tab.c"
+#line 2575 "parser_rules.tab.c"
     break;
 
       default: break;
@@ -4217,6 +4229,5 @@ yypdumpstack (yyGLRStack* yystackp)
 
 
 
-#line 544 "parser_rules.y"
-
+#line 547 "parser_rules.y"
 

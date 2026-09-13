@@ -1,8 +1,3 @@
-Nonterminals useless in grammar
-
-    comma_stmt
-
-
 Terminals unused in grammar
 
     COMMA_PREC
@@ -17,12 +12,6 @@ Terminals unused in grammar
     bitwise_shift_right_with_equals
     bitwise_shift_left_with_equals
     PREC_CALL
-
-
-Rules useless in grammar
-
-  126 comma_stmt: expr comma expr
-  127           | comma_stmt comma expr
 
 
 State 46 conflicts: 2 shift/reduce
