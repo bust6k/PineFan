@@ -45,8 +45,10 @@ float { col += 5; return float_type; }
 color { col += 5; return color_type; }
 string { col += 6; return string_as_type; }
 and { col += 3; return logical_and; }
-"$" { col++; return func_paren; }
-"@" { col++; return call_paren; }
+"$" { col++; return func_lparen; }
+"|" { col++; return func_rparen; }
+"@" { col++; return call_lparen;}
+"^" { col++; return call_rparen; }
 "(" { col++; return left_paren; }
 ")" { col++; return right_paren; }
 "[" { col++; return left_quad_brace; }
@@ -87,8 +89,6 @@ and { col += 3; return logical_and; }
 ";" { col++; return semicolon; }
 "&" { col++; return bitwise_and; }
 "||" { col += 2; return logical_or; }
-"|" { col++; return bitwise_or; }
-"^" { col++; return bitwise_xor; }
 "~" { col++; return bitwise_not; }
 "?" { col++; return question_sign; }
 

@@ -41,3 +41,58 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
+# a constant variable!
+FF = 5
+ph_price_1 = 3
+0x55c7eff13740(ff)
+colori_phl_1_h_ln_color = 0x55c7eff13940(0)
+
+idfs# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+# translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+# elif is all the other conditions
+# and else - it's an optional last condition like default in switch-statement
+
+if f == 10:
+    f# a constant variable!
+FOO = 5
+def foo_fo(ff):
+    FF    fff    if FOO:
+        ffff        fff    FOO    # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+    # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+    # elif is all the other conditions
+    # and else - it's an optional last condition like default in switch-statement
+
+    if FOO == 10:
+        FOOdef foo():
+
+    return     f
+
+for bar in close:
+    str    i_phl_1_source =     0x55c7eff0e270("High/Low")
+
+    i_max_bars_back = 300
+    0x55c7eff0e890("ICT Equal Highs and Lows")
+    g_phl_eq = "███████████████ Equal High Low ███████████████"
+    int    i_phl_1_left =     0x55c7eff0f0b0(60)
+
+    float    i_phl_1_right =     0x55c7eff0f530(30)
+
+    tt_eq = "Lower values mean highs and lows are closer."
+    str    i_phl_1_source =     0x55c7eff19e80("High/Low")
+
+    color    i_phl_1_h_ln_color =     0x55c7eff1a4c0(0)
+
+    color    i_phl_1_l_ln_color =     0x55c7eff1a940(0)
+
+    int    i_phl_eq_transp =     0x55c7eff1adc0(25)
+
+    pl_bi_arr =     0x55c7eff1b560(2)
+
+    int    int    prev_pl_bi =     na
+    bool    bool    pl =     false
+    if !    0x55c7eff1bbc0(    phl_1_ph)
+ && 1 == 1:
+        ph =     true
+        prev_ph_bi =     bar_index -     i_phl_1_right
+    0x55c7eff1c200(    i_phl_1_right
+)

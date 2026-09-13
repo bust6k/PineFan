@@ -41,3 +41,19 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
+
+
+for bar in close:
+    foo = 4
+    color    i_phl_1_h_ln_color =     0x558ef5cd99d0(0)
+
+    int    a = 5
+    color    i_phl_1_h_ln_color =     0x558ef5cd9f90(0)
+
+    idf    # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+    # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
+    # elif is all the other conditions
+    # and else - it's an optional last condition like default in switch-statement
+
+    if     f == 10:
+        gpro

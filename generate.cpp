@@ -89,8 +89,8 @@ char* is_in_const_table(char* name) {
   }
   return name;
 }
-void transform_constants(ast_node* node) {
-  if (!node) return;
+void transform_constants(struct ast_node* node) {
+  if (!node || (long long)node < 0x1000) return;
 
   switch (node->type) {
     case AST_VAR:
@@ -407,7 +407,7 @@ void common_var(std::string_view name, ast_node* value, std::ofstream& output) {
       break;
 
     default:
-      // throw "unknown var";
+      output << "unknown language construction" << std::endl;
       break;
   }
 }
@@ -1026,7 +1026,7 @@ int main(int argc, char* argv[]) {
 
   Pinefan::Ppp::preprocess_files(argc, argv);
 
-  yydebug = 1;
+  //yydebug = 1;
 
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =

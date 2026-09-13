@@ -1,6 +1,6 @@
 %define parse.error verbose
 %glr-parser
-%expect 250
+%expect 253
 
 %code requires {
 #include <stdio.h>
@@ -81,8 +81,10 @@ extern int func_cnt;
 %token <ival> string_as_type
 %token left_paren
 %token right_paren
-%token func_paren
-%token call_paren
+%token func_lparen
+%token func_rparen
+%token call_lparen
+%token call_rparen
 %token left_quad_brace
 %token right_quad_brace
 %token left_brace
@@ -118,7 +120,7 @@ extern int func_cnt;
 %token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr expr_atom  postfix_expr expr_list block stmt_list stmt_block if_body  if_stmt /*comma_stmt*/ for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr expr_atom  postfix_expr expr_list block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -188,7 +190,7 @@ statement:
     | func_stmt
     | import_stmt
     | assignment_re_stmt
-    | expr %prec LOWEST_PREC
+    | expr_list %prec LOWEST_PREC
     ;
 
 block:
@@ -236,7 +238,7 @@ while_stmt:
     ;
 
 func_stmt:
-   identifier func_paren opt_arg_list func_paren block %prec PREC_FUNC
+   identifier func_lparen opt_arg_list func_rparen block %prec PREC_FUNC
    { $$ = new_func_node($1,$3,$5);func_cnt++; }
    ; 
 
@@ -456,7 +458,7 @@ expr_atom:
       ;
 
 postfix_expr:
-       expr_atom call_paren call_list call_paren  /* TODO: you should understand if it's root of problem(bison can determine expr as it*/
+       expr_atom call_lparen call_list call_rparen
       { $$ = new_call_node($1, $3);}
       | expr_atom left_quad_brace expr right_quad_brace
       {$$ = new_index_node($1, $3);}
@@ -527,19 +529,13 @@ expr:
     { $$ = new_ternary_node($1,$3,$5); }
     | left_quad_brace expr_list right_quad_brace
     { $$ = new_array_node($2); }
-    ;
+    ; 
 
 expr_list:
     expr
     { $$ = $1; }
     | expr_list comma expr
     { $$ = $3;}
-    ;
-/*
-comma_stmt:
-   expr comma expr %merge <merge_call_list>
-   { $$ = $1; } 
-   | comma_stmt comma expr %merge <merge_call_list>
-   { $$ = $3;} 
-*/
+    ; 
+
 %%
