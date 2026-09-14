@@ -1218,7 +1218,7 @@ YY_RULE_SETUP
 case 74:
 YY_RULE_SETUP
 #line 97 "lex_rules.l"
-{ yylval.sval = strdup(yytext);col += yyleng;return number;}
+{ yylval.sval = strdup(yytext);col += yyleng;return float_number;}
 	YY_BREAK
 case 75:
 YY_RULE_SETUP

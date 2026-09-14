@@ -137,11 +137,12 @@ extern int yydebug;
     number = 334,                  /* number  */
     identifier = 335,              /* identifier  */
     string = 336,                  /* string  */
-    PREC_SINGLE_NAME = 337,        /* PREC_SINGLE_NAME  */
-    PREC_TYPE_NAME = 338,          /* PREC_TYPE_NAME  */
-    PREC_FUNC = 339,               /* PREC_FUNC  */
-    PREC_CALL = 340,               /* PREC_CALL  */
-    PREC_TERNARY_IDENT = 341       /* PREC_TERNARY_IDENT  */
+    float_number = 337,            /* float_number  */
+    PREC_SINGLE_NAME = 338,        /* PREC_SINGLE_NAME  */
+    PREC_TYPE_NAME = 339,          /* PREC_TYPE_NAME  */
+    PREC_FUNC = 340,               /* PREC_FUNC  */
+    PREC_CALL = 341,               /* PREC_CALL  */
+    PREC_TERNARY_IDENT = 342       /* PREC_TERNARY_IDENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -156,7 +157,7 @@ union YYSTYPE
     char *sval;
     struct ast_node *node;
 
-#line 160 "parser_rules.tab.h"
+#line 161 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

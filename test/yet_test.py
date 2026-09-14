@@ -45,3 +45,34 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 
 for bar in close:
 # a constant variable!
+    FOO = 5
+    str    i_phl_1_source =     0x55e543f4e100("High/Low")
+
+    i_max_bars_back = 300
+    0x55e543f54dd0("ICT Equal Highs and Lows")
+    g_phl_eq = "███████████████ Equal High Low ███████████████"
+    int    i_phl_1_left =     0x55e543f4d090(60)
+
+    int    i_phl_1_right =     0x55e543f50cf0(30)
+
+    tt_eq = "Lower values mean highs and lows are closer."
+    float    i_phl_eq_percent =     0x55e543f51290(0.05)
+
+    str    i_phl_1_source =     0x55e543f59b10("High/Low")
+
+    color    i_phl_1_h_ln_color =     0x55e543f5a150(0)
+
+    color    i_phl_1_l_ln_color =     0x55e543f5a5d0(0)
+
+    int    i_phl_eq_transp =     0x55e543f5aa50(25)
+
+    pl_bi_arr =     0x55e543f5b1f0(2)
+
+    int    int    prev_pl_bi =     na
+    bool    bool    pl =     false
+    if !    0x55e543f5b850(    phl_1_ph)
+ && 1 == 1:
+        ph =     true
+        prev_ph_bi =     bar_index -     i_phl_1_right
+    0x55e543f5be90(    i_phl_1_right
+)

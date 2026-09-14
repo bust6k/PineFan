@@ -94,7 +94,7 @@ and { col += 3; return logical_and; }
 
 "#"[0-9a-fA-F]+\.[0-9a-fA-F]+ { yylval.sval = strdup(yytext);col += yyleng;return number;}
 "#"[0-9a-fA-F]+ {yylval.ival = strtol(yytext, NULL, 10);col += yyleng;return number;}
-[0-9]+\.[0-9]+ { yylval.sval = strdup(yytext);col += yyleng;return number;}
+[0-9]+\.[0-9]+ { yylval.sval = strdup(yytext);col += yyleng;return float_number;}
 [0-9]+ {yylval.ival = strtol(yytext, NULL, 10);col += yyleng;return number;}
 [a-zA-Z_][a-zA-Z0-9_]* {yylval.sval = strdup(yytext);col += yyleng; return identifier; }
 \"(\\.|[^"\\])*\"|'(\\.|[^'\\])*' {

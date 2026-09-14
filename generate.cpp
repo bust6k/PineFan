@@ -245,6 +245,7 @@ void transform_constants(struct ast_node* node) {
       break;
 
     case AST_NUMBER:
+    case AST_FL_NUMBER:
     case AST_STRING:
     case AST_INDICATOR:
     case AST_STRATEGY:
@@ -423,9 +424,8 @@ void up_const_names_recursive(ast_node* node, char* name) {
   for (auto node : program_cpp_root) {
     if (!node) continue;
     transform_constants(node);
-    if (strcmp(node->assign.name, normal_cpy) == 0 &&
-        node->type != AST_STRING && node->type != AST_FUNC &&
-        node->type != AST_CALL) {
+    if (node->type != AST_STRING && node->type != AST_FUNC &&
+        node->type != AST_CALL && node->type != AST_NUMBER && node->type != AST_FL_NUMBER && strcmp(node->assign.name, normal_cpy) == 0  ) {
       node->assign.name = fast_toupper(node->assign.name);
       char* f = fast_tolower(node->assign.name);
       const_table[f] = 42;
@@ -674,6 +674,11 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       output << node->number.value;
       break;
     }
+    case AST_FL_NUMBER: {
+    output << node->float_number_node.float_num;
+    break;
+    }
+
     case AST_STRING: {
       output << "\"" << node->string.value << "\"";
       break;

@@ -117,7 +117,7 @@ extern int func_cnt;
 %token colon
 
 %token <ival> number
-%token <sval> identifier string
+%token <sval> identifier string float_number
 %type <sval> pine_type 
 
 %type <node> program statement   expr expr_atom  postfix_expr expr_list block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
@@ -447,6 +447,8 @@ assignment_re_stmt:
 expr_atom:
       number
       { $$ = new_number_node($1); }
+      | float_number
+      { $$ = new_number_float_node($1); }
       | pine_type
       { $$ = new_varn_node($1, 0); }
       | string
