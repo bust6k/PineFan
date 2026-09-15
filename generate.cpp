@@ -89,8 +89,8 @@ char* is_in_const_table(char* name) {
   }
   return name;
 }
-void transform_constants(ast_node* node) {
-  if (!node) return;
+void transform_constants(struct ast_node* node) {
+  if (!node || (long long)node < 0x1000) return;
 
   switch (node->type) {
     case AST_VAR:
@@ -191,8 +191,8 @@ void transform_constants(ast_node* node) {
       transform_constants(node->paren_expr.expr);
       break;
 
-    case AST_QUAD_BRACE_OP:
-      transform_constants(node->quad_expr.expr);
+    case AST_ARRAY:
+      transform_constants(node->array_node.expr_list);
       break;
 
     case AST_INDEX:
@@ -245,6 +245,7 @@ void transform_constants(ast_node* node) {
       break;
 
     case AST_NUMBER:
+    case AST_FL_NUMBER:
     case AST_STRING:
     case AST_INDICATOR:
     case AST_STRATEGY:
@@ -407,7 +408,7 @@ void common_var(std::string_view name, ast_node* value, std::ofstream& output) {
       break;
 
     default:
-      // throw "unknown var";
+      output << "unknown language construction" << std::endl;
       break;
   }
 }
@@ -423,9 +424,8 @@ void up_const_names_recursive(ast_node* node, char* name) {
   for (auto node : program_cpp_root) {
     if (!node) continue;
     transform_constants(node);
-    if (strcmp(node->assign.name, normal_cpy) == 0 &&
-        node->type != AST_STRING && node->type != AST_FUNC &&
-        node->type != AST_CALL) {
+    if (node->type != AST_STRING && node->type != AST_FUNC &&
+        node->type != AST_CALL && node->type != AST_NUMBER && node->type != AST_FL_NUMBER && strcmp(node->assign.name, normal_cpy) == 0  ) {
       node->assign.name = fast_toupper(node->assign.name);
       char* f = fast_tolower(node->assign.name);
       const_table[f] = 42;
@@ -656,9 +656,9 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       break;
     }
 
-    case AST_QUAD_BRACE_OP: {
+    case AST_ARRAY: {
       output << "[";
-      generate_code(node->quad_expr.expr, output, indent, NULL, 1);
+      generate_code(node->array_node.expr_list, output, indent, NULL, 1);
       output << "]";
       break;
     }
@@ -674,13 +674,18 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       output << node->number.value;
       break;
     }
+    case AST_FL_NUMBER: {
+    output << node->float_number_node.float_num;
+    break;
+    }
+
     case AST_STRING: {
       output << "\"" << node->string.value << "\"";
       break;
     }
 
     case AST_CALL: {
-      output << indent_str << node->call_node.name << "(";
+      output << indent_str << node->call_node.name->var.name << "(";
       for (int i = 0; i < node->call_node.arg_count; i++) {
         generate_code(node->call_node.args, output, 0);
         // if (i + 1 < node->call_node.arg_count) output << ", ";
@@ -757,7 +762,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
 
     case AST_CONST: {
-      output << "# a constant variable!" << std::endl;
+      output << indent_str << "# a constant variable!" << std::endl;
       up_const_names_recursive(node, node->assign.name);
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
@@ -1026,15 +1031,15 @@ int main(int argc, char* argv[]) {
 
   Pinefan::Ppp::preprocess_files(argc, argv);
 
-  yydebug = 1;
+  //yydebug = 1;
 
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =
         Pinefan::File::preprocessed_files.at(i);
 
     error_read_source_file(prped_file->get_name().c_str());
-
-    yy_scan_string(prped_file->get_content().c_str());
+   
+    yy_scan_string(prped_file->get_content(0).c_str());
 
     read_source_file(prped_file->get_name());
 

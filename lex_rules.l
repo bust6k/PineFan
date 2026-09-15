@@ -28,6 +28,7 @@ for { col += 3; return for_statement; }
 return { col += 6; return return_statement; }
 continue { col += 8; return continue_statement; }
 to { col += 2; return to; }
+by { col += 2; return by; }
 switch { col += 6; return switch_statement; }
 break { col += 5; return break_statement; }
 default { col += 7; return default_statement; }
@@ -44,8 +45,10 @@ float { col += 5; return float_type; }
 color { col += 5; return color_type; }
 string { col += 6; return string_as_type; }
 and { col += 3; return logical_and; }
-"$" { col++; return func_paren; }
-"@" { col++; return call_paren; }
+"$" { col++; return func_lparen; }
+"|" { col++; return func_rparen; }
+"@" { col++; return call_lparen;}
+"^" { col++; return call_rparen; }
 "(" { col++; return left_paren; }
 ")" { col++; return right_paren; }
 "[" { col++; return left_quad_brace; }
@@ -86,14 +89,12 @@ and { col += 3; return logical_and; }
 ";" { col++; return semicolon; }
 "&" { col++; return bitwise_and; }
 "||" { col += 2; return logical_or; }
-"|" { col++; return bitwise_or; }
-"^" { col++; return bitwise_xor; }
 "~" { col++; return bitwise_not; }
 "?" { col++; return question_sign; }
 
 "#"[0-9a-fA-F]+\.[0-9a-fA-F]+ { yylval.sval = strdup(yytext);col += yyleng;return number;}
 "#"[0-9a-fA-F]+ {yylval.ival = strtol(yytext, NULL, 10);col += yyleng;return number;}
-[0-9]+\.[0-9]+ { yylval.sval = strdup(yytext);col += yyleng;return number;}
+[0-9]+\.[0-9]+ { yylval.sval = strdup(yytext);col += yyleng;return float_number;}
 [0-9]+ {yylval.ival = strtol(yytext, NULL, 10);col += yyleng;return number;}
 [a-zA-Z_][a-zA-Z0-9_]* {yylval.sval = strdup(yytext);col += yyleng; return identifier; }
 \"(\\.|[^"\\])*\"|'(\\.|[^'\\])*' {

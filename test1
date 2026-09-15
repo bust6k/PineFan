@@ -1,0 +1,1401 @@
+Starting parse
+Entering state 0
+Reading a token
+Next token is token varip_statement ()
+Shifting token varip_statement ()
+Entering state 9
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 59
+Reading a token
+Next token is token assign ()
+Shifting token assign ()
+Entering state 119
+Reading a token
+Next token is token left_quad_brace ()
+Shifting token left_quad_brace ()
+Entering state 21
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Reading a token
+Next token is token right_quad_brace ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token right_quad_brace ()
+Reducing stack 0 by rule 93 (line 468):
+   $1 = nterm expr_atom ()
+-> $$ = nterm expr ()
+Entering state 71
+Next token is token right_quad_brace ()
+Reducing stack 0 by rule 125 (line 537):
+   $1 = nterm expr ()
+-> $$ = nterm expr_list ()
+Entering state 72
+Next token is token right_quad_brace ()
+Shifting token right_quad_brace ()
+Entering state 134
+Reducing stack 0 by rule 124 (line 532):
+   $1 = token left_quad_brace ()
+   $2 = nterm expr_list ()
+   $3 = token right_quad_brace ()
+-> $$ = nterm expr ()
+Entering state 182
+Reading a token
+Next token is token left_quad_brace ()
+Reducing stack 0 by rule 69 (line 393):
+   $1 = token varip_statement ()
+   $2 = token identifier ()
+   $3 = token assign ()
+   $4 = nterm expr ()
+-> $$ = nterm varip_stmt ()
+Entering state 40
+Reducing stack 0 by rule 10 (line 185):
+   $1 = nterm varip_stmt ()
+-> $$ = nterm statement ()
+Entering state 28
+Reducing stack 0 by rule 1 (line 164):
+   $1 = nterm statement ()
+-> $$ = nterm program ()
+Entering state 27
+Next token is token left_quad_brace ()
+Shifting token left_quad_brace ()
+Entering state 21
+Reading a token
+Next token is token number ()
+Shifting token number ()
+Entering state 24
+Reducing stack 0 by rule 86 (line 448):
+   $1 = token number ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Reading a token
+Next token is token right_quad_brace ()
+Reducing stack 0 by rule 93 (line 468):
+   $1 = nterm expr_atom ()
+-> $$ = nterm expr ()
+Entering state 71
+Next token is token right_quad_brace ()
+Reducing stack 0 by rule 125 (line 537):
+   $1 = nterm expr ()
+-> $$ = nterm expr_list ()
+Entering state 72
+Next token is token right_quad_brace ()
+Shifting token right_quad_brace ()
+Entering state 134
+Reducing stack 0 by rule 124 (line 532):
+   $1 = token left_quad_brace ()
+   $2 = nterm expr_list ()
+   $3 = token right_quad_brace ()
+-> $$ = nterm expr ()
+Entering state 48
+Reading a token
+Next token is token identifier ()
+Reducing stack 0 by rule 17 (line 192):
+   $1 = nterm expr ()
+-> $$ = nterm statement ()
+Entering state 77
+Reducing stack 0 by rule 2 (line 166):
+   $1 = nterm program ()
+   $2 = nterm statement ()
+-> $$ = nterm program ()
+Entering state 27
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 25
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Next token is token call_paren ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token call_paren ()
+Stack 0 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 48.
+Stack 1 Entering state 48
+Next token is token call_paren ()
+Reduced stack 1 by rule 17 (line 192); action deferred.  Now in state 77.
+Stack 1 Entering state 77
+Reduced stack 1 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 1 Entering state 27
+Next token is token call_paren ()
+Stack 1 dies.
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+Returning to deterministic operation.
+Entering state 79
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token call_paren ()
+Stack 0 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 142.
+Stack 1 Entering state 142
+Next token is token call_paren ()
+Reduced stack 1 by rule 61 (line 363); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 141
+Next token is token call_paren ()
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 202
+Stack 0 Entering state 79
+Reading a token
+Next token is token call_paren ()
+Reduced stack 0 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 202
+Reduced stack 1 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 1 Entering state 47
+Reduced stack 1 by rule 94 (line 470); action deferred.  Now in state 48.
+Stack 1 Entering state 48
+Next token is token call_paren ()
+Reduced stack 1 by rule 17 (line 192); action deferred.  Now in state 77.
+Stack 1 Entering state 77
+Reduced stack 1 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 1 Entering state 27
+Next token is token call_paren ()
+Stack 1 dies.
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 202
+Reducing stack -1 by rule 63 (line 368):
+-> $$ = nterm call_list ()
+Returning to deterministic operation.
+Entering state 202
+Reducing stack 0 by rule 91 (line 461):
+   $1 = nterm expr_atom ()
+   $2 = token call_paren ()
+   $3 = nterm call_list ()
+   $4 = token call_paren ()
+-> $$ = nterm postfix_expr ()
+Entering state 47
+Reducing stack 0 by rule 94 (line 470):
+   $1 = nterm postfix_expr ()
+-> $$ = nterm expr ()
+Entering state 142
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 61 (line 363):
+   $1 = nterm expr ()
+-> $$ = nterm call_list ()
+Entering state 141
+Next token is token call_paren ()
+Shifting token call_paren ()
+Entering state 202
+Reducing stack 0 by rule 91 (line 461):
+   $1 = nterm expr_atom ()
+   $2 = token call_paren ()
+   $3 = nterm call_list ()
+   $4 = token call_paren ()
+-> $$ = nterm postfix_expr ()
+Entering state 47
+Reducing stack 0 by rule 94 (line 470):
+   $1 = nterm postfix_expr ()
+-> $$ = nterm expr ()
+Entering state 48
+Reading a token
+Next token is token identifier ()
+Reducing stack 0 by rule 17 (line 192):
+   $1 = nterm expr ()
+-> $$ = nterm statement ()
+Entering state 77
+Reducing stack 0 by rule 2 (line 166):
+   $1 = nterm program ()
+   $2 = nterm statement ()
+-> $$ = nterm program ()
+Entering state 27
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 25
+Reading a token
+Next token is token re_assign ()
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Next token is token re_assign ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token re_assign ()
+Reducing stack 0 by rule 93 (line 468):
+   $1 = nterm expr_atom ()
+-> $$ = nterm expr ()
+Entering state 48
+Next token is token re_assign ()
+Shifting token re_assign ()
+Entering state 91
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token call_paren ()
+Stack 0 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 154.
+Stack 1 Entering state 154
+Next token is token call_paren ()
+Reduced stack 1 by rule 85 (line 442); action deferred.  Now in state 45.
+Stack 1 Entering state 45
+Reduced stack 1 by rule 16 (line 191); action deferred.  Now in state 77.
+Stack 1 Entering state 77
+Reduced stack 1 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 1 Entering state 27
+Next token is token call_paren ()
+Stack 1 dies.
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+Returning to deterministic operation.
+Entering state 79
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token call_paren ()
+Stack 0 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 142.
+Stack 1 Entering state 142
+Next token is token call_paren ()
+Reduced stack 1 by rule 61 (line 363); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 141
+Next token is token call_paren ()
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 202
+Stack 0 Entering state 79
+Reading a token
+Next token is token call_paren ()
+Reduced stack 0 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 202
+Reduced stack 1 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 1 Entering state 47
+Reduced stack 1 by rule 94 (line 470); action deferred.  Now in state 154.
+Stack 1 Entering state 154
+Next token is token call_paren ()
+Reduced stack 1 by rule 85 (line 442); action deferred.  Now in state 45.
+Stack 1 Entering state 45
+Reduced stack 1 by rule 16 (line 191); action deferred.  Now in state 77.
+Stack 1 Entering state 77
+Reduced stack 1 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 1 Entering state 27
+Next token is token call_paren ()
+Stack 1 dies.
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 202
+Reducing stack -1 by rule 63 (line 368):
+-> $$ = nterm call_list ()
+Returning to deterministic operation.
+Entering state 202
+Reducing stack 0 by rule 91 (line 461):
+   $1 = nterm expr_atom ()
+   $2 = token call_paren ()
+   $3 = nterm call_list ()
+   $4 = token call_paren ()
+-> $$ = nterm postfix_expr ()
+Entering state 47
+Reducing stack 0 by rule 94 (line 470):
+   $1 = nterm postfix_expr ()
+-> $$ = nterm expr ()
+Entering state 142
+Reading a token
+Next token is token comma ()
+Reducing stack 0 by rule 61 (line 363):
+   $1 = nterm expr ()
+-> $$ = nterm call_list ()
+Entering state 141
+Next token is token comma ()
+Shifting token comma ()
+Entering state 203
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token call_paren ()
+Stack 0 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 1 Entering state 234
+Next token is token call_paren ()
+Reduced stack 1 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 141
+Next token is token call_paren ()
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 202
+Stack 0 Entering state 79
+Reading a token
+Next token is token call_paren ()
+Reduced stack 0 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 202
+Reduced stack 1 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 1 Entering state 47
+Reduced stack 1 by rule 94 (line 470); action deferred.  Now in state 154.
+Stack 1 Entering state 154
+Next token is token call_paren ()
+Reduced stack 1 by rule 85 (line 442); action deferred.  Now in state 45.
+Stack 1 Entering state 45
+Reduced stack 1 by rule 16 (line 191); action deferred.  Now in state 77.
+Stack 1 Entering state 77
+Reduced stack 1 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 1 Entering state 27
+Next token is token call_paren ()
+Stack 1 dies.
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 202
+Reducing stack -1 by rule 63 (line 368):
+-> $$ = nterm call_list ()
+Returning to deterministic operation.
+Entering state 202
+Reducing stack 0 by rule 91 (line 461):
+   $1 = nterm expr_atom ()
+   $2 = token call_paren ()
+   $3 = nterm call_list ()
+   $4 = token call_paren ()
+-> $$ = nterm postfix_expr ()
+Entering state 47
+Reducing stack 0 by rule 94 (line 470):
+   $1 = nterm postfix_expr ()
+-> $$ = nterm expr ()
+Entering state 234
+Reading a token
+Next token is token comma ()
+Reducing stack 0 by rule 62 (line 365):
+   $1 = nterm call_list ()
+   $2 = token comma ()
+   $3 = nterm expr ()
+-> $$ = nterm call_list ()
+Entering state 141
+Next token is token comma ()
+Shifting token comma ()
+Entering state 203
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token call_paren ()
+Stack 0 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 1 Entering state 234
+Next token is token call_paren ()
+Reduced stack 1 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 141
+Next token is token call_paren ()
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 202
+Stack 0 Entering state 79
+Reading a token
+Next token is token call_paren ()
+Reduced stack 0 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 202
+Reduced stack 1 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 1 Entering state 47
+Reduced stack 1 by rule 94 (line 470); action deferred.  Now in state 154.
+Stack 1 Entering state 154
+Next token is token call_paren ()
+Reduced stack 1 by rule 85 (line 442); action deferred.  Now in state 45.
+Stack 1 Entering state 45
+Reduced stack 1 by rule 16 (line 191); action deferred.  Now in state 77.
+Stack 1 Entering state 77
+Reduced stack 1 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 1 Entering state 27
+Next token is token call_paren ()
+Stack 1 dies.
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 202
+Reducing stack -1 by rule 63 (line 368):
+-> $$ = nterm call_list ()
+Returning to deterministic operation.
+Entering state 202
+Reducing stack 0 by rule 91 (line 461):
+   $1 = nterm expr_atom ()
+   $2 = token call_paren ()
+   $3 = nterm call_list ()
+   $4 = token call_paren ()
+-> $$ = nterm postfix_expr ()
+Entering state 47
+Reducing stack 0 by rule 94 (line 470):
+   $1 = nterm postfix_expr ()
+-> $$ = nterm expr ()
+Entering state 234
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 62 (line 365):
+   $1 = nterm call_list ()
+   $2 = token comma ()
+   $3 = nterm expr ()
+-> $$ = nterm call_list ()
+Entering state 141
+Next token is token call_paren ()
+Shifting token call_paren ()
+Entering state 202
+Reducing stack 0 by rule 91 (line 461):
+   $1 = nterm expr_atom ()
+   $2 = token call_paren ()
+   $3 = nterm call_list ()
+   $4 = token call_paren ()
+-> $$ = nterm postfix_expr ()
+Entering state 47
+Reducing stack 0 by rule 94 (line 470):
+   $1 = nterm postfix_expr ()
+-> $$ = nterm expr ()
+Entering state 154
+Reading a token
+Next token is token identifier ()
+Reducing stack 0 by rule 85 (line 442):
+   $1 = nterm expr ()
+   $2 = token re_assign ()
+   $3 = nterm expr ()
+-> $$ = nterm assignment_re_stmt ()
+Entering state 45
+Reducing stack 0 by rule 16 (line 191):
+   $1 = nterm assignment_re_stmt ()
+-> $$ = nterm statement ()
+Entering state 77
+Reducing stack 0 by rule 2 (line 166):
+   $1 = nterm program ()
+   $2 = nterm statement ()
+-> $$ = nterm program ()
+Entering state 27
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 25
+Reading a token
+Next token is token re_assign ()
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Next token is token re_assign ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token re_assign ()
+Reducing stack 0 by rule 93 (line 468):
+   $1 = nterm expr_atom ()
+-> $$ = nterm expr ()
+Entering state 48
+Next token is token re_assign ()
+Shifting token re_assign ()
+Entering state 91
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Reading a token
+Next token is token call_paren ()
+Reducing stack 0 by rule 87 (line 450):
+   $1 = nterm pine_type ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Next token is token call_paren ()
+Stack 0 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 154.
+Stack 1 Entering state 154
+Next token is token call_paren ()
+Reduced stack 1 by rule 85 (line 442); action deferred.  Now in state 45.
+Stack 1 Entering state 45
+Reduced stack 1 by rule 16 (line 191); action deferred.  Now in state 77.
+Stack 1 Entering state 77
+Reduced stack 1 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 1 Entering state 27
+Next token is token call_paren ()
+Stack 1 dies.
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+Returning to deterministic operation.
+Entering state 79
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 33
+Reading a token
+Next token is token dot ()
+Shifting token dot ()
+Entering state 78
+Reading a token
+Next token is token identifier ()
+Shifting token identifier ()
+Entering state 52
+Reducing stack 0 by rule 47 (line 292):
+   $1 = token identifier ()
+-> $$ = nterm pine_type ()
+Entering state 140
+Reducing stack 0 by rule 60 (line 358):
+   $1 = nterm pine_type ()
+   $2 = token dot ()
+   $3 = nterm pine_type ()
+-> $$ = nterm dot_expr ()
+Entering state 38
+Reducing stack 0 by rule 89 (line 454):
+   $1 = nterm dot_expr ()
+-> $$ = nterm expr_atom ()
+Entering state 46
+Reading a token
+Next token is token call_paren ()
+Stack 0 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 142.
+Stack 1 Entering state 142
+Next token is token call_paren ()
+Reduced stack 1 by rule 61 (line 363); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 141
+Next token is token call_paren ()
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 202
+Stack 0 Entering state 79
+Reading a token
+Next token is token identifier ()
+Stack 1 Entering state 202
+Reduced stack 1 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 1 Entering state 47
+Reduced stack 1 by rule 94 (line 470); action deferred.  Now in state 154.
+Stack 1 Entering state 154
+Next token is token identifier ()
+Reduced stack 1 by rule 85 (line 442); action deferred.  Now in state 45.
+Stack 1 Entering state 45
+Reduced stack 1 by rule 16 (line 191); action deferred.  Now in state 77.
+Stack 1 Entering state 77
+Reduced stack 1 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 1 Entering state 27
+Next token is token identifier ()
+On stack 0, shifting token identifier ()
+Stack 0 now in state 52
+On stack 1, shifting token identifier ()
+Stack 1 now in state 25
+Stack 0 Entering state 52
+Reduced stack 0 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 0 Entering state 33
+Reading a token
+Next token is token comma ()
+Reduced stack 0 by rule 87 (line 450); action deferred.  Now in state 46.
+Stack 0 Entering state 46
+Next token is token comma ()
+Reduced stack 0 by rule 93 (line 468); action deferred.  Now in state 142.
+Stack 0 Entering state 142
+Next token is token comma ()
+Reduced stack 0 by rule 61 (line 363); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token comma ()
+Stack 1 Entering state 25
+Next token is token comma ()
+Reduced stack 1 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 1 Entering state 33
+Next token is token comma ()
+Reduced stack 1 by rule 87 (line 450); action deferred.  Now in state 46.
+Stack 1 Entering state 46
+Next token is token comma ()
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 48.
+Stack 1 Entering state 48
+Next token is token comma ()
+On stack 0, shifting token comma ()
+Stack 0 now in state 203
+On stack 1, shifting token comma ()
+Stack 1 now in state 107
+Stack 0 Entering state 203
+Reading a token
+Next token is token number ()
+Stack 1 Entering state 107
+Next token is token number ()
+On stack 0, shifting token number ()
+Stack 0 now in state 24
+On stack 1, shifting token number ()
+Stack 1 now in state 24
+Stack 0 Entering state 24
+Reduced stack 0 by rule 86 (line 448); action deferred.  Now in state 46.
+Stack 0 Entering state 46
+Reading a token
+Next token is token call_paren ()
+Splitting off stack 2 from 0.
+Reduced stack 2 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 2 Entering state 234
+Next token is token call_paren ()
+Reduced stack 2 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 2 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 24
+Reduced stack 1 by rule 86 (line 448); action deferred.  Now in state 46.
+Stack 1 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 3 from 1.
+Reduced stack 3 by rule 93 (line 468); action deferred.  Now in state 170.
+Stack 3 Entering state 170
+Next token is token call_paren ()
+Reduced stack 3 by rule 127 (line 542); action deferred.  Now in state 49.
+Stack 3 Entering state 49
+Next token is token call_paren ()
+Reduced stack 3 by rule 18 (line 193); action deferred.  Now in state 77.
+Stack 3 Entering state 77
+Reduced stack 3 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 3 Entering state 27
+Next token is token call_paren ()
+Stack 3 dies.
+Stack 2 Entering state 141
+Next token is token call_paren ()
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 79
+On stack 2, shifting token call_paren ()
+Stack 2 now in state 202
+Stack 0 Entering state 79
+Reading a token
+Next token is token comma ()
+Reduced stack 0 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token comma ()
+Stack 1 Entering state 79
+Next token is token comma ()
+Reduced stack 1 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token comma ()
+Stack 2 Entering state 202
+Reduced stack 2 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 2 Entering state 47
+Reduced stack 2 by rule 94 (line 470); action deferred.  Now in state 142.
+Stack 2 Entering state 142
+Next token is token comma ()
+Reduced stack 2 by rule 61 (line 363); action deferred.  Now in state 141.
+Stack 2 Entering state 141
+Next token is token comma ()
+On stack 0, shifting token comma ()
+Stack 0 now in state 203
+On stack 1, shifting token comma ()
+Stack 1 now in state 203
+On stack 2, shifting token comma ()
+Stack 2 now in state 203
+Stack 0 Entering state 203
+Reading a token
+Next token is token identifier ()
+Stack 1 Entering state 203
+Next token is token identifier ()
+Stack 2 Entering state 203
+Next token is token identifier ()
+On stack 0, shifting token identifier ()
+Stack 0 now in state 52
+On stack 1, shifting token identifier ()
+Stack 1 now in state 52
+On stack 2, shifting token identifier ()
+Stack 2 now in state 52
+Stack 0 Entering state 52
+Reduced stack 0 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 0 Entering state 33
+Reading a token
+Next token is token dot ()
+Stack 1 Entering state 52
+Reduced stack 1 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 1 Entering state 33
+Next token is token dot ()
+Stack 2 Entering state 52
+Reduced stack 2 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 2 Entering state 33
+Next token is token dot ()
+On stack 0, shifting token dot ()
+Stack 0 now in state 78
+On stack 1, shifting token dot ()
+Stack 1 now in state 78
+On stack 2, shifting token dot ()
+Stack 2 now in state 78
+Stack 0 Entering state 78
+Reading a token
+Next token is token identifier ()
+Stack 1 Entering state 78
+Next token is token identifier ()
+Stack 2 Entering state 78
+Next token is token identifier ()
+On stack 0, shifting token identifier ()
+Stack 0 now in state 52
+On stack 1, shifting token identifier ()
+Stack 1 now in state 52
+On stack 2, shifting token identifier ()
+Stack 2 now in state 52
+Stack 0 Entering state 52
+Reduced stack 0 by rule 47 (line 292); action deferred.  Now in state 140.
+Stack 0 Entering state 140
+Reduced stack 0 by rule 60 (line 358); action deferred.  Now in state 38.
+Stack 0 Entering state 38
+Reduced stack 0 by rule 89 (line 454); action deferred.  Now in state 46.
+Stack 0 Entering state 46
+Reading a token
+Next token is token call_paren ()
+Splitting off stack 3 from 0.
+Reduced stack 3 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 3 Entering state 234
+Next token is token call_paren ()
+Reduced stack 3 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 3 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 52
+Reduced stack 1 by rule 47 (line 292); action deferred.  Now in state 140.
+Stack 1 Entering state 140
+Reduced stack 1 by rule 60 (line 358); action deferred.  Now in state 38.
+Stack 1 Entering state 38
+Reduced stack 1 by rule 89 (line 454); action deferred.  Now in state 46.
+Stack 1 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 4 from 1.
+Reduced stack 4 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 4 Entering state 234
+Next token is token call_paren ()
+Reduced stack 4 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 4 Entering state 141
+Next token is token call_paren ()
+Stack 2 Entering state 52
+Reduced stack 2 by rule 47 (line 292); action deferred.  Now in state 140.
+Stack 2 Entering state 140
+Reduced stack 2 by rule 60 (line 358); action deferred.  Now in state 38.
+Stack 2 Entering state 38
+Reduced stack 2 by rule 89 (line 454); action deferred.  Now in state 46.
+Stack 2 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 5 from 2.
+Reduced stack 5 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 5 Entering state 234
+Next token is token call_paren ()
+Reduced stack 5 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 5 Entering state 141
+Next token is token call_paren ()
+Stack 3 Entering state 141
+Next token is token call_paren ()
+Stack 4 Entering state 141
+Next token is token call_paren ()
+Stack 5 Entering state 141
+Next token is token call_paren ()
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 79
+On stack 2, shifting token call_paren ()
+Stack 2 now in state 79
+On stack 3, shifting token call_paren ()
+Stack 3 now in state 202
+On stack 4, shifting token call_paren ()
+Stack 4 now in state 202
+On stack 5, shifting token call_paren ()
+Stack 5 now in state 202
+Stack 0 Entering state 79
+Reading a token
+Next token is token identifier ()
+Stack 1 Entering state 79
+Next token is token identifier ()
+Stack 2 Entering state 79
+Next token is token identifier ()
+Stack 3 Entering state 202
+Reduced stack 3 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 3 Entering state 47
+Reduced stack 3 by rule 94 (line 470); action deferred.  Now in state 234.
+Stack 3 Entering state 234
+Next token is token identifier ()
+Reduced stack 3 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 3 Entering state 141
+Next token is token identifier ()
+Stack 3 dies.
+Stack 4 Entering state 202
+Reduced stack 4 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 4 Entering state 47
+Reduced stack 4 by rule 94 (line 470); action deferred.  Now in state 170.
+Stack 4 Entering state 170
+Next token is token identifier ()
+Reduced stack 4 by rule 127 (line 542); action deferred.  Now in state 49.
+Stack 4 Entering state 49
+Next token is token identifier ()
+Reduced stack 4 by rule 18 (line 193); action deferred.  Now in state 77.
+Stack 4 Entering state 77
+Reduced stack 4 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 4 Entering state 27
+Next token is token identifier ()
+Stack 5 Entering state 202
+Reduced stack 5 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 5 Entering state 47
+Reduced stack 5 by rule 94 (line 470); action deferred.  Now in state 154.
+Stack 5 Entering state 154
+Next token is token identifier ()
+Reduced stack 5 by rule 85 (line 442); action deferred.  Now in state 45.
+Stack 5 Entering state 45
+Reduced stack 5 by rule 16 (line 191); action deferred.  Now in state 77.
+Stack 5 Entering state 77
+Reduced stack 5 by rule 2 (line 166); action deferred.  Now in state 27.
+Merging stack 5 into stack 4.
+Removing dead stacks.
+Rename stack 4 -> 3.
+On stack 0, shifting token identifier ()
+Stack 0 now in state 52
+On stack 1, shifting token identifier ()
+Stack 1 now in state 52
+On stack 2, shifting token identifier ()
+Stack 2 now in state 52
+On stack 3, shifting token identifier ()
+Stack 3 now in state 25
+Stack 0 Entering state 52
+Reduced stack 0 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 0 Entering state 33
+Reading a token
+Next token is token comma ()
+Reduced stack 0 by rule 87 (line 450); action deferred.  Now in state 46.
+Stack 0 Entering state 46
+Next token is token comma ()
+Reduced stack 0 by rule 93 (line 468); action deferred.  Now in state 142.
+Stack 0 Entering state 142
+Next token is token comma ()
+Reduced stack 0 by rule 61 (line 363); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token comma ()
+Stack 1 Entering state 52
+Reduced stack 1 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 1 Entering state 33
+Next token is token comma ()
+Reduced stack 1 by rule 87 (line 450); action deferred.  Now in state 46.
+Stack 1 Entering state 46
+Next token is token comma ()
+Reduced stack 1 by rule 93 (line 468); action deferred.  Now in state 142.
+Stack 1 Entering state 142
+Next token is token comma ()
+Reduced stack 1 by rule 61 (line 363); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token comma ()
+Stack 2 Entering state 52
+Reduced stack 2 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 2 Entering state 33
+Next token is token comma ()
+Reduced stack 2 by rule 87 (line 450); action deferred.  Now in state 46.
+Stack 2 Entering state 46
+Next token is token comma ()
+Reduced stack 2 by rule 93 (line 468); action deferred.  Now in state 142.
+Stack 2 Entering state 142
+Next token is token comma ()
+Reduced stack 2 by rule 61 (line 363); action deferred.  Now in state 141.
+Stack 2 Entering state 141
+Next token is token comma ()
+Stack 3 Entering state 25
+Next token is token comma ()
+Reduced stack 3 by rule 47 (line 292); action deferred.  Now in state 33.
+Stack 3 Entering state 33
+Next token is token comma ()
+Reduced stack 3 by rule 87 (line 450); action deferred.  Now in state 46.
+Stack 3 Entering state 46
+Next token is token comma ()
+Reduced stack 3 by rule 93 (line 468); action deferred.  Now in state 48.
+Stack 3 Entering state 48
+Next token is token comma ()
+On stack 0, shifting token comma ()
+Stack 0 now in state 203
+On stack 1, shifting token comma ()
+Stack 1 now in state 203
+On stack 2, shifting token comma ()
+Stack 2 now in state 203
+On stack 3, shifting token comma ()
+Stack 3 now in state 107
+Stack 0 Entering state 203
+Reading a token
+Next token is token number ()
+Stack 1 Entering state 203
+Next token is token number ()
+Stack 2 Entering state 203
+Next token is token number ()
+Stack 3 Entering state 107
+Next token is token number ()
+On stack 0, shifting token number ()
+Stack 0 now in state 24
+On stack 1, shifting token number ()
+Stack 1 now in state 24
+On stack 2, shifting token number ()
+Stack 2 now in state 24
+On stack 3, shifting token number ()
+Stack 3 now in state 24
+Stack 0 Entering state 24
+Reduced stack 0 by rule 86 (line 448); action deferred.  Now in state 46.
+Stack 0 Entering state 46
+Reading a token
+Next token is token call_paren ()
+Splitting off stack 4 from 0.
+Reduced stack 4 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 4 Entering state 234
+Next token is token call_paren ()
+Reduced stack 4 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 4 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 24
+Reduced stack 1 by rule 86 (line 448); action deferred.  Now in state 46.
+Stack 1 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 5 from 1.
+Reduced stack 5 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 5 Entering state 234
+Next token is token call_paren ()
+Reduced stack 5 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 5 Entering state 141
+Next token is token call_paren ()
+Stack 2 Entering state 24
+Reduced stack 2 by rule 86 (line 448); action deferred.  Now in state 46.
+Stack 2 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 6 from 2.
+Reduced stack 6 by rule 93 (line 468); action deferred.  Now in state 234.
+Stack 6 Entering state 234
+Next token is token call_paren ()
+Reduced stack 6 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 6 Entering state 141
+Next token is token call_paren ()
+Stack 3 Entering state 24
+Reduced stack 3 by rule 86 (line 448); action deferred.  Now in state 46.
+Stack 3 Entering state 46
+Next token is token call_paren ()
+Splitting off stack 7 from 3.
+Reduced stack 7 by rule 93 (line 468); action deferred.  Now in state 170.
+Stack 7 Entering state 170
+Next token is token call_paren ()
+Reduced stack 7 by rule 127 (line 542); action deferred.  Now in state 49.
+Stack 7 Entering state 49
+Next token is token call_paren ()
+Reduced stack 7 by rule 18 (line 193); action deferred.  Now in state 77.
+Stack 7 Entering state 77
+Reduced stack 7 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 7 Entering state 27
+Next token is token call_paren ()
+Stack 7 dies.
+Stack 4 Entering state 141
+Next token is token call_paren ()
+Stack 5 Entering state 141
+Next token is token call_paren ()
+Stack 6 Entering state 141
+Next token is token call_paren ()
+Removing dead stacks.
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 79
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 79
+On stack 2, shifting token call_paren ()
+Stack 2 now in state 79
+On stack 3, shifting token call_paren ()
+Stack 3 now in state 79
+On stack 4, shifting token call_paren ()
+Stack 4 now in state 202
+On stack 5, shifting token call_paren ()
+Stack 5 now in state 202
+On stack 6, shifting token call_paren ()
+Stack 6 now in state 202
+Stack 0 Entering state 79
+Reading a token
+Next token is token call_paren ()
+Reduced stack 0 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token call_paren ()
+Stack 1 Entering state 79
+Next token is token call_paren ()
+Reduced stack 1 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token call_paren ()
+Stack 2 Entering state 79
+Next token is token call_paren ()
+Reduced stack 2 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 2 Entering state 141
+Next token is token call_paren ()
+Stack 3 Entering state 79
+Next token is token call_paren ()
+Reduced stack 3 by rule 63 (line 368); action deferred.  Now in state 141.
+Stack 3 Entering state 141
+Next token is token call_paren ()
+Stack 4 Entering state 202
+Reduced stack 4 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 4 Entering state 47
+Reduced stack 4 by rule 94 (line 470); action deferred.  Now in state 234.
+Stack 4 Entering state 234
+Next token is token call_paren ()
+Reduced stack 4 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 4 Entering state 141
+Next token is token call_paren ()
+Stack 5 Entering state 202
+Reduced stack 5 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 5 Entering state 47
+Reduced stack 5 by rule 94 (line 470); action deferred.  Now in state 234.
+Stack 5 Entering state 234
+Next token is token call_paren ()
+Reduced stack 5 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 5 Entering state 141
+Next token is token call_paren ()
+Stack 6 Entering state 202
+Reduced stack 6 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 6 Entering state 47
+Reduced stack 6 by rule 94 (line 470); action deferred.  Now in state 234.
+Stack 6 Entering state 234
+Next token is token call_paren ()
+Reduced stack 6 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 6 Entering state 141
+Next token is token call_paren ()
+On stack 0, shifting token call_paren ()
+Stack 0 now in state 202
+On stack 1, shifting token call_paren ()
+Stack 1 now in state 202
+On stack 2, shifting token call_paren ()
+Stack 2 now in state 202
+On stack 3, shifting token call_paren ()
+Stack 3 now in state 202
+On stack 4, shifting token call_paren ()
+Stack 4 now in state 202
+On stack 5, shifting token call_paren ()
+Stack 5 now in state 202
+On stack 6, shifting token call_paren ()
+Stack 6 now in state 202
+Stack 0 Entering state 202
+Reduced stack 0 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 0 Entering state 47
+Reduced stack 0 by rule 94 (line 470); action deferred.  Now in state 234.
+Stack 0 Entering state 234
+Reading a token
+Next token is token identifier ()
+Reduced stack 0 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 0 Entering state 141
+Next token is token identifier ()
+Stack 0 dies.
+Stack 1 Entering state 202
+Reduced stack 1 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 1 Entering state 47
+Reduced stack 1 by rule 94 (line 470); action deferred.  Now in state 234.
+Stack 1 Entering state 234
+Next token is token identifier ()
+Reduced stack 1 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 1 Entering state 141
+Next token is token identifier ()
+Stack 1 dies.
+Stack 2 Entering state 202
+Reduced stack 2 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 2 Entering state 47
+Reduced stack 2 by rule 94 (line 470); action deferred.  Now in state 234.
+Stack 2 Entering state 234
+Next token is token identifier ()
+Reduced stack 2 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 2 Entering state 141
+Next token is token identifier ()
+Stack 2 dies.
+Stack 3 Entering state 202
+Reduced stack 3 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 3 Entering state 47
+Reduced stack 3 by rule 94 (line 470); action deferred.  Now in state 170.
+Stack 3 Entering state 170
+Next token is token identifier ()
+Reduced stack 3 by rule 127 (line 542); action deferred.  Now in state 49.
+Stack 3 Entering state 49
+Next token is token identifier ()
+Reduced stack 3 by rule 18 (line 193); action deferred.  Now in state 77.
+Stack 3 Entering state 77
+Reduced stack 3 by rule 2 (line 166); action deferred.  Now in state 27.
+Stack 3 Entering state 27
+Next token is token identifier ()
+Stack 4 Entering state 202
+Reduced stack 4 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 4 Entering state 47
+Reduced stack 4 by rule 94 (line 470); action deferred.  Now in state 234.
+Stack 4 Entering state 234
+Next token is token identifier ()
+Reduced stack 4 by rule 62 (line 365); action deferred.  Now in state 141.
+Stack 4 Entering state 141
+Next token is token identifier ()
+Stack 4 dies.
+Stack 5 Entering state 202
+Reduced stack 5 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 5 Entering state 47
+Reduced stack 5 by rule 94 (line 470); action deferred.  Now in state 170.
+Stack 5 Entering state 170
+Next token is token identifier ()
+Reduced stack 5 by rule 127 (line 542); action deferred.  Now in state 49.
+Stack 5 Entering state 49
+Next token is token identifier ()
+Reduced stack 5 by rule 18 (line 193); action deferred.  Now in state 77.
+Stack 5 Entering state 77
+Reduced stack 5 by rule 2 (line 166); action deferred.  Now in state 27.
+Merging stack 5 into stack 3.
+Stack 6 Entering state 202
+Reduced stack 6 by rule 91 (line 461); action deferred.  Now in state 47.
+Stack 6 Entering state 47
+Reduced stack 6 by rule 94 (line 470); action deferred.  Now in state 154.
+Stack 6 Entering state 154
+Next token is token identifier ()
+Reduced stack 6 by rule 85 (line 442); action deferred.  Now in state 45.
+Stack 6 Entering state 45
+Reduced stack 6 by rule 16 (line 191); action deferred.  Now in state 77.
+Stack 6 Entering state 77
+Reduced stack 6 by rule 2 (line 166); action deferred.  Now in state 27.
+Merging stack 6 into stack 3.
+Removing dead stacks.
+Rename stack 3 -> 0.
+On stack 0, shifting token identifier ()
+Stack 0 now in state 25
+Ambiguity detected.
+Option 1,
+  program -> <Rule 2, tokens 1 .. 53>
+    program <tokens 1 .. 31>
+    statement -> <Rule 16, tokens 32 .. 53>
+      assignment_re_stmt -> <Rule 85, tokens 32 .. 53>
+        expr <tokens 32 .. 32>
+        re_assign <tokens 33 .. 33>
+        expr -> <Rule 94, tokens 34 .. 53>
+          postfix_expr -> <Rule 91, tokens 34 .. 53>
+            expr_atom <tokens 34 .. 34>
+            call_paren <tokens 35 .. 35>
+            call_list -> <Rule 62, tokens 36 .. 52>
+              call_list -> <Rule 61, tokens 36 .. 43>
+                expr -> <Rule 94, tokens 36 .. 43>
+                  postfix_expr -> <Rule 91, tokens 36 .. 43>
+                    expr_atom <tokens 36 .. 38>
+                    call_paren <tokens 39 .. 39>
+                    call_list -> <Rule 62, tokens 40 .. 42>
+                      call_list -> <Rule 61, tokens 40 .. 40>
+                        expr -> <Rule 93, tokens 40 .. 40>
+                          expr_atom -> <Rule 87, tokens 40 .. 40>
+                            pine_type -> <Rule 47, tokens 40 .. 40>
+                              identifier <tokens 40 .. 40>
+                      comma <tokens 41 .. 41>
+                      expr -> <Rule 93, tokens 42 .. 42>
+                        expr_atom -> <Rule 86, tokens 42 .. 42>
+                          number <tokens 42 .. 42>
+                    call_paren <tokens 43 .. 43>
+              comma <tokens 44 .. 44>
+              expr -> <Rule 94, tokens 45 .. 52>
+                postfix_expr -> <Rule 91, tokens 45 .. 52>
+                  expr_atom -> <Rule 89, tokens 45 .. 47>
+                    dot_expr -> <Rule 60, tokens 45 .. 47>
+                      pine_type -> <Rule 47, tokens 45 .. 45>
+                        identifier <tokens 45 .. 45>
+                      dot <tokens 46 .. 46>
+                      pine_type -> <Rule 47, tokens 47 .. 47>
+                        identifier <tokens 47 .. 47>
+                  call_paren <tokens 48 .. 48>
+                  call_list -> <Rule 62, tokens 49 .. 51>
+                    call_list -> <Rule 61, tokens 49 .. 49>
+                      expr -> <Rule 93, tokens 49 .. 49>
+                        expr_atom -> <Rule 87, tokens 49 .. 49>
+                          pine_type -> <Rule 47, tokens 49 .. 49>
+                            identifier <tokens 49 .. 49>
+                    comma <tokens 50 .. 50>
+                    expr -> <Rule 93, tokens 51 .. 51>
+                      expr_atom -> <Rule 86, tokens 51 .. 51>
+                        number <tokens 51 .. 51>
+                  call_paren <tokens 52 .. 52>
+            call_paren <tokens 53 .. 53>
+
+Option 2,
+  program -> <Rule 2, tokens 1 .. 53>
+    program -> <Rule 2, tokens 1 .. 39>
+      program <tokens 1 .. 31>
+      statement -> <Rule 16, tokens 32 .. 39>
+        assignment_re_stmt -> <Rule 85, tokens 32 .. 39>
+          expr <tokens 32 .. 32>
+          re_assign <tokens 33 .. 33>
+          expr -> <Rule 94, tokens 34 .. 39>
+            postfix_expr -> <Rule 91, tokens 34 .. 39>
+              expr_atom <tokens 34 .. 34>
+              call_paren <tokens 35 .. 35>
+              call_list -> <Rule 61, tokens 36 .. 38>
+                expr -> <Rule 93, tokens 36 .. 38>
+                  expr_atom <tokens 36 .. 38>
+              call_paren <tokens 39 .. 39>
+    statement -> <Rule 18, tokens 40 .. 53>
+      comma_stmt -> <Rule 127, tokens 40 .. 53>
+        expr -> <Rule 93, tokens 40 .. 40>
+          expr_atom -> <Rule 87, tokens 40 .. 40>
+            pine_type -> <Rule 47, tokens 40 .. 40>
+              identifier <tokens 40 .. 40>
+        comma <tokens 41 .. 41>
+        expr -> <Rule 94, tokens 42 .. 53>
+          postfix_expr -> <Rule 91, tokens 42 .. 53>
+            expr_atom -> <Rule 86, tokens 42 .. 42>
+              number <tokens 42 .. 42>
+            call_paren <tokens 43 .. 43>
+            call_list -> <Rule 62, tokens 44 .. 52>
+              call_list -> <Rule 63, empty>
+              comma <tokens 44 .. 44>
+              expr -> <Rule 94, tokens 45 .. 52>
+                postfix_expr -> <Rule 91, tokens 45 .. 52>
+                  expr_atom -> <Rule 89, tokens 45 .. 47>
+                    dot_expr -> <Rule 60, tokens 45 .. 47>
+                      pine_type -> <Rule 47, tokens 45 .. 45>
+                        identifier <tokens 45 .. 45>
+                      dot <tokens 46 .. 46>
+                      pine_type -> <Rule 47, tokens 47 .. 47>
+                        identifier <tokens 47 .. 47>
+                  call_paren <tokens 48 .. 48>
+                  call_list -> <Rule 62, tokens 49 .. 51>
+                    call_list -> <Rule 61, tokens 49 .. 49>
+                      expr -> <Rule 93, tokens 49 .. 49>
+                        expr_atom -> <Rule 87, tokens 49 .. 49>
+                          pine_type -> <Rule 47, tokens 49 .. 49>
+                            identifier <tokens 49 .. 49>
+                    comma <tokens 50 .. 50>
+                    expr -> <Rule 93, tokens 51 .. 51>
+                      expr_atom -> <Rule 86, tokens 51 .. 51>
+                        number <tokens 51 .. 51>
+                  call_paren <tokens 52 .. 52>
+            call_paren <tokens 53 .. 53>
+
+[ERROR]: test/primitive.pine line 9 column 3: syntax is ambiguous
+#1F7525F
+~~^~~~~~
+Cleanup: popping token identifier ()
+Cleanup: popping unresolved nterm program ()
+Cleanup: popping unresolved nterm statement ()
+Cleanup: popping unresolved nterm assignment_re_stmt ()
+Cleanup: popping unresolved nterm expr ()
+Cleanup: popping unresolved nterm postfix_expr ()
+Cleanup: popping token call_paren ()
+Cleanup: popping unresolved nterm call_list ()
+Cleanup: popping unresolved nterm expr ()
+Cleanup: popping unresolved nterm postfix_expr ()
+Cleanup: popping token call_paren ()
+Cleanup: popping unresolved nterm call_list ()
+Cleanup: popping unresolved nterm expr ()
+Cleanup: popping unresolved nterm expr_atom ()
+Cleanup: popping token number ()
+Cleanup: popping token comma ()
+Cleanup: popping unresolved nterm call_list ()
+Cleanup: popping unresolved nterm expr ()
+Cleanup: popping unresolved nterm expr_atom ()
+Cleanup: popping unresolved nterm pine_type ()
+Cleanup: popping token identifier ()
+Cleanup: popping token call_paren ()
+Cleanup: popping unresolved nterm expr_atom ()
+Cleanup: popping unresolved nterm dot_expr ()
+Cleanup: popping unresolved nterm pine_type ()
+Cleanup: popping token identifier ()
+Cleanup: popping token dot ()
+Cleanup: popping unresolved nterm pine_type ()
+Cleanup: popping token identifier ()
+Cleanup: popping token comma ()
+Cleanup: popping unresolved nterm call_list ()
+Cleanup: popping unresolved nterm expr ()
+Cleanup: popping unresolved nterm postfix_expr ()
+Cleanup: popping token call_paren ()
+Cleanup: popping unresolved nterm call_list ()
+Cleanup: popping unresolved nterm expr ()
+Cleanup: popping unresolved nterm expr_atom ()
+Cleanup: popping token number ()
+Cleanup: popping token comma ()
+Cleanup: popping unresolved nterm call_list ()
+Cleanup: popping unresolved nterm expr ()
+Cleanup: popping unresolved nterm expr_atom ()
+Cleanup: popping unresolved nterm pine_type ()
+Cleanup: popping token identifier ()
+Cleanup: popping token call_paren ()
+Cleanup: popping nterm expr_atom ()
+Cleanup: popping token call_paren ()
+Cleanup: popping nterm expr_atom ()
+Cleanup: popping token re_assign ()
+Cleanup: popping nterm expr ()
+Cleanup: popping nterm program ()
+

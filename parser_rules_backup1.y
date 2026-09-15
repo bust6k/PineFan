@@ -1,6 +1,7 @@
 %define parse.error verbose
 %glr-parser
-%expect 249
+%expect 253
+
 
 %code requires {
 #include <stdio.h>
@@ -29,9 +30,6 @@ extern int func_cnt;
 %token LOWEST_PREC
 %right LOWEST_PREC
 
-%left COMMA_PREC
-%nonassoc COMMA_LIST_CALL
-
 %token if_statement
 %token else_statement
 %token for_statement
@@ -56,6 +54,7 @@ extern int func_cnt;
 %token question_sign
 %token bitwise_and
 %token bitwise_or
+%token bitwise_xor
 %token bitwise_not
 %token bitwise_shift_to_left
 %token bitwise_shift_to_right
@@ -70,10 +69,8 @@ extern int func_cnt;
 %token <ival> string_as_type
 %token left_paren
 %token right_paren
-%token func_lparen
-%token func_rparen
-%token call_lparen
-%token call_rparen
+%token func_paren
+%token call_paren
 %token left_quad_brace
 %token right_quad_brace
 %token left_brace
@@ -106,10 +103,10 @@ extern int func_cnt;
 %token colon
 
 %token <ival> number
-%token <sval> identifier string float_number
+%token <sval> identifier string
 %type <sval> pine_type 
 
-%type <node> program statement   expr expr_atom  postfix_expr expr_list block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr expr_atom  postfix_expr expr_list block stmt_list stmt_block if_body  if_stmt comma_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -156,13 +153,6 @@ program:
     | program statement
       {vec_push(program_root, $2);}
     ;
-/*statement_list:
-    statement
-    { vec_push(program_root, $1); }
-    | statement comma statement
-    { vec_push(program_root, $3); }
-    ;
-*/
 
 statement:
      if_stmt
@@ -171,6 +161,7 @@ statement:
     | return_stmt_expr
     | break_stmt
     | continue_stmt
+    | comma_stmt
     | switch_stmt
     | varip_stmt
     | var_stmt
@@ -227,7 +218,7 @@ while_stmt:
     ;
 
 func_stmt:
-   identifier func_lparen opt_arg_list func_rparen block %prec PREC_FUNC
+   identifier func_paren opt_arg_list func_paren block %prec PREC_FUNC
    { $$ = new_func_node($1,$3,$5);func_cnt++; }
    ; 
 
@@ -436,8 +427,6 @@ assignment_re_stmt:
 expr_atom:
       number
       { $$ = new_number_node($1); }
-      | float_number
-      { $$ = new_number_float_node($1); }
       | pine_type
       { $$ = new_varn_node($1, 0); }
       | string
@@ -449,7 +438,7 @@ expr_atom:
       ;
 
 postfix_expr:
-       expr_atom call_lparen call_list call_rparen
+       expr_atom call_paren call_list call_paren
       { $$ = new_call_node($1, $3);}
       | expr_atom left_quad_brace expr right_quad_brace
       {$$ = new_index_node($1, $3);}
@@ -516,17 +505,25 @@ expr:
     { $$ = new_unop_node("-", $2); }
     | plus  expr %prec multiply
     { $$ = new_unop_node("+", $2); }
+    /*| left_quad_brace expr right_quad_brace
+    { $$ = new_quad_brace_expr_node($2); } */
     | expr question_sign expr colon expr %prec PREC_TERNARY_IDENT
     { $$ = new_ternary_node($1,$3,$5); }
     | left_quad_brace expr_list right_quad_brace
     { $$ = new_array_node($2); }
-    ; 
+    ;
 
 expr_list:
     expr
-    { $$ = $1; }
     | expr_list comma expr
-    { $$ = $3;}
-    ; 
+    ;
+
+comma_stmt:
+  expr comma expr
+  { $$ = $1;}
+  |comma_stmt comma comma_stmt
+  { $$ = $3;}
+  ;
 
 %%
+

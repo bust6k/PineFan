@@ -259,6 +259,13 @@ ast_node* new_number_node(int value) {
   return node;
 }
 
+ast_node* new_number_float_node(char* f) {
+ast_node* node = calloc(1,sizeof(ast_node));
+node->type = AST_FL_NUMBER;
+node->float_number_node.float_num = f; 
+return node;
+}
+
 ast_node* new_string_node(char* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_STRING;
@@ -484,8 +491,9 @@ ast_node* new_stmt_node(ast_node* stmts) {
 }
 
 ast_node* new_array_node(ast_node* expr_list) {
-  // stub
   ast_node* node = calloc(1, sizeof(ast_node));
+  node->type = AST_ARRAY;
+  node->array_node.expr_list = expr_list;
   return node;
 }
 

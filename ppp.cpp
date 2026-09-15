@@ -500,7 +500,7 @@ bool replace_call_parens(std::string& line) {
       if (!previous_ascii_letter(line, parens[i].first)) return false;
     }
     line[parens[i].first] = '@';
-    line[parens[i].second] = '@';
+    line[parens[i].second] = '^';
   }
 
   return true;
@@ -515,7 +515,7 @@ bool replace_func_parens(std::string& line) {
       if (!previous_ascii_letter(line, parens[i].first)) return false;
     }
     line[parens[i].first] = '$';
-    line[parens[i].second] = '$';
+    line[parens[i].second] = '|';
   }
 
   return true;
@@ -642,12 +642,7 @@ void preprocess(const std::string& input, std::string& output) {
       else
         break;
     }
-
-    // TODO: there's must be check if in this line have no something but if in
-    // other one is has arrow so then you should grab that line
-
-    // Just getting out the string of the line before arrow(=>)
-
+    
     auto left_part = find_expr_at_switch(info.content, 0);
     size_t is_func = std::string::npos;
     size_t call_paren_pos = 0;
@@ -818,6 +813,7 @@ void preprocess(const std::string& input, std::string& output) {
     }
     output += "}\n";
   }
+   output += '\n';
 }
 
 int preprocess_files(int argc, char* argv[]) {
@@ -847,15 +843,13 @@ int preprocess_files(int argc, char* argv[]) {
 
     file->Pinefan::File::Prp_file::add_preprocessed_file(file);
 
-    // #ifdef _IS_MAIN
     auto* f = file->Pinefan::File::Prp_file::get_preprocessed_file(i - 1);
 
     std::cout << "\e[92m" << f_name << "\e[0m" << std::endl
               << std::endl
               << std::endl;
     std::cout << f->get_content();
-    // #endif
-    //  delete file;
+   
   }
 
   return 0;
