@@ -86,6 +86,12 @@ typedef struct ast_node {
     struct {
       struct ast_node* expr;
     } comma_expr;
+     struct {
+    struct ast_node* expr;   
+    struct ast_node* next;   
+    size_t count;
+} expr_list_node;
+        
     struct {
       char* op;
       struct ast_node* operand;
@@ -168,7 +174,8 @@ typedef enum ast_node_kind {
   AST_STRATEGY,
   AST_STMT,
   AST_STMTS,
-  AST_ARRAY
+  AST_ARRAY,
+  AST_EXPR_LIST
 } ast_node_kind;
 
 ast_node* new_assign_node(char* name, ast_node* value);
@@ -220,4 +227,5 @@ ast_node* new_block_node(ast_node* stmt);
 ast_node* new_stmt_node(ast_node* stmts);
 ast_node* new_var_dot_node(char* name, char* scnd_name);
 ast_node* new_array_node(ast_node* expr_list);
+ast_node* new_expr_list_node(ast_node* expr,ast_node* prev);
 void ast_free(ast_node* node);

@@ -396,6 +396,22 @@ ast_node* new_switch_node(ast_node* expr, ast_node* cases,
   return node;
 }
 
+ast_node* new_expr_list_node(ast_node* expr,ast_node* prev) {
+    ast_node* node = (ast_node*)calloc(1, sizeof(ast_node));
+    node->type = AST_EXPR_LIST;
+    node->expr_list_node.expr = expr;
+    size_t count = 0;
+    ast_node* p = prev;
+    while(p) {
+    count++;
+    p = p->expr_list_node.next;
+    }
+    node->expr_list_node.next = p;
+   node->expr_list_node.count = count;
+
+    return node;
+}
+
 ast_node* new_switch_block_node(ast_node* prev, ast_node* th) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_SWITCH_BLOCK;

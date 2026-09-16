@@ -2602,18 +2602,21 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 
   case 126: /* expr_list: expr  */
 #line 527 "parser_rules.y"
-    { ((*yyvalp).node) = (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node); }
+    { ((*yyvalp).node) = (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node);}
 #line 2607 "parser_rules.tab.c"
     break;
 
   case 127: /* expr_list: expr_list comma expr  */
 #line 529 "parser_rules.y"
-    { ((*yyvalp).node) = (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node);}
-#line 2613 "parser_rules.tab.c"
+    {
+        ast_node* new_node = new_expr_list_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node),(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.node));
+        ((*yyvalp).node) = new_node;
+    }
+#line 2616 "parser_rules.tab.c"
     break;
 
 
-#line 2617 "parser_rules.tab.c"
+#line 2620 "parser_rules.tab.c"
 
       default: break;
     }
@@ -4295,5 +4298,5 @@ yypdumpstack (yyGLRStack* yystackp)
 
 
 
-#line 532 "parser_rules.y"
+#line 535 "parser_rules.y"
 

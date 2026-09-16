@@ -529,7 +529,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
   int idt = indent;
 
-  if (is_in_exec_model == 1) indent_str += "    ";
+  if (is_in_exec_model == 1 && is_statement) indent_str += "    ";
 
   switch (node->type) {
     case AST_IF: {
@@ -548,7 +548,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
           output << indent_str << "if ";
         }
         generate_code(node->if_node.cond, output, 0);
-        output << ":\n";
+        output << ":";
+	if(is_statement){output << "\n";}
         if (node->if_node.is_elif) {
           generate_code(node->if_node.then, output, indent + 4);
         } else {
@@ -575,7 +576,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       generate_code(node->ternary_node.cond, output, 0);
       output << " else ";
       generate_code(node->ternary_node.else_, output, 0);
-      output << '\n';
+     if(is_statement){output << "\n";}
+        
       break;
     }
 
@@ -606,7 +608,9 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
         output << " == ";
         generate_code(first_case->case_stmt.expr, output, 0);
 
-        output << ":\n";
+        output << ":";
+	if(is_statement){output << "\n";}
+        
         generate_code(first_case->case_stmt.switch_blk_node, output,
                       indent + 4);
 
@@ -618,7 +622,9 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
             generate_code(const_first_case, output, 0);
             output << " == ";
             generate_code(first_case->case_stmt.expr, output, 0);
-            output << ":\n";
+            output << ":";
+	if(is_statement){output << "\n";}
+        
             generate_code(first_case->case_stmt.switch_blk_node, output,
                           indent + 4);
             first_case = first_case->switch_case.next;
@@ -628,7 +634,9 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
 
       if (node->switch_node.default_body != NULL && !is_only_def) {
         output << indent_str << "else";
-        output << ":\n";
+        output << ":";
+	if(is_statement){output << "\n";}
+        
 
         generate_code(
             node->switch_node.default_body->default_stmt.switch_blk_node,
@@ -644,7 +652,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       if (!strcmp(node->binop.op, "+=") || !strcmp(node->binop.op, "-=") ||
           !strcmp(node->binop.op, "*=") || !strcmp(node->binop.op, "/=") ||
           !strcmp(node->binop.op, "%=")) {
-        output << "\n";
+        	if(is_statement){output << "\n";}
+        
       }
       break;
     }
@@ -691,9 +700,19 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
         // if (i + 1 < node->call_node.arg_count) output << ", ";
       }
       output << ")";
-      if(is_statement){ output << "\n";is_statement = 1;}
+      if(is_statement){ output << "\n";}
      break;
     }
+ 
+   case AST_EXPR_LIST: {
+   for(int i = 0;i < node->expr_list_node.count;i++) {
+   generate_code(node->expr_list_node.expr,output,indent);
+   if(i + 1 < node->expr_list_node.count) output << ", ";
+
+   }
+   if(is_statement){ output << "\n";}
+   break;
+   }
 
     case AST_FUNC: {
       udf_depth++;
@@ -721,7 +740,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       output << indent_str << "return ";
       if (node->return_node.value)
         generate_code(node->return_node.value, output, 0);
-      output << "\n";
+     	if(is_statement){output << "\n";}
+        
       break;
     }
 
@@ -729,7 +749,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     case AST_SIMPLE: {
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
-      output << "\n";
+      	if(is_statement){output << "\n";}
+        
       break;
     }
 
@@ -750,7 +771,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
         output << node->var.name;
       }
 
-      if (node->var.n) output << "\n";
+      if (node->var.n && is_statement) output << "\n";
+        
       break;
     }
 
@@ -758,7 +780,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       generate_code(node->ast_assign.name, output, indent);
       output << " = ";
       generate_code(node->ast_assign.value, output, 0);
-      output << "\n";
+     	if(is_statement){output << "\n";}
+        
       break;
     }
 
@@ -767,7 +790,8 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       up_const_names_recursive(node, node->assign.name);
       output << indent_str << node->assign.name << " = ";
       generate_code(node->assign.value, output, 0);
-      output << "\n";
+      	if(is_statement){output << "\n";}
+        
       break;
     }
 
@@ -788,14 +812,18 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
         generate_code(node->for_node.step, output, 0);
       }
 
-      output << "):\n";
+      output << "):";
+	if(is_statement){output << "\n";}
+        
       generate_code(node->for_node.body, output, indent + 4);
       break;
     }
     case AST_WHILE: {
       output << indent_str << "while ";
       generate_code(node->while_node.cond, output, 0);
-      output << ":\n";
+      output << ":";
+	if(is_statement){output << "\n";}
+        
       generate_code(node->while_node.body, output, indent + 4);
       break;
     }

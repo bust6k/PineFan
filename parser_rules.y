@@ -524,9 +524,12 @@ expr:
 
 expr_list:
     expr
-    { $$ = $1; }
+    { $$ = $1;}
     | expr_list comma expr
-    { $$ = $3;}
-    ; 
-
+    {
+        ast_node* new_node = new_expr_list_node($3,$1);
+        $$ = new_node;
+    }
+    ;
+        
 %%
