@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "ast.h"
 #include<string.h>
+//static struct ast_node* merge_call_list(YYSTYPE x0,YYSTYPE x1);
 }
 
 %code {
@@ -13,6 +14,15 @@
 extern int yylex(void);
 extern void yyerror(const char* s);
 extern Vector* program_root;
+
+static struct ast_node* merge_call_list(YYSTYPE x0,YYSTYPE x1){
+printf("MERGE CALLED!\n");
+if(!x0.node && x1.node) return x1.node;
+if(!x1.node && x0.node) return x0.node;
+
+return x0.node;
+}
+
 }
 
 %{
@@ -349,9 +359,9 @@ dot_expr:
     ;
     
 call_list:
-   expr
+   expr %prec COMMA_LIST_CALL %merge <merge_call_list>
    { $$ = $1; }
-   | call_list comma expr
+   | call_list comma expr %prec COMMA_LIST_CALL %merge <merge_call_list>
    { $3->call_arg.next = $1; $$ = $3; }
    | /*empty*/
    { $$ = NULL;}

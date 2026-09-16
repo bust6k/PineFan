@@ -1,7 +1,6 @@
 Terminals unused in grammar
 
     COMMA_PREC
-    COMMA_LIST_CALL
     by
     case_statement
     as

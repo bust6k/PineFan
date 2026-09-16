@@ -44,6 +44,10 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 
 
 for bar in close:
+<<<<<<< HEAD
     foo(    t)
     ph_pchg =     pchg(0)
+=======
+    ph_pchg =     0x55c8e0f07370(0)
+>>>>>>> a6bc432377bcf1a8186fdb4abcb41bb013fe9c45
 

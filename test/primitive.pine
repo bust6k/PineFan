@@ -11,6 +11,19 @@ const int[] ff = 5
 ph_price_0 = array.get(ph_arr, 0), ph_price_1 = 3
 //#1F7525F
 
+
+0.59
+varip lifter =   [MAX_COUNT][5]
+//p(f())
+//ph := pchg(ar(), a(),a())
+//ph_pchg := pchg(array.get(ph_arr, 0),array.get(ph_arr, 1))
+//e_0 = arr(5), f = a(5)
+//ph_price_0 = arr(5), ph_price_1 = array.get(ph_arr,1)
+//c
+const int[] ff = 5
+ph_price_0 = array.get(ph_arr, 0), ph_price_1 = 3
+//#1F7525F
+
 foo(ff)
 color i_phl_1_h_ln_color = input.color(defval=#F7525F, title='Bearish Color', group=g_phl_eq)
 
@@ -54,6 +67,9 @@ g_phl_eq = '███████████████ Equal High Low ██�
 int i_phl_1_left = input.int(defval=60, title='Left', group=g_phl_eq)
 float i_phl_1_right = input.int(defval=30, title='Right', group=g_phl_eq)
 tt_eq := "Lower values mean highs and lows are closer."
+
+tt_eq = "Lower values mean highs and lows are closer."
+
 float i_phl_eq_percent = input.float(defval=5, minval=0, step=0, title='Equal HL %', tooltip=tt_eq, group=g_phl_eq)
 string i_phl_1_source = input.string(defval='High/Low', title='Source', options=['High/Low', 'Open/Close'], group=g_phl_eq)
 color i_phl_1_h_ln_color = input.color(defval=#1F7525F, title='Bearish Color', group=g_phl_eq)
