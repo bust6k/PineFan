@@ -1,3 +1,4 @@
+foo = 5
 p(p())
 //ph := pchg(ar(), a(),a())
 //ph_pchg := pchg(array.get(ph_arr, 0),array.get(ph_arr, 1))

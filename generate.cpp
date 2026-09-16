@@ -777,7 +777,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
 
     case AST_EXPR_ASSIGN: {
-      generate_code(node->ast_assign.name, output, indent);
+      generate_code(node->ast_assign.name, output, indent,NULL,0,1);
       output << " = ";
       generate_code(node->ast_assign.value, output, 0);
      	if(is_statement){output << "\n";}

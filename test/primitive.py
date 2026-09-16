@@ -69,24 +69,24 @@ def foo_fo(ff):
 
 for bar in close:
     lifter = [MAX_COUNT]
-    stri_phl_1_source = input.str("High/Low")
-i_max_bars_back = 300
+    str    i_phl_1_source = input.str("High/Low")
+    i_max_bars_back = 300
     indicator("ICT Equal Highs and Lows")
-g_phl_eq = "███████████████ Equal High Low ███████████████"
-    inti_phl_1_left = input.int(60)
-    floati_phl_1_right = input.int(30)
-tt_eq = "Lower values mean highs and lows are closer."
-    floati_phl_eq_percent = input.float(5)
-    stri_phl_1_source = input.str("High/Low")
-    colori_phl_1_h_ln_color = input.color(0)
-    colori_phl_1_l_ln_color = input.color(0)
-    inti_phl_eq_transp = input.int(25)
+    g_phl_eq = "███████████████ Equal High Low ███████████████"
+    int    i_phl_1_left = input.int(60)
+    float    i_phl_1_right = input.int(30)
+    tt_eq = "Lower values mean highs and lows are closer."
+    float    i_phl_eq_percent = input.float(5)
+    str    i_phl_1_source = input.str("High/Low")
+    color    i_phl_1_h_ln_color = input.color(0)
+    color    i_phl_1_l_ln_color = input.color(0)
+    int    i_phl_eq_transp = input.int(25)
     pl_bi_arr = array.new_int(2)
     intint, int
-prev_pl_bi = na
+    prev_pl_bi = na
     boolbool, bool
-pl = false
+    pl = false
     if !na(phl_1_ph) && 1 == 1:
-    ph = true
-    prev_ph_bi = bar_index - i_phl_1_right
+        ph = true
+        prev_ph_bi = bar_index - i_phl_1_right
     plotshape(i_phl_1_right)

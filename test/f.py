@@ -44,9 +44,10 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 
 
 for bar in close:
-    p(    p())
+    foo = 5
+    p(p())
     # a constant variable!
     ff = 5
-    ph_price_1 = 3
-    foo(    ff)
+    ph_price_1 = 3,     ph_price_1 = 3,     ph_price_1 = 3,     ph_price_1 = 3
+    foo(ff)
     c
