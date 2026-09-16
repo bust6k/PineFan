@@ -1,6 +1,6 @@
 %define parse.error verbose
 %glr-parser
-%expect 249
+%expect 253
 
 %code requires {
 #include <stdio.h>
@@ -152,9 +152,9 @@ extern int func_cnt;
 
 program:
      statement
-    { vec_push(program_root,$1); }
+    { vec_push(program_root,new_block_node($1)); }
     | program statement
-      {vec_push(program_root, $2);}
+      {vec_push(program_root, new_block_node($2));}
     ;
 /*statement_list:
     statement
@@ -179,7 +179,7 @@ statement:
     | func_stmt
     | import_stmt
     | assignment_re_stmt
-    | expr %prec LOWEST_PREC
+    | expr_list %prec LOWEST_PREC
     ;
 
 block:

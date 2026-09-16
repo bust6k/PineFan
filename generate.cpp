@@ -424,7 +424,7 @@ void up_const_names_recursive(ast_node* node, char* name) {
   for (auto node : program_cpp_root) {
     if (!node) continue;
     transform_constants(node);
-    if (node->type != AST_STRING && node->type != AST_FUNC &&
+    if (node->type != AST_STRING && node->type != AST_FUNC && node->type != AST_STMT &&
         node->type != AST_CALL && node->type != AST_NUMBER && node->type != AST_FL_NUMBER && strcmp(node->assign.name, normal_cpy) == 0  ) {
       node->assign.name = fast_toupper(node->assign.name);
       char* f = fast_tolower(node->assign.name);
@@ -521,7 +521,7 @@ void collect_varip_variables(ast_node* node, std::ofstream& output, int indent);
 void generate_varip_buffer(std::ofstream& output, int indent);
 
 void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
-                   ast_node* last_node = NULL, int is_quad = 0) {
+                   ast_node* last_node = NULL, int is_quad = 0,int is_statement = 0) {
   if (!node) return;
 
   std::string indent_str(indent, ' ');
@@ -687,11 +687,12 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     case AST_CALL: {
       output << indent_str << node->call_node.name->var.name << "(";
       for (int i = 0; i < node->call_node.arg_count; i++) {
-        generate_code(node->call_node.args, output, 0);
+      generate_code(node->call_node.args, output, 0);
         // if (i + 1 < node->call_node.arg_count) output << ", ";
       }
-      output << ")\n";
-      break;
+      output << ")";
+      if(is_statement){ output << "\n";is_statement = 1;}
+     break;
     }
 
     case AST_FUNC: {
@@ -887,14 +888,14 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
           node->block_node.is_else == 1) {
         // it's else if — generating directly
         node->block_node.stmt->if_node.is_elif = 1;
-        generate_code(node->block_node.stmt, output, indent, last_node);
+        generate_code(node->block_node.stmt, output, indent, last_node,0,1);
       } else {
         // common block
-        generate_code(node->block_node.stmt, output, indent, last_node);
+        generate_code(node->block_node.stmt, output, indent, last_node,0,1);
       }
 
       if (node->block_node.next != NULL) {
-        generate_code(node->block_node.next, output, indent, last_node);
+        generate_code(node->block_node.next, output, indent, last_node,0,1);
       } else if (node->block_node.next == NULL)
         break;
 
@@ -902,7 +903,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
 
     case AST_STMTS: {
-      generate_code(node->stmt_node.stmt, output, indent, last_node);
+      generate_code(node->stmt_node.stmt, output, indent, last_node,0,1);
       break;
     }
 
@@ -1079,7 +1080,7 @@ int main(int argc, char* argv[]) {
   }
 
   for (int f = 0; f < program_cpp_root.size(); f++) {
-    ast_free(program_cpp_root.at(f));
+   // ast_free(program_cpp_root.at(f));
   }
 
   Pinefan::Ppp::clean_prp_files();

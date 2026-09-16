@@ -2,9 +2,9 @@
 
 #include <stddef.h>
 #include <stdint.h>
-
 typedef struct ast_node {
   int type;
+ 
   union {
     struct {
       char* name;
@@ -98,6 +98,7 @@ typedef struct ast_node {
       struct ast_node* name;
       struct ast_node* args;
       int arg_count;
+      int magic_num; //this is the num for determinig if call_node is really unallocated and free for use
     } call_node;
     struct {
       struct ast_node* prev;
