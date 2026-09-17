@@ -107,6 +107,10 @@ void transform_constants(struct ast_node* node) {
         fast_toupper(node->var.name);
       }
       break;
+    case AST_EXPR_LIST:
+      transform_constants(node->expr_list_node.expr);
+      transform_constants(node->expr_list_node.next);
+      break;
 
     case AST_ASSIGN:
     case AST_CONST:
@@ -708,7 +712,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
    for(int i = 0;i < node->expr_list_node.count;i++) {
    generate_code(node->expr_list_node.expr,output,indent);
    if(i + 1 < node->expr_list_node.count) output << ", ";
-
+   generate_code(node->expr_list_node.next,output,indent);
    }
    if(is_statement){ output << "\n";}
    break;

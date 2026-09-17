@@ -44,10 +44,11 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 
 
 for bar in close:
+fa, ffaf
     foo = 5
     p(p())
     # a constant variable!
     ff = 5
-    ph_price_1 = 3,     ph_price_1 = 3,     ph_price_1 = 3,     ph_price_1 = 3
+    ph_price_1 = 3,     ph_price_0 = array.get(ph_arr)    ph_price_1 = 3,     ph_price_0 = array.get(ph_arr)    ph_price_1 = 3,     ph_price_0 = array.get(ph_arr)    ph_price_1 = 3,     ph_price_0 = array.get(ph_arr)    ph_price_1 = 3    ph_price_0 = array.get(ph_arr)
     foo(ff)
     c
