@@ -769,6 +769,7 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
 
     case AST_VARN: {
+      if(!strcmp(node->var.name,"int") || !strcmp(node->var.name,"float") || !strcmp(node->var.name,"bool") || !strcmp(node->var.name,"str") || !strcmp(node->var.name,"color")) break;
       if (!is_quad) {
         output << indent_str << node->var.name;
       } else {
@@ -1064,7 +1065,7 @@ int main(int argc, char* argv[]) {
 
   Pinefan::Ppp::preprocess_files(argc, argv);
 
-  //yydebug = 1;
+  yydebug = 1;
 
   for (int i = 0; i < Pinefan::File::preprocessed_files.size(); i++) {
     Pinefan::File::Prp_file* prped_file =

@@ -44,12 +44,12 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 [5]0.59p(f())
 # a constant variable!
 ff = 5
-ph_price_1 = 3, ph_price_1 = 3, ph_price_1 = 3, ph_price_1 = 3
+ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3ph_price_0 = array.get(ph_arr)
 0.59[5]# a constant variable!
 ff = 5
-ph_price_1 = 3, ph_price_1 = 3, ph_price_1 = 3, ph_price_1 = 3
+ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3ph_price_0 = array.get(ph_arr)
 foo(ff)
-colori_phl_1_h_ln_color = input.color(0)
+i_phl_1_h_ln_color = input.color(0)
 idfs# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
 # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
 # elif is all the other conditions
@@ -73,23 +73,23 @@ def foo_fo(ff):
 for bar in close:
     lifter = [MAX_COUNT]
     lifter = [MAX_COUNT]
-    str    i_phl_1_source = input.str("High/Low")
+    i_phl_1_source = input.str("High/Low")
     i_max_bars_back = 300
     indicator("ICT Equal Highs and Lows")
     g_phl_eq = "███████████████ Equal High Low ███████████████"
-    int    i_phl_1_left = input.int(60)
-    float    i_phl_1_right = input.int(30)
+    i_phl_1_left = input.int(60)
+    i_phl_1_right = input.int(30)
     tt_eq = "Lower values mean highs and lows are closer."
     tt_eq = "Lower values mean highs and lows are closer."
-    float    i_phl_eq_percent = input.float(5)
-    str    i_phl_1_source = input.str("High/Low")
-    color    i_phl_1_h_ln_color = input.color(0)
-    color    i_phl_1_l_ln_color = input.color(0)
-    int    i_phl_eq_transp = input.int(25)
+    i_phl_eq_percent = input.float(5)
+    i_phl_1_source = input.str("High/Low")
+    i_phl_1_h_ln_color = input.color(0)
+    i_phl_1_l_ln_color = input.color(0)
+    i_phl_eq_transp = input.int(25)
     pl_bi_arr = array.new_int(2)
-    intint, int
+,     prev_ph_bi = na,     prev_ph_bi = na    prev_ph_bi = na
     prev_pl_bi = na
-    boolbool, bool
+,     ph = false,     ph = false    ph = false
     pl = false
     if !na(phl_1_ph) && 1 == 1:
         ph = true

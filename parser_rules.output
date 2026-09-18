@@ -173,8 +173,8 @@ Grammar
    85 expr_atom: number
    86          | float_number
    87          | pine_type
-   88          | string
-   89          | dot_expr
+   88          | dot_expr
+   89          | string
    90          | left_paren expr right_paren
 
    91 postfix_expr: expr_atom call_lparen call_list call_rparen
@@ -298,7 +298,7 @@ Terminals, with rules where they appear
     colon (332) 123
     number <ival> (333) 85
     identifier <sval> (334) 26 27 30 35 37 39 40 46 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81
-    string <sval> (335) 82 88
+    string <sval> (335) 82 89
     float_number <sval> (336) 86
     PREC_SINGLE_NAME (337)
     PREC_TYPE_NAME (338)
@@ -383,7 +383,7 @@ Nonterminals, with rules where they appear
         on right: 53 54 58
     dot_expr <node> (112)
         on left: 59
-        on right: 66 67 71 72 75 76 80 81 89
+        on right: 66 67 71 72 75 76 80 81 88
     call_list <node> (113)
         on left: 60 61 62
         on right: 61 91
@@ -857,9 +857,9 @@ State 25
 
 State 26
 
-   88 expr_atom: string •
+   89 expr_atom: string •
 
-    $default  reduce using rule 88 (expr_atom)
+    $default  reduce using rule 89 (expr_atom)
 
 
 State 27
@@ -1002,9 +1002,9 @@ State 38
 
 State 39
 
-   89 expr_atom: dot_expr •
+   88 expr_atom: dot_expr •
 
-    $default  reduce using rule 89 (expr_atom)
+    $default  reduce using rule 88 (expr_atom)
 
 
 State 40

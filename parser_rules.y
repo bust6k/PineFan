@@ -433,7 +433,7 @@ import_stmt:
     ;
 
 assignment_stmt:
-     expr assign expr
+      expr assign expr
      { $$ = new_expr_assign_node($1,$3); }
      ;
 
@@ -449,12 +449,12 @@ expr_atom:
       | float_number
       { $$ = new_number_float_node($1); }
       | pine_type
-      { $$ = new_varn_node($1, 0); }
+      {$$ = new_varn_node($1,0);}
+      | dot_expr
+      { $$ = $1;}
       | string
       { $$ = new_string_node($1); }
-      | dot_expr
-      { $$ = $1; }
-      | left_paren expr right_paren
+     | left_paren expr right_paren
       { $$ = new_paren_expr_node($2); }
       ;
 

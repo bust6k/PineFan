@@ -625,8 +625,8 @@ static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     0,    49,    50,     0,     0,     0,
        0,     0,     0,     0,     0,    42,    43,    45,    46,    44,
-       0,     0,     0,     0,    86,    47,    89,    87,     0,     2,
-       4,     5,     6,    15,    88,     7,     8,     9,    10,    90,
+       0,     0,     0,     0,    86,    47,    90,    87,     0,     2,
+       4,     5,     6,    15,    88,     7,     8,     9,    10,    89,
       12,    11,    13,    14,    16,    96,    17,    94,    95,   126,
       18,     0,     0,    47,    48,     0,     0,    47,     0,     0,
       47,     0,     0,     0,     0,    47,     0,     0,   120,   121,
@@ -2383,19 +2383,19 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 
   case 88: /* expr_atom: pine_type  */
 #line 452 "parser_rules.y"
-      { ((*yyvalp).node) = new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.sval), 0); }
+      {((*yyvalp).node) = new_varn_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.sval),0);}
 #line 2388 "parser_rules.tab.c"
     break;
 
-  case 89: /* expr_atom: string  */
+  case 89: /* expr_atom: dot_expr  */
 #line 454 "parser_rules.y"
-      { ((*yyvalp).node) = new_string_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.sval)); }
+      { ((*yyvalp).node) = (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node);}
 #line 2394 "parser_rules.tab.c"
     break;
 
-  case 90: /* expr_atom: dot_expr  */
+  case 90: /* expr_atom: string  */
 #line 456 "parser_rules.y"
-      { ((*yyvalp).node) = (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.node); }
+      { ((*yyvalp).node) = new_string_node((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.sval)); }
 #line 2400 "parser_rules.tab.c"
     break;
 
