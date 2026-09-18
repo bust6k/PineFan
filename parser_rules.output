@@ -1,6 +1,7 @@
 Terminals unused in grammar
 
     COMMA_PREC
+    COMMA_LIST_CALL
     by
     case_statement
     as
@@ -180,8 +181,8 @@ Grammar
    91 postfix_expr: expr_atom call_lparen call_list call_rparen
    92             | expr_atom left_quad_brace expr right_quad_brace
 
-   93 expr: expr_atom
-   94     | postfix_expr
+   93 expr: postfix_expr
+   94     | expr_atom
    95     | assignment_stmt
    96     | expr plus_and_assign expr
    97     | expr minus_and_assign expr
@@ -410,10 +411,10 @@ Nonterminals, with rules where they appear
         on right: 16
     expr_atom <node> (121)
         on left: 85 86 87 88 89 90
-        on right: 91 92 93
+        on right: 91 92 94
     postfix_expr <node> (122)
         on left: 91 92
-        on right: 94
+        on right: 93
     expr <node> (123)
         on left: 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124
         on right: 24 25 26 27 28 29 47 50 53 60 61 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 83 84 90 92 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 125 126
@@ -1060,20 +1061,20 @@ State 47
 
    91 postfix_expr: expr_atom • call_lparen call_list call_rparen
    92             | expr_atom • left_quad_brace expr right_quad_brace
-   93 expr: expr_atom •
+   94 expr: expr_atom •
 
     call_lparen      shift, and go to state 80
     left_quad_brace  shift, and go to state 81
 
-    left_quad_brace  [reduce using rule 93 (expr)]
-    $default         reduce using rule 93 (expr)
+    left_quad_brace  [reduce using rule 94 (expr)]
+    $default         reduce using rule 94 (expr)
 
 
 State 48
 
-   94 expr: postfix_expr •
+   93 expr: postfix_expr •
 
-    $default  reduce using rule 94 (expr)
+    $default  reduce using rule 93 (expr)
 
 
 State 49

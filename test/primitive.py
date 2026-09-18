@@ -41,57 +41,83 @@ with open(csv_path, 'r') as f:
             volume.append(float(row[5]) if len(row) > 5 else 0.0)
 
 print(f"Loaded {len(close)} bars from {csv_path}\n")
-[5]0.59p(f())
+foo(5,10,11)
+[5]
+0.59
+p(f())
 # a constant variable!
 ff = 5
-ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3ph_price_0 = array.get(ph_arr)
-0.59[5]# a constant variable!
+ph_price_1 = 3ph_price_0 = array.get(ph_arr,0)
+0.59
+[5]
+# a constant variable!
 ff = 5
-ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3, ph_price_0 = array.get(ph_arr)ph_price_1 = 3ph_price_0 = array.get(ph_arr)
+ph_price_1 = 3ph_price_0 = array.get(ph_arr,0)
 foo(ff)
-i_phl_1_h_ln_color = input.color(0)
-idfs# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+
+i_phl_1_h_ln_color = input.color(0,defval = title = group = ,title = group = ,group = )
+idf
+s
+# in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
 # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
 # elif is all the other conditions
 # and else - it's an optional last condition like default in switch-statement
 
 if f == 10:
-    f# a constant variable!
+    f
+# a constant variable!
 foo = 5
 def foo_fo(ff):
-    ff    fff    if foo:
-        ffff        fff    foo    # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
+    ff
+    fff
+    if foo:
+        ffff
+        fff
+    foo
+    # in source code version that was switch-statement. Since Python doesn't it(but only since Python 3.10),PineFan
     # translates it to if/elif/else construction. Where if-statement is the first condition like in switch-statement
     # elif is all the other conditions
     # and else - it's an optional last condition like default in switch-statement
 
     if foo == 10:
-        foodef foo():
+        foo
+def foo():
 
     return     f
 
+
 for bar in close:
-    lifter = [MAX_COUNT]
-    lifter = [MAX_COUNT]
-    i_phl_1_source = input.str("High/Low")
+    lifter = [    MAX_COUNT]
+    lifter = [    MAX_COUNT]
+
+    i_phl_1_source = input.str("High/Low",    defval =     title =     options =     group = ,    title =     options =     group = ,    options =     group = ,    group = )
     i_max_bars_back = 300
-    indicator("ICT Equal Highs and Lows")
+indicator("ICT Equal Highs and Lows",    title =     shorttitle =     overlay =     max_bars_back =     max_lines_count =     max_labels_count = ,    shorttitle =     overlay =     max_bars_back =     max_lines_count =     max_labels_count = ,    overlay =     max_bars_back =     max_lines_count =     max_labels_count = ,    max_bars_back =     max_lines_count =     max_labels_count = ,    max_lines_count =     max_labels_count = ,    max_labels_count = )
     g_phl_eq = "███████████████ Equal High Low ███████████████"
-    i_phl_1_left = input.int(60)
-    i_phl_1_right = input.int(30)
+
+    i_phl_1_left = input.int(60,    defval =     title =     group = ,    title =     group = ,    group = )
+
+    i_phl_1_right = input.int(30,    defval =     title =     group = ,    title =     group = ,    group = )
     tt_eq = "Lower values mean highs and lows are closer."
     tt_eq = "Lower values mean highs and lows are closer."
-    i_phl_eq_percent = input.float(5)
-    i_phl_1_source = input.str("High/Low")
-    i_phl_1_h_ln_color = input.color(0)
-    i_phl_1_l_ln_color = input.color(0)
-    i_phl_eq_transp = input.int(25)
+
+    i_phl_eq_percent = input.float(5,    defval =     minval =     step =     title =     tooltip =     group = ,    minval =     step =     title =     tooltip =     group = ,    step =     title =     tooltip =     group = ,    title =     tooltip =     group = ,    tooltip =     group = ,    group = )
+
+    i_phl_1_source = input.str("High/Low",    defval =     title =     options =     group = ,    title =     options =     group = ,    options =     group = ,    group = )
+
+    i_phl_1_h_ln_color = input.color(0,    defval =     title =     group = ,    title =     group = ,    group = )
+
+    i_phl_1_l_ln_color = input.color(0,    defval =     title =     group = ,    title =     group = ,    group = )
+
+    i_phl_eq_transp = input.int(25,    defval =     minval =     title =     group = ,    minval =     title =     group = ,    title =     group = ,    group = )
     pl_bi_arr = array.new_int(2)
-,     prev_ph_bi = na,     prev_ph_bi = na    prev_ph_bi = na
+
+    prev_ph_bi = na
     prev_pl_bi = na
-,     ph = false,     ph = false    ph = false
+
+    ph = false
     pl = false
     if !na(phl_1_ph) && 1 == 1:
         ph = true
         prev_ph_bi = bar_index - i_phl_1_right
-    plotshape(i_phl_1_right)
+plotshape(i_phl_1_right,high[    style =     location =     offset =  =     size =  if ph_condition else na],    style =     location =     offset =  =     size =  if ph_condition else na,    style =     location =     offset =  =     size = ,    location =     offset =  =     size = ,    offset =  =     size = , =     size = ,    size = )

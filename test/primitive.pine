@@ -1,4 +1,5 @@
 
+foo(5,10,11)
 varip lifter =   [MAX_COUNT][5]
 0.59
 p(f())

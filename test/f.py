@@ -44,4 +44,4 @@ print(f"Loaded {len(close)} bars from {csv_path}\n")
 
 
 for bar in close:
-    foo = 5
+f()45fa

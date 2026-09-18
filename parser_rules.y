@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include "ast.h"
 #include<string.h>
-//static struct ast_node* merge_call_list(YYSTYPE x0,YYSTYPE x1);
 }
 
 %code {
@@ -14,15 +13,6 @@
 extern int yylex(void);
 extern void yyerror(const char* s);
 extern Vector* program_root;
-
-static struct ast_node* merge_call_list(YYSTYPE x0,YYSTYPE x1){
-printf("MERGE CALLED!\n");
-if(!x0.node && x1.node) return x1.node;
-if(!x1.node && x0.node) return x0.node;
-
-return x0.node;
-}
-
 }
 
 %{
@@ -358,14 +348,16 @@ dot_expr:
     { $$ = new_var_dot_node($1, $3); }
     ;
     
+
 call_list:
-   expr %prec COMMA_LIST_CALL %merge <merge_call_list>
+   expr 
    { $$ = $1; }
-   | call_list comma expr %prec COMMA_LIST_CALL %merge <merge_call_list>
-   { $3->call_arg.next = $1; $$ = $3; }
+   | call_list comma expr
+   { $3->call_arg.next = $1; $$ = $3;}
    | /*empty*/
    { $$ = NULL;}
    ;
+
 
 /*
 call_stmt:
@@ -466,10 +458,10 @@ postfix_expr:
       ;
 
 expr: 
-    expr_atom
+    postfix_expr
    { $$ = $1;}
-    | postfix_expr
-    { $$ = $1;}
+   | expr_atom
+   { $$ = $1;}
     | assignment_stmt
     { $$ = $1;}
     | expr plus_and_assign expr
@@ -532,14 +524,12 @@ expr:
     { $$ = new_array_node($2); }
     ; 
 
+
 expr_list:
     expr
-    { $$ = $1;}
+    { $$ = new_expr_list_node($1,NULL);}
     | expr_list comma expr
-    {
-        ast_node* new_node = new_expr_list_node($3,$1);
-        $$ = new_node;
-    }
+    {$$ = new_expr_list_node($3,$1);}
     ;
         
 %%

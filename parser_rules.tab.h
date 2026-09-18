@@ -45,9 +45,8 @@ extern int yydebug;
 #include <stdio.h>
 #include "ast.h"
 #include<string.h>
-//static struct ast_node* merge_call_list(YYSTYPE x0,YYSTYPE x1);
 
-#line 51 "parser_rules.tab.h"
+#line 50 "parser_rules.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -151,13 +150,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 33 "parser_rules.y"
+#line 23 "parser_rules.y"
 
     int ival;
     char *sval;
     struct ast_node *node;
 
-#line 161 "parser_rules.tab.h"
+#line 160 "parser_rules.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

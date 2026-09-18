@@ -701,23 +701,26 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
       output << indent_str << node->call_node.name->var.name << "(";
       for (int i = 0; i < node->call_node.arg_count; i++) {
       generate_code(node->call_node.args, output, 0);
-        // if (i + 1 < node->call_node.arg_count) output << ", ";
-      }
+      if(i +1 < node->call_node.arg_count) output << ",";
+      node->call_node.args = node->call_node.args->call_arg.next;
+      } 
+
       output << ")";
       if(is_statement){ output << "\n";}
      break;
     }
  
    case AST_EXPR_LIST: {
-   for(int i = 0;i < node->expr_list_node.count;i++) {
-   generate_code(node->expr_list_node.expr,output,indent);
-   if(i + 1 < node->expr_list_node.count) output << ", ";
+      generate_code(node->expr_list_node.expr,output,indent);
+   
+  // if(i + 1 < node->expr_list_node.count) output << ",";
+   
+   //node->expr_list_node.expr = node->expr_list_node.next->stmt_node.stmt;
    generate_code(node->expr_list_node.next,output,indent);
-   }
+		       }
    if(is_statement){ output << "\n";}
    break;
-   }
-
+   
     case AST_FUNC: {
       udf_depth++;
       func_rg++;
@@ -1118,5 +1121,6 @@ int main(int argc, char* argv[]) {
 
   Pinefan::Ppp::clean_prp_files();
   generate_matrolib();
+  
   return 0;
 }

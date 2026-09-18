@@ -9,6 +9,8 @@
 
 #include "ast.h"
 
+int cnt = 0;
+
 ast_node* new_assign_node(char* name, ast_node* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
   node->type = AST_ASSIGN;
@@ -315,33 +317,44 @@ ast_node* reverse_list(ast_node* node) {
   ast_node* prev = NULL;
   ast_node* current = node;
   ast_node* next = NULL;
+  int count = 0;
 
   while (current != NULL) {
+    count++;
     next = current->call_arg.next;
     current->call_arg.next = prev;
     prev = current;
     current = next;
   }
-
+ 
   return prev;
 }
 
 ast_node* new_call_node(ast_node* name, ast_node* args) {
-  ast_node* node = calloc(1, sizeof(ast_node));
-  node->type = AST_CALL;
-  node->call_node.name = name;
-  node->call_node.args = reverse_list(args);
+    ast_node* node = calloc(1, sizeof(ast_node));
+    node->type = AST_CALL;
+    node->call_node.name = name;
+    /*
+    int c = 0;
+    ast_node* b = args;
+    while(b) {
+    c++;
+    b = b->call_arg.next;
+    }
+ */
+    node->call_node.args = reverse_list(args);
 
-  size_t count = 0;
-  ast_node* a = args;
-  while (a) {
-    count++;
-    a = a->call_arg.next;
-  }
+    size_t count = 0;
+    ast_node* a = node->call_node.args;
+    while (a) {
+        count++;
+        a = a->call_arg.next;
+    }
 
-  node->call_node.arg_count = count;
-  return node;
+    node->call_node.arg_count = count;
+    return node;
 }
+
 ast_node* new_call_node_dot(ast_node* name, ast_node* args) {
   return new_call_node(name, args);
 }
@@ -385,7 +398,7 @@ ast_node* new_switch_node(ast_node* expr, ast_node* cases,
   node->switch_node.cases = cases;
   node->switch_node.default_body = default_body;
 
-  size_t count = 1;
+  size_t count = 0;
   ast_node* c = cases;
   while (c) {
     count++;
@@ -402,14 +415,15 @@ ast_node* new_expr_list_node(ast_node* expr,ast_node* prev) {
     node->expr_list_node.expr = expr;
     node->expr_list_node.next = prev;
 
-    size_t count = 1;
+    size_t count  = 0 ;
     ast_node* p = prev;
     while(p) {
     count++;
     p = p->expr_list_node.next;
     }
-   node->expr_list_node.count = count;
-
+   
+    node->expr_list_node.count = count;
+   cnt++;
     return node;
 }
 
