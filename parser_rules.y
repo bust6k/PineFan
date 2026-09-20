@@ -109,7 +109,7 @@ extern int func_cnt;
 %token <sval> identifier string float_number
 %type <sval> pine_type 
 
-%type <node> program statement   expr expr_atom  postfix_expr expr_list block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
+%type <node> program statement   expr expr_atom  postfix_expr expr_list  block stmt_list stmt_block if_body  if_stmt for_stmt while_stmt  return_stmt_expr break_stmt  continue_stmt dot_expr   switch_stmt case_list default_case case_stmt switch_block_stmts switch_block_stmt  func_stmt opt_arg_list arg_list func_type  call_list /*call_stmt*/ varip_stmt var_stmt const_stmt simple_stmt import_stmt assignment_stmt assignment_re_stmt 
 %start program
 
 
@@ -523,13 +523,10 @@ expr:
     | left_quad_brace expr_list right_quad_brace
     { $$ = new_array_node($2); }
     ; 
-
-
 expr_list:
     expr
-    { $$ = new_expr_list_node($1,NULL);}
+    { $$ = new_expr_list_node($1, NULL); }
     | expr_list comma expr
-    {$$ = new_expr_list_node($3,$1);}
-    ;
-        
+    { $$ = new_expr_list_node($3, $1); }
+    ;        
 %%

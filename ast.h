@@ -4,7 +4,8 @@
 #include <stdint.h>
 typedef struct ast_node {
   int type;
- 
+  int visited;
+
   union {
     struct {
       char* name;
@@ -86,11 +87,11 @@ typedef struct ast_node {
     struct {
       struct ast_node* expr;
     } comma_expr;
-     struct {
+    struct {
     struct ast_node* expr;   
     struct ast_node* next;   
     size_t count;
-} expr_list_node;
+    } expr_list_node;
         
     struct {
       char* op;
@@ -228,4 +229,5 @@ ast_node* new_stmt_node(ast_node* stmts);
 ast_node* new_var_dot_node(char* name, char* scnd_name);
 ast_node* new_array_node(ast_node* expr_list);
 ast_node* new_expr_list_node(ast_node* expr,ast_node* prev);
+ast_node* reverse_expr_list(ast_node* expr); 
 void ast_free(ast_node* node);

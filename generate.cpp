@@ -711,16 +711,14 @@ void generate_code(ast_node* node, std::ofstream& output, int indent = 0,
     }
  
    case AST_EXPR_LIST: {
-      generate_code(node->expr_list_node.expr,output,indent);
-   
-  // if(i + 1 < node->expr_list_node.count) output << ",";
-   
-   //node->expr_list_node.expr = node->expr_list_node.next->stmt_node.stmt;
    generate_code(node->expr_list_node.next,output,indent);
-		       }
+   output << ';';
+   generate_code(node->expr_list_node.expr,output,indent);
+    
    if(is_statement){ output << "\n";}
    break;
-   
+   }
+
     case AST_FUNC: {
       udf_depth++;
       func_rg++;

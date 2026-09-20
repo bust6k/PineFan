@@ -9,7 +9,6 @@
 
 #include "ast.h"
 
-int cnt = 0;
 
 ast_node* new_assign_node(char* name, ast_node* value) {
   ast_node* node = calloc(1, sizeof(ast_node));
@@ -334,15 +333,7 @@ ast_node* new_call_node(ast_node* name, ast_node* args) {
     ast_node* node = calloc(1, sizeof(ast_node));
     node->type = AST_CALL;
     node->call_node.name = name;
-    /*
-    int c = 0;
-    ast_node* b = args;
-    while(b) {
-    c++;
-    b = b->call_arg.next;
-    }
- */
-    node->call_node.args = reverse_list(args);
+        node->call_node.args = reverse_list(args);
 
     size_t count = 0;
     ast_node* a = node->call_node.args;
@@ -409,21 +400,30 @@ ast_node* new_switch_node(ast_node* expr, ast_node* cases,
   return node;
 }
 
-ast_node* new_expr_list_node(ast_node* expr,ast_node* prev) {
+
+ast_node* reverse_expr_list(ast_node* node) {
+  ast_node* prev = NULL;
+  ast_node* current = node;
+  ast_node* next = NULL;
+  int count = 0;
+
+  while (current != NULL) {
+    count++;
+    next = current->expr_list_node.next;
+    current->expr_list_node.next = prev;
+    prev = current;
+    current = next;
+  }
+ 
+  return prev;
+}
+
+
+ast_node* new_expr_list_node(ast_node* expr, ast_node* prev) {
     ast_node* node = (ast_node*)calloc(1, sizeof(ast_node));
     node->type = AST_EXPR_LIST;
     node->expr_list_node.expr = expr;
-    node->expr_list_node.next = prev;
-
-    size_t count  = 0 ;
-    ast_node* p = prev;
-    while(p) {
-    count++;
-    p = p->expr_list_node.next;
-    }
-   
-    node->expr_list_node.count = count;
-   cnt++;
+    node->expr_list_node.next = prev;   // prepend, без reverse
     return node;
 }
 
